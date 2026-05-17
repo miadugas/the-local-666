@@ -51,9 +51,12 @@ grave-goods-store/
 
 ## Locked decisions — don't re-litigate
 
-- **Ember purple is the primary brand accent.** `--color-ember-500` does the work for primary CTAs, links, focus rings.
-  - Blood (`--color-blood-*`) is reserved for **danger / sale only**.
-  - Candle (`--color-candle-*`) is reserved for **highlight / holy only**.
+- **Ember purple is the primary brand accent.** `--color-ember-500` does the work for primary CTAs, links, focus rings, nav hover, "new" tags.
+  - **Blood (`--color-blood-*`)** is reserved for **three roles**, none of which are interactive UI:
+    1. Riso _print effects_ — off-register text shadows, halftone fills (it IS the ink color in the design language)
+    2. Tactical/urgency messaging — announcement strip background, activist banners
+    3. Danger / sale flags on product cards
+  - **Candle (`--color-candle-*`)** is reserved for **highlight / holy only**.
 - **Vue 3 SPA**, no SSR/SSG. Add prerendering only if SEO becomes a measured bottleneck.
 - **Express**, not Nuxt/Next/Astro server routes. Backend will be its own workspace when it exists.
 - **Stripe Checkout (hosted), not Elements.** Lower PCI scope.
@@ -104,7 +107,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ `axios` — use native `fetch`
 - ❌ Tailwind v3 syntax (`@tailwind base/components/utilities`)
 - ❌ Tailwind `group` utility class
-- ❌ Blood used as a general accent (it's danger/sale only)
+- ❌ Blood used for interactive UI (buttons, links, hover, focus — those use ember). Blood = riso ink, tactical messaging, danger/sale.
 - ❌ Candle used as a general accent (it's highlight/holy only)
 - ❌ A UI component library (shadcn-vue, PrimeVue, Element Plus)
 - ❌ Suggesting Shopify, Sticker Mule, or POD fulfillment
