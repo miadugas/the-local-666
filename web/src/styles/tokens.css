@@ -1,5 +1,5 @@
 /* =========================================================================
-   Mission Grave Goods — design tokens (Tailwind v4 @theme + semantic vars)
+  Grave Goods — design tokens (Tailwind v4 @theme + semantic vars)
    --------------------------------------------------------------------------
    Ported from the design kit:
      ~/Downloads/mgg-design-system-v2/handoff/storefront-riso/colors_and_type.css
@@ -46,12 +46,12 @@
   --color-candle-400: #e3bd57;
   --color-candle-300: #efd28a;
 
-  /* Ember — PRIMARY brand accent. The real one. */
-  --color-ember-100: #f3e8ff;
-  --color-ember-300: #d8b4fe;
-  --color-ember-500: #a855f7;
-  --color-ember-600: #9333ea;
-  --color-ember-700: #7e22ce;
+  /* Ember — PRIMARY brand accent. Deep dusty riso violet, not tech-purple. */
+  --color-ember-100: #e8e1f0;
+  --color-ember-300: #b5a4cc;
+  --color-ember-500: #4f3872;
+  --color-ember-600: #3d2b5a;
+  --color-ember-700: #2a1c40;
 
   /* Séance pastels — dusty, never saccharine. */
   --color-ghost-pink: #f0bcc7;
