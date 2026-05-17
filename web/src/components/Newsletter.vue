@@ -11,7 +11,7 @@ function handleSubmit() {
 
 <template>
   <section
-    class="relative overflow-hidden bg-blood-500 text-bone-50 py-[60px] border-y-[4px] border-plum-900"
+    class="relative overflow-hidden bg-ember-700 text-bone-50 py-[60px] border-y-[4px] border-plum-900"
   >
     <!-- Riso grain overlay -->
     <div
@@ -79,12 +79,12 @@ function handleSubmit() {
   color: var(--color-plum-600);
 }
 .email-input:focus {
-  outline: 2px solid var(--color-ember-500);
+  outline: 2px solid var(--color-ember-300);
   outline-offset: 2px;
 }
 
 .subscribe-btn {
-  background: var(--color-candle-500);
+  background: var(--color-bone-50);
   color: var(--color-plum-900);
   font-family: var(--font-poster);
   font-size: 13px;

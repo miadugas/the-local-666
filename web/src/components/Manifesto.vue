@@ -13,7 +13,7 @@ import SectionRule from "./SectionRule.vue";
       <div class="grid grid-cols-2 gap-14 mt-1">
         <!-- Left: italic Bodoni pull-quote with blood-red rule -->
         <p
-          class="font-display italic text-[26px] leading-[1.4] text-plum-900 m-0 border-l-[4px] border-blood-500 pl-[22px]"
+          class="font-display italic text-[26px] leading-[1.4] text-plum-900 m-0 border-l-[4px] border-ember-500 pl-[22px]"
         >
           We're a two-person operation in Denver. We print stickers, we send
           half the profits to bail funds, and we're never going to ask you to

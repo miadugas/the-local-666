@@ -29,7 +29,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-          class="text-candle-500 block mb-[10px]"
+          class="text-ember-300 block mb-[10px]"
         >
           <path d="M11 14h2a2 2 0 1 0 0-4h-3.5L5 14.5" />
           <path d="M5 14.5 8.5 18l5.5-2 5-3" />
@@ -57,7 +57,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-          class="text-candle-500 block mb-[10px]"
+          class="text-ember-300 block mb-[10px]"
         >
           <polyline points="6 9 6 2 18 2 18 9" />
           <path
@@ -87,7 +87,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-          class="text-candle-500 block mb-[10px]"
+          class="text-ember-300 block mb-[10px]"
         >
           <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
           <path d="M15 18H9" />
@@ -119,7 +119,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-          class="text-candle-500 block mb-[10px]"
+          class="text-ember-300 block mb-[10px]"
         >
           <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
           <path d="M21 3v5h-5" />

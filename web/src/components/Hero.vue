@@ -19,7 +19,7 @@
           height="5"
           patternUnits="userSpaceOnUse"
         >
-          <circle cx="2.5" cy="2.5" r="1.3" fill="rgb(193 33 39 / 0.35)" />
+          <circle cx="2.5" cy="2.5" r="1.3" fill="rgb(181 164 204 / 0.5)" />
         </pattern>
         <pattern
           id="hero-ht-bone"
@@ -40,7 +40,7 @@
       <!-- LEFT — issue meta · ransom headline · lede · CTAs -->
       <div>
         <div
-          class="font-poster text-[13px] tracking-[0.3em] uppercase text-blood-500 mb-[18px]"
+          class="font-poster text-[13px] tracking-[0.3em] uppercase text-ember-300 mb-[18px]"
         >
           ★ Issue No. 04 · Two-color riso ★
         </div>
@@ -51,7 +51,7 @@
           <!-- Off-register back layer (blood-red, offset) -->
           <span
             aria-hidden="true"
-            class="absolute left-[6px] top-[5px] text-blood-500 opacity-95"
+            class="absolute left-[6px] top-[5px] text-ember-300 opacity-95"
             >No gods,<br />just<br />stickers.</span
           >
           <!-- Front layer (bone-50) -->
@@ -80,11 +80,11 @@
         class="relative self-start mt-[18px] p-5 bg-plum-1000 border-2 border-bone-100"
         style="
           transform: rotate(-1.6deg);
-          box-shadow: 8px 8px 0 var(--color-blood-500);
+          box-shadow: 8px 8px 0 var(--color-ember-500);
         "
       >
         <div
-          class="font-mono text-[11px] tracking-shout text-blood-500 uppercase mb-[14px]"
+          class="font-mono text-[11px] tracking-shout text-ember-300 uppercase mb-[14px]"
         >
           ★ Print sample · 2-pass riso
         </div>
@@ -101,10 +101,10 @@
               height="6"
               patternUnits="userSpaceOnUse"
             >
-              <circle cx="3" cy="3" r="2" fill="#c12127" />
+              <circle cx="3" cy="3" r="2" fill="#b5a4cc" />
             </pattern>
           </defs>
-          <rect x="0" y="0" width="360" height="360" fill="#0c0610" />
+          <rect x="0" y="0" width="360" height="360" fill="#101113" />
           <!-- Halftone tentacle blob + off-register bone overlay -->
           <g transform="translate(180 200)">
             <path
@@ -123,7 +123,7 @@
             x="180"
             y="62"
             text-anchor="middle"
-            fill="#c12127"
+            fill="#b5a4cc"
             opacity="0.85"
             font-family="var(--font-poster)"
             font-size="44"
@@ -148,7 +148,7 @@
             x="180"
             y="326"
             text-anchor="middle"
-            fill="#c12127"
+            fill="#b5a4cc"
             opacity="0.85"
             font-family="var(--font-poster)"
             font-size="58"

@@ -35,7 +35,7 @@ const NAV = [
   <header class="sticky top-0 z-50 bg-plum-1000 text-bone-100">
     <!-- Announcement strip — blood-red riso ink + tactical/activist copy, rotating every 5s -->
     <div
-      class="tex-grain relative overflow-hidden bg-blood-500 text-bone-50 text-center font-poster text-[13px] uppercase tracking-shout py-2.5 border-b-[3px] border-plum-1000"
+      class="tex-grain relative overflow-hidden bg-ember-700 text-bone-50 text-center font-poster text-[13px] uppercase tracking-shout py-2.5 border-b-[3px] border-plum-1000"
     >
       <span :key="stripIndex" class="strip-line relative inline-block">
         {{ STRIP_LINES[stripIndex] }}
@@ -54,7 +54,7 @@ const NAV = [
           >
             <span
               aria-hidden="true"
-              class="absolute top-[2px] left-[3px] text-blood-500 whitespace-nowrap"
+              class="absolute top-[2px] left-[3px] text-ember-300 whitespace-nowrap"
             >
               Grave Goods
             </span>

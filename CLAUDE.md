@@ -51,12 +51,14 @@ grave-goods-store/
 
 ## Locked decisions — don't re-litigate
 
-- **Ember purple is the primary brand accent.** `--color-ember-500` does the work for primary CTAs, links, focus rings, nav hover, "new" tags.
-  - **Blood (`--color-blood-*`)** is reserved for **three roles**, none of which are interactive UI:
-    1. Riso _print effects_ — off-register text shadows, halftone fills (it IS the ink color in the design language)
-    2. Tactical/urgency messaging — announcement strip background, activist banners
-    3. Danger / sale flags on product cards
-  - **Candle (`--color-candle-*`)** is reserved for **highlight / holy moments** AND **typographic labels on dark surfaces** (footer section headers, colophon mark) where ember would muddy. Also: **CTAs on blood-red backgrounds** use candle, not ember — ember + blood = low contrast.
+- **Stripped palette — three working colors only:**
+  - **Ember violet** (`--color-ember-*`, anchor `#4f3872`) is the sole accent. Does all the work that blood + candle used to: CTAs, links, focus rings, hover states, section eyebrows, off-register print effects, halftones, decorative borders, scale bands.
+    - `ember-500` on light surfaces (bone): CTA fills, kicker text, decorative borders
+    - `ember-300` (`#b5a4cc`) on dark surfaces (plum): off-register shadows, halftone fills, eyebrow text on plum, link hover, icon color
+    - `ember-700` (`#2a1c40`) as a full-section surface band (announcement strip, Newsletter)
+  - **Plum** (`--color-plum-*`, anchor `--color-plum-1000` = `#101113`) is the ink-black surface family. plum-1000 = primary dark surface (Header, Hero, Footer). plum-900 = alt dark band (ValuesStrip). plum-700 = hairline dividers on dark.
+  - **Bone** (`--color-bone-*`) is the paper family. bone-100 = primary light surface (ProductGrid). bone-200 = aged-paper variant (Manifesto). bone-50 = brightest cream (cards, form inputs, button fills on dark violet).
+- **Blood and Candle are out of the page.** Tokens stay defined in `tokens.css` for potential future use (sale tags, holy moments), but are NOT used in any component today. If you reach for one, you're probably re-litigating a closed decision.
 - **Vue 3 SPA**, no SSR/SSG. Add prerendering only if SEO becomes a measured bottleneck.
 - **Express**, not Nuxt/Next/Astro server routes. Backend will be its own workspace when it exists.
 - **Stripe Checkout (hosted), not Elements.** Lower PCI scope.
@@ -107,7 +109,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ `axios` — use native `fetch`
 - ❌ Tailwind v3 syntax (`@tailwind base/components/utilities`)
 - ❌ Tailwind `group` utility class
-- ❌ Blood used for interactive UI (buttons, links, hover, focus — those use ember). Blood = riso ink, tactical messaging, danger/sale.
+- ❌ Blood or Candle in any component (stripped-palette rule — page runs on ember + plum + bone only)
 - ❌ Candle used as a general accent (it's highlight/holy only)
 - ❌ A UI component library (shadcn-vue, PrimeVue, Element Plus)
 - ❌ Suggesting Shopify, Sticker Mule, or POD fulfillment

@@ -8,7 +8,7 @@ defineProps<{ kicker: string; title: string }>();
   >
     <div>
       <div
-        class="font-mono text-[11px] tracking-[0.28em] uppercase text-blood-500 font-bold mb-[6px]"
+        class="font-mono text-[11px] tracking-[0.28em] uppercase text-ember-500 font-bold mb-[6px]"
       >
         {{ kicker }}
       </div>

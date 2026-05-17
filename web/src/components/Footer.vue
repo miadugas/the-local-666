@@ -43,7 +43,7 @@ const LINK_GROUPS = [
       >
         <span>The colophon</span>
         <span
-          class="font-blackletter text-[36px] tracking-normal normal-case text-candle-500"
+          class="font-blackletter text-[36px] tracking-normal normal-case text-bone-100"
         >
           Grave Goods
         </span>
@@ -72,7 +72,7 @@ const LINK_GROUPS = [
         <!-- Link groups -->
         <div v-for="group in LINK_GROUPS" :key="group.heading">
           <div
-            class="font-body font-extrabold text-[12px] tracking-[0.18em] uppercase text-candle-500 mb-3"
+            class="font-body font-extrabold text-[12px] tracking-[0.18em] uppercase text-bone-100 mb-3"
           >
             {{ group.heading }}
           </div>
@@ -80,7 +80,7 @@ const LINK_GROUPS = [
             <li v-for="link in group.links" :key="link">
               <a
                 href="#"
-                class="font-body text-[14px] text-bone-100 no-underline hover:text-ember-500 transition-colors"
+                class="font-body text-[14px] text-bone-100 no-underline hover:text-ember-300 transition-colors"
               >
                 {{ link }}
               </a>
