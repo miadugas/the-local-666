@@ -3,21 +3,43 @@ defineProps<{ kicker: string; title: string }>();
 </script>
 
 <template>
-  <div
-    class="border-b-[4px] border-plum-900 pb-[14px] mb-9 flex justify-between items-end"
-  >
+  <header class="section-rule">
     <div>
-      <div
-        class="font-mono text-[11px] tracking-[0.28em] uppercase text-ember-500 font-bold mb-[6px]"
-      >
-        {{ kicker }}
-      </div>
-      <h2
-        class="font-display font-black text-[64px] tracking-tight leading-[0.95] m-0 text-plum-900"
-      >
-        {{ title }}
-      </h2>
+      <p class="kicker">{{ kicker }}</p>
+      <h2 class="title">{{ title }}</h2>
     </div>
     <slot name="right" />
-  </div>
+  </header>
 </template>
+
+<style scoped>
+.section-rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.kicker {
+  margin: 0 0 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  font-weight: 600;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--fg);
+}
+</style>

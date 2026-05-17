@@ -6,46 +6,23 @@ const emit = defineEmits<{ "add-to-cart": [product: Product] }>();
 </script>
 
 <template>
-  <article
-    class="card group bg-bone-50 border-[3px] border-plum-900 rounded-sm cursor-pointer relative flex flex-col"
-  >
-    <!-- Image panel: tinted radial gradient over warm paper + riso grain -->
-    <div
-      class="tex-grain aspect-square overflow-hidden border-b-[3px] border-plum-900 flex items-center justify-center p-[18px] relative"
-      :style="{
-        background: `radial-gradient(circle at 50% 50%, ${product.ring}33 0%, ${product.ring}10 60%, transparent 100%), #f4ecd8`,
-      }"
-    >
+  <article class="card">
+    <div class="art">
       <img
         :src="`/stickers/${product.id}.png`"
         :alt="product.title"
         draggable="false"
-        class="max-w-[92%] max-h-[92%] object-contain block sticker-img"
       />
     </div>
-
-    <!-- Body: title, spec, divider, price + Add to cart -->
-    <div class="p-[12px_14px_14px]">
-      <h3
-        class="font-display font-extrabold text-[22px] leading-[1.05] tracking-tight text-plum-900 mb-[2px] mt-0"
-      >
-        {{ product.title }}
-      </h3>
-      <div class="font-mono text-[11px] text-plum-600 tracking-wide">
-        {{ product.spec }}
-      </div>
-
-      <div
-        class="flex justify-between items-center mt-3 pt-[10px] border-t-2 border-plum-900"
-      >
-        <div class="flex items-baseline gap-2">
-          <span class="font-display font-black text-[24px] text-plum-900">
-            ${{ product.price }}
-          </span>
-        </div>
+    <div class="meta">
+      <p class="type">3" die-cut vinyl</p>
+      <h3>{{ product.title }}</h3>
+      <p class="desc">{{ product.spec }}</p>
+      <div class="row">
+        <span class="price">${{ product.price }}</span>
         <button
           type="button"
-          class="cart-add-btn"
+          class="add-btn"
           @click.stop="emit('add-to-cart', product)"
         >
           Add to cart
@@ -57,42 +34,119 @@ const emit = defineEmits<{ "add-to-cart": [product: Product] }>();
 
 <style scoped>
 .card {
-  box-shadow: 5px 5px 0 var(--color-plum-900);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transition:
-    transform 160ms var(--ease-snap),
-    box-shadow 160ms var(--ease-snap);
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    border-color 220ms var(--ease-out);
 }
 .card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 var(--color-plum-900);
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow:
+    var(--shadow-soft),
+    0 0 0 1px rgba(255, 95, 50, 0.18);
 }
 
-.sticker-img {
-  filter: drop-shadow(2px 3px 0 rgba(21, 11, 28, 0.18));
+.art {
+  aspect-ratio: 1 / 1;
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(255, 141, 89, 0.08),
+      transparent 70%
+    ),
+    var(--bg-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
 }
 
-.cart-add-btn {
-  background: var(--color-ember-500);
-  color: var(--color-bone-50);
-  font-family: var(--font-poster);
-  font-size: 12px;
-  letter-spacing: 0.18em;
+.meta {
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+}
+
+.type {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 7px 14px;
-  border: 2px solid var(--color-plum-900);
-  border-radius: 2px;
+  color: var(--accent-soft);
+  font-weight: 600;
+}
+
+.meta h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--fg);
+}
+
+.desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+.row {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+}
+
+.add-btn {
+  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+  color: #fff9f1;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  border-radius: 9999px;
   cursor: pointer;
-  box-shadow: 3px 3px 0 var(--color-plum-900);
+  box-shadow: 0 8px 20px rgba(255, 95, 50, 0.22);
   transition:
-    transform 120ms var(--ease-snap),
-    box-shadow 120ms var(--ease-snap);
+    transform 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
 }
-.cart-add-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--color-plum-900);
+.add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(255, 95, 50, 0.3);
 }
-.cart-add-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--color-plum-900);
+.add-btn:active {
+  transform: translateY(0);
 }
 </style>
