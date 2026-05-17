@@ -116,6 +116,17 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 ---
 
+## Placeholders / TODOs
+
+**Replace before launch:**
+
+- Product prices in `web/src/data/products.ts` are uniform `$4` placeholders. Real prices come from Stripe Products (phase 5).
+- Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
+- Color tokens in `web/src/styles/tokens.css` are hex — OKLCH conversion pending a proper tool pass.
+- Google Fonts loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
+
+---
+
 ## Commands
 
 ```bash
