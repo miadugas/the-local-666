@@ -4,6 +4,8 @@ import Hero from "./components/Hero.vue";
 import ProductGrid from "./components/ProductGrid.vue";
 import ValuesStrip from "./components/ValuesStrip.vue";
 import Manifesto from "./components/Manifesto.vue";
+import Newsletter from "./components/Newsletter.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <template>
@@ -12,4 +14,6 @@ import Manifesto from "./components/Manifesto.vue";
   <ProductGrid />
   <ValuesStrip />
   <Manifesto />
+  <Newsletter />
+  <Footer />
 </template>

@@ -56,7 +56,7 @@ grave-goods-store/
     1. Riso _print effects_ — off-register text shadows, halftone fills (it IS the ink color in the design language)
     2. Tactical/urgency messaging — announcement strip background, activist banners
     3. Danger / sale flags on product cards
-  - **Candle (`--color-candle-*`)** is reserved for **highlight / holy only**.
+  - **Candle (`--color-candle-*`)** is reserved for **highlight / holy moments** AND **typographic labels on dark surfaces** (footer section headers, colophon mark) where ember would muddy. Also: **CTAs on blood-red backgrounds** use candle, not ember — ember + blood = low contrast.
 - **Vue 3 SPA**, no SSR/SSG. Add prerendering only if SEO becomes a measured bottleneck.
 - **Express**, not Nuxt/Next/Astro server routes. Backend will be its own workspace when it exists.
 - **Stripe Checkout (hosted), not Elements.** Lower PCI scope.
