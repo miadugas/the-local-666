@@ -1,6 +1,6 @@
 # grave-goods-store
 
-**Grave Goods** — punk leftist sticker store. Solo-operator side project. Modern occult × playful × Satan-positive aesthetic. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
+**Grave Goods** — punk leftist sticker store. Solo-operator side project. Modern occult × warm boutique × Satan-positive aesthetic. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
 
 > Project-specific. Global rules live in `~/.claude/CLAUDE.md`. Don't duplicate.
 
@@ -12,7 +12,7 @@
 | ---------- | ------------------------------------------------------------------ |
 | Frontend   | Vue 3 + Vite + TypeScript                                          |
 | Styling    | Tailwind v4 (`@import "tailwindcss"` + `@tailwindcss/vite` plugin) |
-| Tokens     | `@theme` block in `web/src/styles/tokens.css` (OKLCH)              |
+| Tokens     | `@theme` block in `web/src/styles/tokens.css`                      |
 | Workspaces | npm workspaces; root manages `web/` (backend/shared reserved)      |
 | Hosting    | the_litterbox (10.0.0.142) behind Cloudflare Tunnel                |
 
@@ -33,10 +33,10 @@ grave-goods-store/
 ├── web/                       # Vue 3 SPA (current focus)
 │   ├── src/
 │   │   ├── main.ts
-│   │   ├── App.vue
+│   │   ├── App.vue            # mounts <Header /> ... <Footer /> + .grain-overlay
 │   │   ├── styles/
-│   │   │   ├── global.css     # @import "tailwindcss" + tokens
-│   │   │   └── tokens.css     # @theme block (OKLCH) + semantic tokens
+│   │   │   ├── global.css     # Tailwind import + body bg gradient + grain overlay
+│   │   │   └── tokens.css     # @theme block + semantic vars
 │   │   ├── components/        # hand-built, no UI library
 │   │   ├── composables/       # API calls live here (when there are any)
 │   │   └── pages/             # HomePage.vue, ProductPage.vue (suffix `Page`)
@@ -49,23 +49,69 @@ grave-goods-store/
 
 ---
 
-## Locked decisions — don't re-litigate
+## Aesthetic — locked decisions
 
-- **Stripped palette — three working colors only:**
-  - **Ember violet** (`--color-ember-*`, anchor `#4f3872`) is the sole accent. Does all the work that blood + candle used to: CTAs, links, focus rings, hover states, section eyebrows, off-register print effects, halftones, decorative borders, scale bands.
-    - `ember-500` on light surfaces (bone): CTA fills, kicker text, decorative borders
-    - `ember-300` (`#b5a4cc`) on dark surfaces (plum): off-register shadows, halftone fills, eyebrow text on plum, link hover, icon color
-    - `ember-700` (`#2a1c40`) as a full-section surface band (announcement strip, Newsletter)
-  - **Plum** (`--color-plum-*`, anchor `--color-plum-1000` = `#101113`) is the ink-black surface family. plum-1000 = primary dark surface (Header, Hero, Footer). plum-900 = alt dark band (ValuesStrip). plum-700 = hairline dividers on dark.
-  - **Bone** (`--color-bone-*`) is the paper family. bone-100 = primary light surface (ProductGrid). bone-200 = aged-paper variant (Manifesto). bone-50 = brightest cream (cards, form inputs, button fills on dark violet).
-- **Blood and Candle are out of the page.** Tokens stay defined in `tokens.css` for potential future use (sale tags, holy moments), but are NOT used in any component today. If you reach for one, you're probably re-litigating a closed decision.
+**Direction:** modern goth-occult-warm boutique. Mirrors `github.com/miadugas/graveyard`. NOT punk-riso-zine — no off-register text, no halftones, no tabloid sections, no "Issue No. X · riso" copy.
+
+### Palette — three working families
+
+- **Soot** (`--color-soot-*`) — near-black surfaces. `soot-900: #0a0a0a` (page bg anchor), `soot-1000: #050505` (footer / sunken), `soot-800: #131313` (soft elevated), `soot-700: #1d1b1a` (raised). Plus `--panel: rgba(24, 24, 24, 0.88)` for translucent cards.
+- **Cream** (`--color-cream-*`) — warm off-white text. `cream-100: #efe7da` (anchor / body text), `cream-300: #b7ad9d` (muted secondary), `cream-50: #f7efe0` (brightest), `cream-400: #847a6a` (faintest).
+- **Ember** (`--color-ember-*`) — molten orange accent. `ember-500: #ff4e2b` (anchor — CTAs, focus, primary accent), `ember-300: #ff8d59` (soft — eyebrows, hover, links), `ember-700: #d93514` (deep — gradient end), `ember-100`/`ember-900` for tints.
+
+Semantic vars: `--bg`, `--bg-soft`, `--bg-raised`, `--bg-sunken`, `--panel`, `--fg`, `--fg-muted`, `--fg-faint`, `--accent`, `--accent-soft`, `--accent-deep`, `--border`, `--border-strong`.
+
+**Removed:** plum, bone, blood, candle, séance pastels, riso ink overlays. All gone — those were from the kit's punk-riso direction.
+
+### Body atmosphere
+
+Body bg is **NOT flat** — it's an atmospheric stack defined in `global.css`:
+
+- Radial-gradient ember glow at 15%/20%
+- Radial-gradient deep ember glow at 85%/0%
+- Diagonal linear-gradient soot
+
+Plus a fixed `.grain-overlay` (radial dot SVG, soft-light blend, 0.4 opacity) mounted at the top of `App.vue`.
+
+Sections sit on this body gradient. Most sections have **transparent backgrounds**. Only Footer uses a solid bg (`--bg-sunken`).
+
+### Type
+
+- **Cinzel** (`--font-display`) — h1/h2/h3/brand. Roman engraved-stone serif. Monumental + occult.
+- **Instrument Sans** (`--font-body`) — body. Refined modern sans.
+- **Anton SC** (`--font-poster`) — reserved for poster moments. Mostly unused; available if needed.
+
+Removed: Bodoni Moda, Poppins, Pirata One (blackletter), Permanent Marker, Special Elite (typewriter).
+
+Fonts loaded via `<link>` in `web/index.html`. Self-host from the_litterbox before launch.
+
+### Geometry
+
+- **Radii:** `--radius-md: 14px`, `--radius-lg: 18px` (default panel rounding), `--radius-pill: 9999px` (buttons, chips, icon buttons). NO hard 4px rect.
+- **Shadows:** `--shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.45)` (panels), `--shadow-glow-ember: 0 18px 36px rgba(255, 95, 50, 0.25)` (primary CTAs). NO hard offset peel shadows.
+- **Borders:** hairline `var(--border)` (`rgba(239,231,218,0.18)`) for panel edges. NO 3-4px chunky borders.
+
+### Buttons
+
+- **Primary CTA:** gradient ember pill — `linear-gradient(145deg, var(--accent), var(--accent-deep))`, cream text, glow shadow, `translateY(-2px)` hover. Pill shape (`border-radius: 9999px`).
+- **Secondary CTA:** transparent + hairline border pill, `translateY(-2px)` hover with border + tint shift.
+- **Ghost link:** underlined text, ember-soft hover.
+
+### Header
+
+`backdrop-filter: blur(10px)` translucent dark (`rgba(8, 8, 8, 0.78)`) + hairline bottom border. Sticky. Cinzel brand wordmark. No announcement strip.
+
+---
+
+## Other locked decisions
+
 - **Vue 3 SPA**, no SSR/SSG. Add prerendering only if SEO becomes a measured bottleneck.
-- **Express**, not Nuxt/Next/Astro server routes. Backend will be its own workspace when it exists.
+- **Express**, not Nuxt/Next/Astro server routes. Backend gets its own workspace when it exists.
 - **Stripe Checkout (hosted), not Elements.** Lower PCI scope.
 - **Sticky Brand for fulfillment. Never Sticker Mule.** SM's CEO is MAGA-aligned — off-brand for a leftist store.
 - **Bulk-order + self-ship.** No POD API.
 - **Cloudflare Tunnel** for public exposure. Not port forwarding, not Tailscale Funnel, not ngrok.
-- **No UI library.** Components hand-built so the punk/occult aesthetic stays distinctive.
+- **No UI library.** Components hand-built so the goth-boutique aesthetic stays distinctive.
 - **No Shopify, no Medusa, no Snipcart.** Stripe Products is the catalog source of truth (when wired).
 
 ---
@@ -76,7 +122,7 @@ grave-goods-store/
 
 - `@import "tailwindcss";` — no `@tailwind base/components/utilities`
 - `@tailwindcss/vite` plugin only — no PostCSS config
-- Tokens defined in `tokens.css` via `@theme { --color-* : oklch(…) }` so utilities auto-generate
+- Tokens defined in `tokens.css` via `@theme { --color-*: ... }` so utilities auto-generate
 - **Don't use the `group` utility class** — use data attributes or named hover variants
 
 ### Cart UI = plain "Cart"
@@ -109,12 +155,15 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ `axios` — use native `fetch`
 - ❌ Tailwind v3 syntax (`@tailwind base/components/utilities`)
 - ❌ Tailwind `group` utility class
-- ❌ Blood or Candle in any component (stripped-palette rule — page runs on ember + plum + bone only)
-- ❌ Candle used as a general accent (it's highlight/holy only)
+- ❌ Hard offset / peel shadows — soft drop shadows only
+- ❌ 4px rect corners on panels — 14/18px or pill
+- ❌ Off-register text effects, halftone fills, riso pattern dots — all gone with the kit's aesthetic
+- ❌ Bringing back plum / bone / blood / candle tokens — they're removed
 - ❌ A UI component library (shadcn-vue, PrimeVue, Element Plus)
 - ❌ Suggesting Shopify, Sticker Mule, or POD fulfillment
 - ❌ Generic AI placeholder copy ("lorem ipsum", "exciting new product!") — write thematic copy even in stubs
 - ❌ Thematic substitutions for utility UI (cart says "Cart", not "Coffin"; checkout says "Checkout", not "Last Rites")
+- ❌ "Issue No. X · riso", "Section A/B/C", "two-pass misregister" copy — riso framing is dead
 
 ---
 
@@ -124,8 +173,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 - Product prices in `web/src/data/products.ts` are uniform `$4` placeholders. Real prices come from Stripe Products (phase 5).
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
-- Color tokens in `web/src/styles/tokens.css` are hex — OKLCH conversion pending a proper tool pass.
-- Google Fonts loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
+- Google Fonts (Cinzel + Instrument Sans + Anton SC) loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
 
 ---
 
@@ -143,10 +191,10 @@ npm run dev --workspace web
 
 ---
 
-## Design kit (reference)
+## Reference
 
-- `~/Downloads/mgg-design-system-v2/handoff/storefront-riso/` — hi-fi React prototype + token system + 11 sticker assets + logo + hero illustration
-- **Visual reference only.** Code does not get ported as-is (kit is React + vanilla CSS; this project is Vue 3 + Tailwind v4).
+- **Aesthetic source of truth:** `https://github.com/miadugas/graveyard` — Mia's original design (`styles.css` + `tailwind.config.ts`). Mirror this, not the kit.
+- Old kit (visual reference, NOT to be ported): `~/Downloads/mgg-design-system-v2/handoff/storefront-riso/`
 
 ---
 
@@ -157,3 +205,4 @@ npm run dev --workspace web
 - No unsolicited summaries after edits
 - Match existing patterns before inventing new ones
 - Don't preemptively wire backend/Stripe/Cloudinary things before they exist
+- When tempted to reach for old kit aesthetics (riso, plum, blood, candle, off-register) → stop and use the boutique tokens instead

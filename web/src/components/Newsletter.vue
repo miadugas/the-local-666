@@ -10,101 +10,137 @@ function handleSubmit() {
 </script>
 
 <template>
-  <section
-    class="relative overflow-hidden bg-ember-700 text-bone-50 py-[60px] border-y-[4px] border-plum-900"
-  >
-    <!-- Riso grain overlay -->
-    <div
-      aria-hidden="true"
-      class="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.22]"
-      style="
-        background-image: url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);
-      "
-    ></div>
-
-    <div
-      class="relative max-w-[1240px] mx-auto px-8 grid grid-cols-2 gap-[60px] items-center"
-    >
-      <!-- Left: kicker + headline -->
-      <div>
-        <div
-          class="font-mono text-[11px] tracking-[0.28em] uppercase mb-[10px]"
-        >
-          Subscribe — Section C
-        </div>
-        <h2
-          class="font-display font-black text-[72px] leading-[0.9] tracking-tight m-0"
-        >
-          One cursed email,<br /><span class="italic">monthly.</span>
-        </h2>
-      </div>
-
-      <!-- Right: body + form -->
-      <div>
-        <p class="font-body text-[15px] leading-[1.55] m-0 mb-4 max-w-[44ch]">
+  <section class="newsletter">
+    <div class="newsletter-inner">
+      <div class="copy">
+        <p class="eyebrow">One cursed email, monthly</p>
+        <h2>Join the haunt list.</h2>
+        <p class="lede">
           New drops, mutual-aid totals, and the occasional photo of the cat who
           guards the print room. We will never sell your email. We will never DM
           you about manifestation.
         </p>
-        <form class="flex gap-[10px]" @submit.prevent="handleSubmit">
-          <input
-            v-model="email"
-            type="email"
-            required
-            placeholder="where do we send the haunting?"
-            aria-label="Email address"
-            class="email-input"
-          />
-          <button type="submit" class="subscribe-btn">Subscribe</button>
-        </form>
       </div>
+
+      <form class="form" @submit.prevent="handleSubmit">
+        <input
+          v-model="email"
+          type="email"
+          required
+          placeholder="where do we send the haunting?"
+          aria-label="Email address"
+          class="email-input"
+        />
+        <button type="submit" class="subscribe-btn">Subscribe</button>
+      </form>
     </div>
   </section>
 </template>
 
 <style scoped>
+.newsletter {
+  padding: clamp(2.5rem, 6vw, 5rem) 0;
+}
+.newsletter-inner {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+  padding: clamp(1.8rem, 4vw, 3rem);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  font-weight: 600;
+}
+
+.copy h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+
+.lede {
+  margin: 1rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  max-width: 44ch;
+}
+
+.form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
 .email-input {
   flex: 1;
-  padding: 14px 16px;
-  background: var(--color-bone-50);
-  color: var(--color-plum-900);
-  border: 3px solid var(--color-plum-900);
-  border-radius: 4px;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 231, 218, 0.08);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
   font-family: var(--font-body);
-  font-size: 15px;
-  box-shadow: 5px 5px 0 var(--color-plum-900);
+  font-size: 0.95rem;
   outline: none;
+  transition:
+    border-color 160ms,
+    background 160ms;
 }
 .email-input::placeholder {
-  color: var(--color-plum-600);
+  color: var(--fg-faint);
 }
 .email-input:focus {
-  outline: 2px solid var(--color-ember-300);
-  outline-offset: 2px;
+  border-color: var(--accent);
+  background: rgba(239, 231, 218, 0.12);
 }
 
 .subscribe-btn {
-  background: var(--color-bone-50);
-  color: var(--color-plum-900);
-  font-family: var(--font-poster);
-  font-size: 13px;
-  letter-spacing: 0.18em;
+  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+  color: #fff9f1;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 14px 22px;
-  border: 3px solid var(--color-plum-900);
-  border-radius: 4px;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 9999px;
   cursor: pointer;
-  box-shadow: 5px 5px 0 var(--color-plum-900);
+  box-shadow: var(--shadow-glow-ember);
   transition:
-    transform 120ms var(--ease-snap),
-    box-shadow 120ms var(--ease-snap);
+    transform 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
 }
 .subscribe-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0 var(--color-plum-900);
+  transform: translateY(-2px);
+  box-shadow:
+    var(--shadow-glow-ember),
+    0 22px 44px rgba(255, 95, 50, 0.28);
 }
 .subscribe-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: 1px 1px 0 var(--color-plum-900);
+  transform: translateY(0);
+}
+
+@media (max-width: 800px) {
+  .newsletter-inner {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
