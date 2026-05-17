@@ -1,228 +1,211 @@
 <script setup lang="ts">
-// Riso-edition hero: dark plum surface, off-register "NO GODS, JUST STICKERS."
-// in Anton SC, halftone tentacle riso sample card on the right.
+// Concept B hero — atmospheric, Cinzel monumental headline + 3 translucent
+// panel cards on the right. No riso sample, no off-register, no halftones.
 </script>
 
 <template>
-  <section
-    class="relative overflow-hidden bg-plum-1000 text-bone-100 pt-[60px] pb-[90px] border-b-[4px] border-plum-900"
-  >
-    <!-- Full-section riso halftone backdrop (bone overlay + blood bottom-left patch) -->
-    <svg
-      class="absolute inset-0 w-full h-full pointer-events-none"
-      aria-hidden="true"
-    >
-      <defs>
-        <pattern
-          id="hero-ht-blood"
-          width="5"
-          height="5"
-          patternUnits="userSpaceOnUse"
-        >
-          <circle cx="2.5" cy="2.5" r="1.3" fill="rgb(181 164 204 / 0.5)" />
-        </pattern>
-        <pattern
-          id="hero-ht-bone"
-          width="4"
-          height="4"
-          patternUnits="userSpaceOnUse"
-        >
-          <circle cx="2" cy="2" r="1.0" fill="rgb(247 244 239 / 0.12)" />
-        </pattern>
-      </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#hero-ht-bone)" />
-      <rect x="0" y="40%" width="62%" height="60%" fill="url(#hero-ht-blood)" />
-    </svg>
-
-    <div
-      class="relative max-w-[1240px] mx-auto px-8 grid grid-cols-[1.5fr_1fr] gap-14 items-start"
-    >
-      <!-- LEFT — issue meta · ransom headline · lede · CTAs -->
-      <div>
-        <div
-          class="font-poster text-[13px] tracking-[0.3em] uppercase text-ember-300 mb-[18px]"
-        >
-          ★ Issue No. 04 · Two-color riso ★
-        </div>
-
-        <h1
-          class="relative m-0 font-poster uppercase leading-[0.88] tracking-tight text-[clamp(3.5rem,12vw,9.75rem)]"
-        >
-          <!-- Off-register back layer (blood-red, offset) -->
-          <span
-            aria-hidden="true"
-            class="absolute left-[6px] top-[5px] text-ember-300 opacity-95"
-            >No gods,<br />just<br />stickers.</span
-          >
-          <!-- Front layer (bone-50) -->
-          <span class="relative text-bone-50"
-            >No gods,<br />just<br />stickers.</span
-          >
-        </h1>
-
-        <p
-          class="font-body text-base leading-[1.65] text-bone-300 mt-9 mb-0 max-w-[52ch]"
-        >
-          Riso-printed in two passes on 100lb French Speckletone. Small-batch
-          stickers and buttons.
-          <b class="text-bone-50">For people who'd rather be loud than polite</b
-          >.
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Drop one · for the haunted</p>
+        <h1>No gods. Just stickers.</h1>
+        <p class="lede">
+          Small-batch handmade die-cut vinyl. Half the profits go to bail funds.
+          The other half buys more ink.
         </p>
-
-        <div class="mt-[26px] flex gap-[14px] flex-wrap">
-          <button type="button" class="cta-primary">Browse the drop →</button>
-          <button type="button" class="cta-secondary">Read the zine</button>
+        <div class="hero-actions">
+          <a href="#shop" class="btn btn-primary">Shop the drop</a>
+          <a href="#manifesto" class="btn btn-secondary">Read the manifesto</a>
         </div>
       </div>
 
-      <!-- RIGHT — rotated riso print-sample card -->
-      <div
-        class="relative self-start mt-[18px] p-5 bg-plum-1000 border-2 border-bone-100"
-        style="
-          transform: rotate(-1.6deg);
-          box-shadow: 8px 8px 0 var(--color-ember-500);
-        "
-      >
-        <div
-          class="font-mono text-[11px] tracking-shout text-ember-300 uppercase mb-[14px]"
-        >
-          ★ Print sample · 2-pass riso
-        </div>
-
-        <svg
-          viewBox="0 0 360 360"
-          class="block w-full h-auto"
-          aria-hidden="true"
-        >
-          <defs>
-            <pattern
-              id="card-ht"
-              width="6"
-              height="6"
-              patternUnits="userSpaceOnUse"
-            >
-              <circle cx="3" cy="3" r="2" fill="#b5a4cc" />
-            </pattern>
-          </defs>
-          <rect x="0" y="0" width="360" height="360" fill="#101113" />
-          <!-- Halftone tentacle blob + off-register bone overlay -->
-          <g transform="translate(180 200)">
-            <path
-              d="M -120 80 C -140 0, -100 -80, -40 -100 C 0 -120, 40 -80, 60 -40 C 100 -60, 120 -10, 100 40 C 80 80, 0 100, -80 110 Z"
-              fill="url(#card-ht)"
+      <aside class="hero-cards" aria-label="What we're about">
+        <article class="hero-card">
+          <p class="card-eyebrow">Featured drop</p>
+          <div class="featured">
+            <img
+              src="/stickers/protect-trans-kids.png"
+              alt="Protect Trans Kids sticker"
+              draggable="false"
             />
-            <path
-              d="M -100 60 C -100 20, -60 -40, 0 -50 C 60 -60, 80 -20, 70 30 C 50 80, -10 90, -100 60 Z"
-              fill="#f7f4ef"
-              opacity="0.18"
-              transform="translate(6 -4)"
-            />
-          </g>
-          <!-- Off-register VISIBLE -->
-          <text
-            x="180"
-            y="62"
-            text-anchor="middle"
-            fill="#b5a4cc"
-            opacity="0.85"
-            font-family="var(--font-poster)"
-            font-size="44"
-            letter-spacing="0.04em"
-            transform="translate(5 4)"
-          >
-            VISIBLE
-          </text>
-          <text
-            x="180"
-            y="62"
-            text-anchor="middle"
-            fill="#f7f4ef"
-            font-family="var(--font-poster)"
-            font-size="44"
-            letter-spacing="0.04em"
-          >
-            VISIBLE
-          </text>
-          <!-- Off-register DISSENT -->
-          <text
-            x="180"
-            y="326"
-            text-anchor="middle"
-            fill="#b5a4cc"
-            opacity="0.85"
-            font-family="var(--font-poster)"
-            font-size="58"
-            letter-spacing="0.04em"
-            transform="translate(5 4)"
-          >
-            DISSENT
-          </text>
-          <text
-            x="180"
-            y="326"
-            text-anchor="middle"
-            fill="#f7f4ef"
-            font-family="var(--font-poster)"
-            font-size="58"
-            letter-spacing="0.04em"
-          >
-            DISSENT
-          </text>
-        </svg>
+            <div>
+              <h3>Protect Trans Kids</h3>
+              <p class="card-meta">3" die-cut vinyl · $4</p>
+            </div>
+          </div>
+        </article>
 
-        <div
-          class="font-mono text-[11px] text-bone-300 mt-[14px] leading-[1.55] tracking-[0.04em]"
-        >
-          No.&nbsp;04 / 100<br />
-          printed on 100lb French Speckletone<br />
-          · two passes, slight misregister ·
-        </div>
-      </div>
+        <article class="hero-card">
+          <p class="card-eyebrow">Mutual aid</p>
+          <p class="card-body">
+            50% of profits go to the Colorado Freedom Fund. We do not manifest
+            abundance. We pay bail.
+          </p>
+        </article>
+
+        <article class="hero-card">
+          <p class="card-eyebrow">Two people · Denver</p>
+          <p class="card-body">
+            Printed in a mile-high basement by a pack of two queer lesbo's and a
+            cat named Circe.
+          </p>
+        </article>
+      </aside>
     </div>
   </section>
 </template>
 
 <style scoped>
-.cta-primary {
-  background: var(--color-ember-500);
-  color: var(--color-bone-50);
-  border: none;
-  padding: 16px 28px;
-  font-family: var(--font-poster);
-  font-size: 14px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 5px 5px 0 var(--color-bone-50);
-  transition:
-    transform 120ms var(--ease-snap),
-    box-shadow 120ms var(--ease-snap);
+.hero {
+  padding: clamp(2.5rem, 7vw, 6rem) 0 clamp(3rem, 8vw, 7rem);
 }
-.cta-primary:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0 var(--color-bone-50);
-}
-.cta-primary:active {
-  transform: translate(4px, 4px);
-  box-shadow: 1px 1px 0 var(--color-bone-50);
+.hero-inner {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
 }
 
-.cta-secondary {
-  background: transparent;
-  color: var(--color-bone-100);
-  border: 2px solid var(--color-bone-100);
-  padding: 16px 26px;
-  font-family: var(--font-poster);
-  font-size: 14px;
-  letter-spacing: 0.18em;
+.eyebrow {
+  margin: 0 0 0.75rem;
   text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--accent-soft);
+}
+
+.hero-copy h1 {
+  margin: 0;
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+}
+
+.lede {
+  margin: 1.4rem 0 0;
+  max-width: 56ch;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  padding: 0.7rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition:
-    background 120ms,
-    color 120ms;
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    background 220ms var(--ease-out),
+    color 220ms var(--ease-out);
 }
-.cta-secondary:hover {
-  background: var(--color-bone-100);
-  color: var(--color-plum-1000);
+.btn-primary {
+  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+  color: #fff9f1;
+  box-shadow: var(--shadow-glow-ember);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--shadow-glow-ember),
+    0 24px 48px rgba(255, 95, 50, 0.3);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border);
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  background: rgba(239, 231, 218, 0.05);
+}
+
+.hero-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-card {
+  padding: 1.1rem 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(6px);
+}
+
+.card-eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  font-weight: 600;
+}
+
+.hero-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+
+.card-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  letter-spacing: 0.04em;
+}
+
+.card-body {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.featured {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0.85rem;
+  align-items: center;
+}
+.featured img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.55));
+}
+
+@media (max-width: 880px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
