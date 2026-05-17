@@ -1,6 +1,6 @@
 # grave-goods-store
 
-**Mission Grave Goods** — punk leftist sticker store. Solo-operator side project. Modern occult × playful × Satan-positive aesthetic. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
+**Grave Goods** — punk leftist sticker store. Solo-operator side project. Modern occult × playful × Satan-positive aesthetic. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
 
 > Project-specific. Global rules live in `~/.claude/CLAUDE.md`. Don't duplicate.
 

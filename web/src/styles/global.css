@@ -1,16 +1,46 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-/* Body defaults — site falls back to bone-cream/plum-ink with Poppins body type. */
 html,
 body {
   margin: 0;
   padding: 0;
   min-height: 100%;
 }
+
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 78, 43, 0.3), transparent 42%),
+    radial-gradient(circle at 85% 0%, rgba(120, 47, 23, 0.42), transparent 35%),
+    linear-gradient(135deg, #070707 0%, #12110f 45%, #090909 100%);
+  background-attachment: fixed;
   color: var(--fg);
   font-family: var(--font-body);
+  line-height: var(--leading-body);
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Persistent grain overlay — adds tactile atmosphere over the body gradient */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 0.6px,
+    transparent 0.6px
+  );
+  background-size: 2px 2px;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* Cinzel + display headings get the engraved serif treatment */
+h1,
+h2,
+h3,
+.brand {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
 }

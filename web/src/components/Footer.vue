@@ -93,7 +93,7 @@ const LINK_GROUPS = [
       <div
         class="mt-10 pt-[18px] border-t border-plum-700 flex justify-between font-mono text-[11px] text-bone-400 tracking-[0.08em]"
       >
-        <div>© Mission Grave Goods — a worker-owned grave</div>
+        <div>© Grave Goods — a worker-owned grave</div>
         <div>★ no gods, no masters, no minimum order ★</div>
       </div>
     </div>

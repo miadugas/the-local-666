@@ -1,232 +1,105 @@
 /* =========================================================================
-  Grave Goods — design tokens (Tailwind v4 @theme + semantic vars)
+   Grave Goods — design tokens (Tailwind v4 @theme + semantic vars)
    --------------------------------------------------------------------------
-   Ported from the design kit:
-     ~/Downloads/mgg-design-system-v2/handoff/storefront-riso/colors_and_type.css
-
-   TODO: convert color hex → OKLCH in the @theme block. Currently hex for
-   1:1 fidelity to the kit; OKLCH conversion is a polish pass with a proper
-   tool, not freehand math.
-
-   Webfonts loaded via <link> in web/index.html (avoids CSS @import ordering
-   issues; preconnect hints included for perf). Self-hosting from the_litterbox
-   is parked.
+   Aesthetic: modern goth-occult-warm boutique. Soot-black surfaces, warm
+   cream text, ember-orange accent, atmospheric body gradient. Mirrors the
+   reference design at github.com/miadugas/graveyard.
    ========================================================================= */
 
 @theme {
   /* COLOR — Core ---------------------------------------------------------- */
 
-  /* Plum-black — the crypt. Default surface on dark, default text on light. */
-  --color-plum-1000: #101113;
-  --color-plum-900: #150b1c;
-  --color-plum-800: #1f1228;
-  --color-plum-700: #2c1a38;
-  --color-plum-600: #3e2750;
-  --color-plum-500: #5a3a74;
+  /* Soot — near-black surface family. */
+  --color-soot-700: #1d1b1a;
+  --color-soot-800: #131313;
+  --color-soot-900: #0a0a0a; /* anchor — page bg */
+  --color-soot-1000: #050505;
 
-  /* Bone-ivory — paper. Default surface on light, default text on dark. */
-  --color-bone-50: #fbf6e9;
-  --color-bone-100: #f7f4ef;
-  --color-bone-200: #ebe1c5;
-  --color-bone-300: #dcd0ad;
-  --color-bone-400: #b8a984;
+  /* Cream — warm off-white text family. */
+  --color-cream-50: #f7efe0;
+  --color-cream-100: #efe7da; /* anchor — body text */
+  --color-cream-200: #dcd2c0;
+  --color-cream-300: #b7ad9d; /* muted */
+  --color-cream-400: #847a6a;
 
-  /* Blood — DANGER / SALE only. Not a general accent. */
-  --color-blood-900: #5a0d11;
-  --color-blood-700: #8a161c;
-  --color-blood-600: #a51c22;
-  --color-blood-500: #c12127;
-  --color-blood-400: #d94850;
-  --color-blood-300: #ea8088;
-
-  /* Candle — HIGHLIGHT / HOLY only. Not a general accent. */
-  --color-candle-900: #6b4a0a;
-  --color-candle-700: #a17b16;
-  --color-candle-500: #d4a82f;
-  --color-candle-400: #e3bd57;
-  --color-candle-300: #efd28a;
-
-  /* Ember — PRIMARY brand accent. Deep dusty riso violet, not tech-purple. */
-  --color-ember-100: #e8e1f0;
-  --color-ember-300: #b5a4cc;
-  --color-ember-500: #4f3872;
-  --color-ember-600: #3d2b5a;
-  --color-ember-700: #2a1c40;
-
-  /* Séance pastels — dusty, never saccharine. */
-  --color-ghost-pink: #f0bcc7;
-  --color-ghost-pink-deep: #d68fa1;
-  --color-seance-teal: #87b8b1;
-  --color-seance-teal-deep: #5a9089;
-  --color-spirit-lav: #c9b6e0;
-  --color-spirit-lav-deep: #9d83bf;
-
-  /* Riso ink-mix overlays — use with mix-blend-mode: multiply on bone */
-  --color-riso-red: #ff4438;
-  --color-riso-blue: #3b5bdb;
-  --color-riso-yellow: #f5d220;
+  /* Ember — molten orange. The accent. */
+  --color-ember-100: #fde6dc;
+  --color-ember-300: #ff8d59; /* accent-soft */
+  --color-ember-500: #ff4e2b; /* primary anchor */
+  --color-ember-700: #d93514; /* deep — gradient end */
+  --color-ember-900: #822010;
 
   /* TYPE — Families ------------------------------------------------------- */
-  --font-display: "Bodoni Moda", "Bodoni 72", "Didot", "Times New Roman", serif;
-  --font-poster:
-    "Anton SC", "Impact", "Haettenschweiler", "Arial Narrow", sans-serif;
+  --font-display: "Cinzel", "Trajan Pro", "Times New Roman", serif;
   --font-body:
-    "Poppins", "SF Pro Text", "SF Pro Display", -apple-system,
-    BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-marker: "Permanent Marker", "Marker Felt", "Comic Sans MS", cursive;
-  --font-mono: "Special Elite", "Courier Prime", "Courier New", monospace;
-  --font-blackletter:
-    "Pirata One", "UnifrakturCook", "Blackletter686 BT", serif;
+    "Instrument Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-poster: "Anton SC", "Impact", "Haettenschweiler", sans-serif;
 
   /* TYPE — Scale ---------------------------------------------------------- */
-  --text-xs: 0.75rem; /* 12 */
-  --text-sm: 0.875rem; /* 14 */
-  --text-base: 1rem; /* 16 — body */
-  --text-lg: 1.125rem; /* 18 */
-  --text-xl: 1.25rem; /* 20 */
-  --text-2xl: 1.5rem; /* 24 */
-  --text-3xl: 2rem; /* 32 */
-  --text-4xl: 2.5rem; /* 40 */
-  --text-5xl: 3.5rem; /* 56 */
-  --text-6xl: 4.5rem; /* 72 */
-  --text-7xl: 6rem; /* 96 */
-  --text-poster: 9.75rem; /* 156 — hero ransom-note treatment */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+  --text-6xl: 4.5rem;
 
-  /* TYPE — Line-height + tracking ---------------------------------------- */
-  --leading-tight: 0.95;
-  --leading-snug: 1.1;
+  /* TYPE — Leading + tracking -------------------------------------------- */
+  --leading-tight: 0.98;
+  --leading-snug: 1.15;
   --leading-body: 1.55;
-  --leading-loose: 1.75;
 
   --tracking-tight: -0.02em;
-  --tracking-normal: 0;
   --tracking-wide: 0.08em;
-  --tracking-shout: 0.18em; /* ALL CAPS labels — "MUTUAL AID" energy */
+  --tracking-shout: 0.15em;
 
   /* SHAPE / RADIUS ------------------------------------------------------- */
-  --radius-none: 0;
-  --radius-xs: 2px;
-  --radius-sm: 4px; /* default — sticker peel corner */
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px; /* default panel rounding */
   --radius-pill: 9999px;
 
-  /* SHADOW — sticker peel + photocopy offset, never web-rounded ---------- */
-  --shadow-peel-sm: 3px 3px 0 var(--color-plum-900);
-  --shadow-peel: 5px 5px 0 var(--color-plum-900);
-  --shadow-peel-lg: 8px 8px 0 var(--color-plum-900);
-  --shadow-peel-blood: 5px 5px 0 var(--color-blood-500);
-  --shadow-peel-gold: 5px 5px 0 var(--color-candle-500);
-  --shadow-peel-ember: 5px 5px 0 var(--color-ember-500);
-  --shadow-lift: 0 6px 18px -8px rgba(12, 6, 16, 0.45);
-  --inset-shadow-press: inset 2px 2px 0 rgba(12, 6, 16, 0.35);
+  /* SHADOW — soft drop + ember glow. No hard offset peel shadows. -------- */
+  --shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.45);
+  --shadow-soft-sm: 0 10px 22px rgba(0, 0, 0, 0.35);
+  --shadow-glow-ember: 0 18px 36px rgba(255, 95, 50, 0.25);
 
   /* MOTION --------------------------------------------------------------- */
-  --ease-snap: cubic-bezier(0.2, 0.9, 0.2, 1); /* punk: fast in, settled */
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   --duration-fast: 120ms;
-  --duration-base: 200ms;
+  --duration-base: 250ms;
   --duration-slow: 400ms;
 }
 
 /* =========================================================================
    Semantic tokens — NOT Tailwind utilities. Use in custom CSS / inline.
-   These map roles to palette tokens (locked-decision enforcement).
    ========================================================================= */
 :root {
-  --bg: var(--color-bone-100);
-  --bg-raised: var(--color-bone-50);
-  --bg-sunken: var(--color-bone-200);
-  --bg-invert: var(--color-plum-900);
+  --bg: var(--color-soot-900);
+  --bg-soft: var(--color-soot-800);
+  --bg-raised: var(--color-soot-700);
+  --bg-sunken: var(--color-soot-1000);
+  --panel: rgba(24, 24, 24, 0.88);
 
-  --fg: var(--color-plum-900);
-  --fg-muted: var(--color-plum-600);
-  --fg-faint: var(--color-bone-400);
-  --fg-invert: var(--color-bone-100);
+  --fg: var(--color-cream-100);
+  --fg-muted: var(--color-cream-300);
+  --fg-faint: var(--color-cream-400);
 
-  /* PRIMARY brand accent = ember purple (locked decision) */
+  /* Primary brand accent = ember orange */
   --accent: var(--color-ember-500);
-  --accent-hover: var(--color-ember-600);
-  --accent-press: var(--color-ember-700);
-  --accent-on: var(--color-bone-50);
+  --accent-soft: var(--color-ember-300);
+  --accent-deep: var(--color-ember-700);
 
-  /* Halo = candle gold (highlight / holy only) */
-  --halo: var(--color-candle-500);
-  --halo-hover: var(--color-candle-700);
-  --halo-on: var(--color-plum-900);
+  /* Hairline borders / dividers (cream at 18% alpha — visible on dark) */
+  --border: rgba(239, 231, 218, 0.18);
+  --border-strong: rgba(239, 231, 218, 0.3);
 
-  /* Danger = blood red (danger / sale only) */
-  --danger: var(--color-blood-500);
-  --danger-hover: var(--color-blood-600);
-
-  --hairline: color-mix(in oklab, var(--color-plum-900) 18%, transparent);
-  --hairline-bold: color-mix(in oklab, var(--color-plum-900) 38%, transparent);
-
-  --success: #4f8a5b; /* moss, sparingly */
-  --warning: var(--color-candle-700);
-}
-
-/* Dark / "crypt" theme override */
-[data-theme="crypt"] {
-  --bg: var(--color-plum-900);
-  --bg-raised: var(--color-plum-800);
-  --bg-sunken: var(--color-plum-1000);
-  --bg-invert: var(--color-bone-100);
-  --fg: var(--color-bone-100);
-  --fg-muted: var(--color-bone-300);
-  --fg-faint: var(--color-plum-500);
-  --fg-invert: var(--color-plum-900);
-  --hairline: color-mix(in oklab, var(--color-bone-100) 22%, transparent);
-  --hairline-bold: color-mix(in oklab, var(--color-bone-100) 45%, transparent);
-}
-
-/* =========================================================================
-   TEXTURE UTILITIES — riso grain + photocopy noise (CSS-only)
-   ========================================================================= */
-.tex-grain {
-  position: relative;
-  isolation: isolate;
-}
-.tex-grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  opacity: 0.22;
-  z-index: 1;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-.tex-xerox::after {
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-
-/* Deckled paper edge — torn-bottom utility for hero panels */
-.deckle-bottom {
-  -webkit-mask-image:
-    radial-gradient(8px 6px at 6px 100%, transparent 98%, #000 100%) repeat-x
-      bottom left / 12px 12px,
-    linear-gradient(#000, #000);
-  mask-image:
-    radial-gradient(8px 6px at 6px 100%, transparent 98%, #000 100%) repeat-x
-      bottom left / 12px 12px,
-    linear-gradient(#000, #000);
-  -webkit-mask-composite: source-over;
-  padding-bottom: 14px;
-}
-
-/* Ransom-note word — wrap a span. Optional --rn-bg, --rn-rot. */
-.ransom {
-  display: inline-block;
-  padding: 0.05em 0.35em;
-  background: var(--rn-bg, var(--color-bone-50));
-  color: var(--fg);
-  border: 2px solid var(--color-plum-900);
-  box-shadow: var(--shadow-peel-sm);
-  transform: rotate(var(--rn-rot, -2deg));
-  margin: 0.05em 0.1em;
-  font-family: var(--font-display);
-  font-weight: 900;
+  --success: #4f8a5b;
+  --warning: var(--color-ember-300);
+  --danger: var(--color-ember-700);
 }

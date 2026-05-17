@@ -1,5 +1,5 @@
 /**
- * Product catalog — Mission Grave Goods.
+ * Product catalog — Grave Goods.
  *
  * Source of truth for the storefront UI until Stripe Products is wired (phase 5).
  *
