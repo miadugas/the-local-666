@@ -9,11 +9,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at 15% 20%, rgba(255, 78, 43, 0.3), transparent 42%),
-    radial-gradient(circle at 85% 0%, rgba(120, 47, 23, 0.42), transparent 35%),
-    linear-gradient(135deg, #070707 0%, #12110f 45%, #090909 100%);
-  background-attachment: fixed;
+  background: var(--color-pitch);
   color: var(--fg);
   font-family: var(--font-body);
   line-height: var(--leading-body);
@@ -21,26 +17,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Persistent grain overlay — adds tactile atmosphere over the body gradient */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.05) 0.6px,
-    transparent 0.6px
-  );
-  background-size: 2px 2px;
-  mix-blend-mode: soft-light;
-  opacity: 0.4;
-  z-index: -1;
+/* Reusable section divider — 3px bone-cream rule between sections */
+.section-divider {
+  border-top: var(--border-bone);
 }
 
-/* Cinzel + display headings get the engraved serif treatment */
+/* Headings + brand share the Bowlby display by default; brand wordmark
+   overrides to Permanent Marker inline where it's used. */
 h1,
 h2,
-h3,
-.brand {
+h3 {
   font-family: var(--font-display);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  margin: 0;
 }

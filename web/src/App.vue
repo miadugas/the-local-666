@@ -9,7 +9,6 @@ import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <div class="grain-overlay" aria-hidden="true"></div>
   <Header />
   <Hero />
   <ProductGrid />

@@ -1,105 +1,89 @@
 /* =========================================================================
    Grave Goods — design tokens (Tailwind v4 @theme + semantic vars)
    --------------------------------------------------------------------------
-   Aesthetic: modern goth-occult-warm boutique. Soot-black surfaces, warm
-   cream text, ember-orange accent, atmospheric body gradient. Mirrors the
-   reference design at github.com/miadugas/graveyard.
+   Aesthetic: Horror-Punk Pop-Art. Pure black base, rotating acid neon
+   accents (pink/blue/lime/yellow + reserved red), hand-painted brand,
+   bone-cream ink-line outlines, hard offset blocky shadows.
    ========================================================================= */
 
 @theme {
-  /* COLOR — Core ---------------------------------------------------------- */
+  /* COLOR — Base ---------------------------------------------------------- */
+  --color-pitch: #000000;
+  --color-ink: #050505;
+  --color-bone: #f4ecd8;
 
-  /* Soot — near-black surface family. */
-  --color-soot-700: #1d1b1a;
-  --color-soot-800: #131313;
-  --color-soot-900: #0a0a0a; /* anchor — page bg */
-  --color-soot-1000: #050505;
-
-  /* Cream — warm off-white text family. */
-  --color-cream-50: #f7efe0;
-  --color-cream-100: #efe7da; /* anchor — body text */
-  --color-cream-200: #dcd2c0;
-  --color-cream-300: #b7ad9d; /* muted */
-  --color-cream-400: #847a6a;
-
-  /* Ember — molten orange. The accent. */
-  --color-ember-100: #fde6dc;
-  --color-ember-300: #ff8d59; /* accent-soft */
-  --color-ember-500: #ff4e2b; /* primary anchor */
-  --color-ember-700: #d93514; /* deep — gradient end */
-  --color-ember-900: #822010;
+  /* COLOR — Acid accents (rotating; one per card/section) ----------------- */
+  --color-acid-pink: #ff2d8a;
+  --color-acid-blue: #00d4ff;
+  --color-acid-lime: #a3e635;
+  --color-acid-yellow: #fff200;
+  --color-acid-red: #e3151f; /* reserved for warning semantics */
 
   /* TYPE — Families ------------------------------------------------------- */
-  --font-display: "Cinzel", "Trajan Pro", "Times New Roman", serif;
+  --font-brand: "Permanent Marker", "Brush Script MT", cursive;
+  --font-display: "Bowlby One", Impact, "Arial Black", sans-serif;
+  --font-zine: "Special Elite", "Courier New", monospace;
   --font-body:
-    "Instrument Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-poster: "Anton SC", "Impact", "Haettenschweiler", sans-serif;
+    "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 
   /* TYPE — Scale ---------------------------------------------------------- */
-  --text-xs: 0.75rem;
+  --text-xs: 0.7rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 2rem;
-  --text-4xl: 2.5rem;
-  --text-5xl: 3.5rem;
-  --text-6xl: 4.5rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4rem;
+  --text-6xl: 4.875rem;
 
   /* TYPE — Leading + tracking -------------------------------------------- */
-  --leading-tight: 0.98;
+  --leading-tight: 0.9;
   --leading-snug: 1.15;
   --leading-body: 1.55;
 
-  --tracking-tight: -0.02em;
-  --tracking-wide: 0.08em;
-  --tracking-shout: 0.15em;
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.18em;
+  --tracking-shout: 0.22em;
 
   /* SHAPE / RADIUS ------------------------------------------------------- */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 18px; /* default panel rounding */
+  --radius-tight: 2px;
+  --radius-sm: 4px;
   --radius-pill: 9999px;
 
-  /* SHADOW — soft drop + ember glow. No hard offset peel shadows. -------- */
-  --shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.45);
-  --shadow-soft-sm: 0 10px 22px rgba(0, 0, 0, 0.35);
-  --shadow-glow-ember: 0 18px 36px rgba(255, 95, 50, 0.25);
+  /* SHADOW — hard offset blocky. NO blur. -------------------------------- */
+  --shadow-block-bone: 4px 4px 0 var(--color-bone);
+  --shadow-block-ink: 4px 4px 0 var(--color-ink);
+  --shadow-block-pink: 4px 4px 0 var(--color-acid-pink);
+  --shadow-block-blue: 4px 4px 0 var(--color-acid-blue);
+
+  /* BORDER — heavy ink-line. NO hairlines. ------------------------------- */
+  --border-bone: 3px solid var(--color-bone);
+  --border-ink: 2px solid var(--color-ink);
+
+  /* ROTATION — surgical, applied to tape/stencil/strip elements ---------- */
+  --rotate-tape: 6deg;
+  --rotate-stencil: -2deg;
+  --rotate-strip: -1deg;
 
   /* MOTION --------------------------------------------------------------- */
   --ease-snap: cubic-bezier(0.2, 0.9, 0.2, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-
   --duration-fast: 120ms;
-  --duration-base: 250ms;
-  --duration-slow: 400ms;
+  --duration-base: 200ms;
 }
 
 /* =========================================================================
    Semantic tokens — NOT Tailwind utilities. Use in custom CSS / inline.
    ========================================================================= */
 :root {
-  --bg: var(--color-soot-900);
-  --bg-soft: var(--color-soot-800);
-  --bg-raised: var(--color-soot-700);
-  --bg-sunken: var(--color-soot-1000);
-  --panel: rgba(24, 24, 24, 0.88);
+  --bg: var(--color-pitch);
+  --fg: var(--color-bone);
 
-  --fg: var(--color-cream-100);
-  --fg-muted: var(--color-cream-300);
-  --fg-faint: var(--color-cream-400);
-
-  /* Primary brand accent = ember orange */
-  --accent: var(--color-ember-500);
-  --accent-soft: var(--color-ember-300);
-  --accent-deep: var(--color-ember-700);
-
-  /* Hairline borders / dividers (cream at 18% alpha — visible on dark) */
-  --border: rgba(239, 231, 218, 0.18);
-  --border-strong: rgba(239, 231, 218, 0.3);
-
-  --success: #4f8a5b;
-  --warning: var(--color-ember-300);
-  --danger: var(--color-ember-700);
+  /* Accent roles */
+  --accent: var(--color-acid-pink);
+  --accent-secondary: var(--color-acid-blue);
+  --accent-tertiary: var(--color-acid-lime);
+  --accent-quaternary: var(--color-acid-yellow);
+  --accent-warning: var(--color-acid-red);
 }
