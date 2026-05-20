@@ -1,18 +1,16 @@
 <script setup lang="ts">
 const NAV = [
-  { label: "Stickers", href: "#" },
-  { label: "Tarot", href: "#" },
-  { label: "ACAB", href: "#" },
-  { label: "Queer joy", href: "#" },
-  { label: "Demons", href: "#" },
-  { label: "Mutual aid", href: "#" },
-  { label: "The zine", href: "#" },
+  { label: "Shop", href: "#shop" },
+  { label: "Manifesto", href: "#manifesto" },
+  { label: "About", href: "#about" },
 ];
 </script>
 
 <template>
   <header class="site-header">
-    <a href="/" class="brand">Grave Goods</a>
+    <a href="/" class="brand" aria-label="Grave Goods — home">
+      grave<span class="brand-accent">goods</span>
+    </a>
 
     <nav class="site-nav" aria-label="Primary">
       <a v-for="item in NAV" :key="item.label" :href="item.href">
@@ -20,44 +18,7 @@ const NAV = [
       </a>
     </nav>
 
-    <div class="header-actions">
-      <button type="button" class="icon-btn" aria-label="Search">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-      </button>
-      <button type="button" class="icon-btn" aria-label="Account">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      </button>
-      <button type="button" class="cart-btn" aria-label="Cart">
-        Cart
-        <span class="cart-count">· $0</span>
-      </button>
-    </div>
+    <button type="button" class="cart-btn">Cart · 0</button>
   </header>
 </template>
 
@@ -69,91 +30,79 @@ const NAV = [
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem clamp(1rem, 4vw, 3rem);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgba(8, 8, 8, 0.78);
-  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2.25rem);
+  background: var(--color-pitch);
+  border-bottom: var(--border-bone);
 }
 
 .brand {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(1.2rem, 2.4vw, 1.65rem);
-  letter-spacing: 0.04em;
+  font-family: var(--font-brand);
+  font-size: clamp(1.3rem, 2.6vw, 1.625rem);
+  letter-spacing: 0.01em;
   color: var(--fg);
   text-decoration: none;
+  line-height: 1;
+}
+.brand-accent {
+  color: var(--color-acid-pink);
 }
 
 .site-nav {
   display: flex;
-  gap: 1rem;
+  gap: clamp(1rem, 3vw, 1.75rem);
   flex-wrap: wrap;
 }
 
 .site-nav a {
-  color: var(--fg-muted);
+  color: var(--fg);
   text-decoration: none;
-  font-size: 0.92rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  transition: color 160ms var(--ease-out);
+  letter-spacing: var(--tracking-wide);
+  transition: color var(--duration-fast) var(--ease-snap);
 }
 
 .site-nav a:hover {
-  color: var(--accent);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.icon-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  width: 2.25rem;
-  height: 2.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--fg);
-  transition:
-    border-color 160ms,
-    background 160ms;
-}
-.icon-btn:hover {
-  border-color: var(--border-strong);
-  background: rgba(239, 231, 218, 0.06);
+  color: var(--color-acid-blue);
 }
 
 .cart-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 9999px;
+  background: var(--color-acid-pink);
+  color: var(--color-ink);
+  border: var(--border-ink);
   padding: 0.5rem 0.95rem;
   font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--fg);
   cursor: pointer;
-  transition:
-    border-color 160ms,
-    background 160ms,
-    color 160ms;
+  box-shadow: var(--shadow-block-bone);
+  transition: transform var(--duration-fast) var(--ease-snap);
 }
+
 .cart-btn:hover {
-  border-color: var(--accent);
-  background: rgba(255, 78, 43, 0.1);
-  color: var(--accent-soft);
+  transform: translate(-1px, -1px);
 }
-.cart-count {
-  opacity: 0.65;
-  margin-left: 0.25rem;
+.cart-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-bone);
+}
+
+/* Keyboard focus — visible against pitch-black header */
+.brand:focus-visible,
+.site-nav a:focus-visible,
+.cart-btn:focus-visible {
+  outline: 3px solid var(--color-acid-blue);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .site-nav {
+    display: none; /* hamburger toggle out of scope for v1 */
+  }
 }
 </style>
