@@ -1,6 +1,6 @@
 # grave-goods-store
 
-**Grave Goods** — punk leftist sticker store. Solo-operator side project. Modern occult × warm boutique × Satan-positive aesthetic. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
+**Grave Goods** — punk leftist sticker store. Solo-operator side project. Horror-Punk Pop-Art × Satan-positive aesthetic — neon-on-black, Misfits/Vampira tape-strip collage. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
 
 > Project-specific. Global rules live in `~/.claude/CLAUDE.md`. Don't duplicate.
 
@@ -33,9 +33,9 @@ grave-goods-store/
 ├── web/                       # Vue 3 SPA (current focus)
 │   ├── src/
 │   │   ├── main.ts
-│   │   ├── App.vue            # mounts <Header /> ... <Footer /> + .grain-overlay
+│   │   ├── App.vue            # mounts <Header /> ... <Footer />
 │   │   ├── styles/
-│   │   │   ├── global.css     # Tailwind import + body bg gradient + grain overlay
+│   │   │   ├── global.css     # Tailwind import + pure-pitch body + heading resets
 │   │   │   └── tokens.css     # @theme block + semantic vars
 │   │   ├── components/        # hand-built, no UI library
 │   │   ├── composables/       # API calls live here (when there are any)
@@ -51,55 +51,64 @@ grave-goods-store/
 
 ## Aesthetic — locked decisions
 
-**Direction:** modern goth-occult-warm boutique. Mirrors `github.com/miadugas/graveyard`. NOT punk-riso-zine — no off-register text, no halftones, no tabloid sections, no "Issue No. X · riso" copy.
+**Direction:** Horror-Punk Pop-Art. Channels Misfits gig flyers, Vampira/Elvira blacklight horror-host posters, Misfits "3 Hits from Hell" tape-strip collage, Moon-of-Jupiter-style neon-on-black acrylic portraits. NOT goth boutique — the previous "modern goth-occult-warm boutique" direction is dead.
 
 ### Palette — three working families
 
-- **Soot** (`--color-soot-*`) — near-black surfaces. `soot-900: #0a0a0a` (page bg anchor), `soot-1000: #050505` (footer / sunken), `soot-800: #131313` (soft elevated), `soot-700: #1d1b1a` (raised). Plus `--panel: rgba(24, 24, 24, 0.88)` for translucent cards.
-- **Cream** (`--color-cream-*`) — warm off-white text. `cream-100: #efe7da` (anchor / body text), `cream-300: #b7ad9d` (muted secondary), `cream-50: #f7efe0` (brightest), `cream-400: #847a6a` (faintest).
-- **Ember** (`--color-ember-*`) — molten orange accent. `ember-500: #ff4e2b` (anchor — CTAs, focus, primary accent), `ember-300: #ff8d59` (soft — eyebrows, hover, links), `ember-700: #d93514` (deep — gradient end), `ember-100`/`ember-900` for tints.
+- **Pitch** (`--color-pitch: #000000`) — page background. Pure black, no gradient.
+- **Bone** (`--color-bone: #f4ecd8`) — body text, ink-line outlines on dark surfaces. The warm-cream replacement; old `cream-*` tokens are gone.
+- **Ink** (`--color-ink: #050505`) — text color on acid-bg surfaces (newsletter pink, taped eyebrows, brand strips on cards).
 
-Semantic vars: `--bg`, `--bg-soft`, `--bg-raised`, `--bg-sunken`, `--panel`, `--fg`, `--fg-muted`, `--fg-faint`, `--accent`, `--accent-soft`, `--accent-deep`, `--border`, `--border-strong`.
+**Acid accents** — rotating, one per card / section. Multiple acids can coexist in a frame but never blended in one element.
 
-**Removed:** plum, bone, blood, candle, séance pastels, riso ink overlays. All gone — those were from the kit's punk-riso direction.
-
-### Body atmosphere
-
-Body bg is **NOT flat** — it's an atmospheric stack defined in `global.css`:
-
-- Radial-gradient ember glow at 15%/20%
-- Radial-gradient deep ember glow at 85%/0%
-- Diagonal linear-gradient soot
-
-Plus a fixed `.grain-overlay` (radial dot SVG, soft-light blend, 0.4 opacity) mounted at the top of `App.vue`.
-
-Sections sit on this body gradient. Most sections have **transparent backgrounds**. Only Footer uses a solid bg (`--bg-sunken`).
+- `--color-acid-pink: #ff2d8a` — primary CTA, brand "goods", manifesto highlight, newsletter section
+- `--color-acid-blue: #00d4ff` — nav hover, card brand strip, divider accents
+- `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
+- `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, occasional tape
+- `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
 
 ### Type
 
-- **Cinzel** (`--font-display`) — h1/h2/h3/brand. Roman engraved-stone serif. Monumental + occult.
-- **Instrument Sans** (`--font-body`) — body. Refined modern sans.
-- **Anton SC** (`--font-poster`) — reserved for poster moments. Mostly unused; available if needed.
+- **Permanent Marker** (`--font-brand`) — hand-painted brand wordmark + one signature word per major section (e.g., footer `hail thyself`, manifesto pull-quote).
+- **Bowlby One** (`--font-display`) — h1/h2/h3, prices. Chunky uppercase.
+- **Special Elite** (`--font-zine`) — eyebrows, micro-CTAs (`Add ↗`), footer caps lines. Typewriter / photocopy register.
+- **Inter** (`--font-body`) — body, nav links, card titles in caps. 400/500/700 only.
 
-Removed: Bodoni Moda, Poppins, Pirata One (blackletter), Permanent Marker, Special Elite (typewriter).
+Removed: Cinzel, Cormorant Garamond, Instrument Sans, Anton SC. Fonts loaded via Google Fonts CDN in `web/index.html`. Self-host before launch.
 
-Fonts loaded via `<link>` in `web/index.html`. Self-host from the_litterbox before launch.
+### Body atmosphere
+
+Body bg is pure `#000000`. **No** radial gradients, **no** grain overlay (both were boutique vocabulary, wrong for punk poster). Hero gets a localized splatter pattern of acid dots; section separation is via 3px bone-cream horizontal rules.
 
 ### Geometry
 
-- **Radii:** `--radius-md: 14px`, `--radius-lg: 18px` (default panel rounding), `--radius-pill: 9999px` (buttons, chips, icon buttons). NO hard 4px rect.
-- **Shadows:** `--shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.45)` (panels), `--shadow-glow-ember: 0 18px 36px rgba(255, 95, 50, 0.25)` (primary CTAs). NO hard offset peel shadows.
-- **Borders:** hairline `var(--border)` (`rgba(239,231,218,0.18)`) for panel edges. NO 3-4px chunky borders.
+- **Radii:** `--radius-tight: 2px` for cards / inputs, `--radius-sm: 4px` for occasional moments, `--radius-pill: 9999px` reserved for the nav cart pill. **No 14/18px panel rounding.**
+- **Shadows:** hard offset blocky shadows REQUIRED — `--shadow-block-bone`, `--shadow-block-ink`, `--shadow-block-pink`, `--shadow-block-blue`. No blur. Hero h1 uses a layered text-shadow (`4px 4px 0 #ff2d8a, 8px 8px 0 #00d4ff`) — too one-off to token.
+- **Borders:** heavy ink-line REQUIRED — `--border-bone: 3px solid #f4ecd8`, `--border-ink: 2px solid #050505`. No hairline borders on dark surfaces.
+- **Rotations:** small surgical applications — `--rotate-tape: 6deg`, `--rotate-stencil: -2deg`, `--rotate-strip: -1deg`. Used on taped eyebrows, photocopy labels, card brand strips.
 
 ### Buttons
 
-- **Primary CTA:** gradient ember pill — `linear-gradient(145deg, var(--accent), var(--accent-deep))`, cream text, glow shadow, `translateY(-2px)` hover. Pill shape (`border-radius: 9999px`).
-- **Secondary CTA:** transparent + hairline border pill, `translateY(-2px)` hover with border + tint shift.
-- **Ghost link:** underlined text, ember-soft hover.
+- **Primary CTA:** acid-pink bg, ink-black text, 2px ink border, 4px bone-cream offset shadow.
+- **Secondary CTA:** bone-cream bg, ink-black text, 2px ink border, 4px acid-blue offset shadow.
+- **Cart pill:** acid-pink bg, ink-black text, 2px ink border, 4px bone-cream offset shadow.
+- Hover: `translate(-1px, -1px)`. Active: `translate(2px, 2px)`. No glow, no fade.
+- All interactive elements get `:focus-visible` with `outline: 3px solid var(--color-acid-blue); outline-offset: 3px;`.
 
 ### Header
 
-`backdrop-filter: blur(10px)` translucent dark (`rgba(8, 8, 8, 0.78)`) + hairline bottom border. Sticky. Cinzel brand wordmark. No announcement strip.
+3px bone-cream bottom border on pure-pitch background. **No** backdrop-blur translucent. Brand: `grave` in bone-cream + `goods` in acid-pink, Permanent Marker. Caps Inter nav links. Pink cart pill.
+
+### Punk-moment vocabulary
+
+Patterns that recur across sections — keep them in their defined slots, never as ambient texture:
+
+- **Taped eyebrow** — acid-color bg, Special Elite caps, 2px ink border, slight rotation. Section eyebrows only.
+- **Brand strip** — acid-color band across top of card, Permanent Marker text in ink-black. Top of every product card; color rotates by index.
+- **Image tape** — acid-color rectangle with two bone-cream tape-corner pieces. Card image area until real photos exist.
+- **Layered offset shadow** — two overlapping text-shadows in accent colors. Hero h1 only — too loud anywhere else.
+- **Highlight word** — acid-color block + ink text + slight rotation. One word per major headline only.
+- **Splatter** — multi-stop colored dots. Hero only.
 
 ---
 
@@ -111,7 +120,7 @@ Fonts loaded via `<link>` in `web/index.html`. Self-host from the_litterbox befo
 - **Sticky Brand for fulfillment. Never Sticker Mule.** SM's CEO is MAGA-aligned — off-brand for a leftist store.
 - **Bulk-order + self-ship.** No POD API.
 - **Cloudflare Tunnel** for public exposure. Not port forwarding, not Tailscale Funnel, not ngrok.
-- **No UI library.** Components hand-built so the goth-boutique aesthetic stays distinctive.
+- **No UI library.** Components hand-built so the horror-punk pop-art aesthetic stays distinctive.
 - **No Shopify, no Medusa, no Snipcart.** Stripe Products is the catalog source of truth (when wired).
 
 ---
@@ -155,15 +164,19 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ `axios` — use native `fetch`
 - ❌ Tailwind v3 syntax (`@tailwind base/components/utilities`)
 - ❌ Tailwind `group` utility class
-- ❌ Hard offset / peel shadows — soft drop shadows only
-- ❌ 4px rect corners on panels — 14/18px or pill
-- ❌ Off-register text effects, halftone fills, riso pattern dots — all gone with the kit's aesthetic
-- ❌ Bringing back plum / bone / blood / candle tokens — they're removed
+- ❌ **Soft drop shadows** with blur on any UI element — hard offset blocky only
+- ❌ **14/18px or pill-rounded** panels — `--radius-tight: 2px` for cards / inputs; pill reserved for the cart only
+- ❌ **Hairline borders** on dark cards — `--border-bone` (3px solid) is the rule
+- ❌ **Soft radial-gradient body backgrounds** or grain overlays — pure `#000000` only
+- ❌ **Engraved roman serif headlines** (Cinzel, Cormorant, Garamond, Trajan) — Bowlby One only for display
+- ❌ **Ember-orange anywhere** — old ember/soot/cream tokens are removed
+- ❌ **Mixing multiple acid accents inside one element** — one acid per element; multiple can coexist in a frame
+- ❌ **Decorative use of acid-red** — reserved for warning semantics (sold-out, sale, removal)
+- ❌ Punk-moment patterns (tape, stencil, ransom-note) scattered as ambient texture — keep them in defined slots
 - ❌ A UI component library (shadcn-vue, PrimeVue, Element Plus)
 - ❌ Suggesting Shopify, Sticker Mule, or POD fulfillment
 - ❌ Generic AI placeholder copy ("lorem ipsum", "exciting new product!") — write thematic copy even in stubs
 - ❌ Thematic substitutions for utility UI (cart says "Cart", not "Coffin"; checkout says "Checkout", not "Last Rites")
-- ❌ "Issue No. X · riso", "Section A/B/C", "two-pass misregister" copy — riso framing is dead
 
 ---
 
@@ -173,7 +186,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 - Product prices in `web/src/data/products.ts` are uniform `$4` placeholders. Real prices come from Stripe Products (phase 5).
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
-- Google Fonts (Cinzel + Instrument Sans + Anton SC) loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
+- Google Fonts (Permanent Marker + Bowlby One + Special Elite + Inter) loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
 
 ---
 
@@ -193,8 +206,8 @@ npm run dev --workspace web
 
 ## Reference
 
-- **Aesthetic source of truth:** `https://github.com/miadugas/graveyard` — Mia's original design (`styles.css` + `tailwind.config.ts`). Mirror this, not the kit.
-- Old kit (visual reference, NOT to be ported): `~/Downloads/mgg-design-system-v2/handoff/storefront-riso/`
+- **Aesthetic source of truth:** the spec at `docs/superpowers/specs/2026-05-20-horror-punk-pop-art-refresh.md` + reference images (Misfits gig flyers, Vampira/Elvira blacklight portraits, Moon-of-Jupiter neon-on-black acrylic, Misfits "3 Hits from Hell" tape-strip collage).
+- Dead references (DO NOT mirror): `https://github.com/miadugas/graveyard` (old boutique direction), `~/Downloads/mgg-design-system-v2/handoff/storefront-riso/` (old riso kit).
 
 ---
 
@@ -205,4 +218,4 @@ npm run dev --workspace web
 - No unsolicited summaries after edits
 - Match existing patterns before inventing new ones
 - Don't preemptively wire backend/Stripe/Cloudinary things before they exist
-- When tempted to reach for old kit aesthetics (riso, plum, blood, candle, off-register) → stop and use the boutique tokens instead
+- When tempted to reach for old aesthetics (Cinzel monumental, ember-orange, soft gradients, hairline borders, pill-rounded cards) → stop and use the horror-punk pop-art tokens instead
