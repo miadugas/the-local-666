@@ -1,31 +1,52 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { Product } from "../data/products";
 
-defineProps<{ product: Product }>();
+const props = defineProps<{
+  product: Product;
+  /**
+   * 0-indexed position in the grid. Drives strip color, strip label, and
+   * price color in lockstep (all cycle through STRIPS modulo length).
+   */
+  index: number;
+}>();
+
 const emit = defineEmits<{ "add-to-cart": [product: Product] }>();
+
+// MUST stay a closed token list — `color` values flow into inline style as
+// raw CSS. Never derive from product data or user input.
+const STRIPS = [
+  { color: "var(--color-acid-pink)", label: "Protect" },
+  { color: "var(--color-acid-blue)", label: "A.C.A.B." },
+  { color: "var(--color-acid-yellow)", label: "Wake up" },
+  { color: "var(--color-acid-lime)", label: "Class!" },
+] as const;
+
+const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 </script>
 
 <template>
-  <article class="card">
-    <div class="art">
+  <article class="card" :style="{ '--strip': strip.color }">
+    <div class="strip">{{ strip.label }}</div>
+
+    <div class="image-tape">
       <img
         :src="`/stickers/${product.id}.png`"
         :alt="product.title"
         draggable="false"
       />
     </div>
+
     <div class="meta">
-      <p class="type">3" die-cut vinyl</p>
-      <h3>{{ product.title }}</h3>
-      <p class="desc">{{ product.spec }}</p>
+      <h3 class="title">{{ product.title }}</h3>
       <div class="row">
         <span class="price">${{ product.price }}</span>
         <button
           type="button"
-          class="add-btn"
+          class="add"
           @click.stop="emit('add-to-cart', product)"
         >
-          Add to cart
+          Add ↗
         </button>
       </div>
     </div>
@@ -34,119 +55,115 @@ const emit = defineEmits<{ "add-to-cart": [product: Product] }>();
 
 <style scoped>
 .card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
+  background: var(--color-pitch);
+  border: var(--border-bone);
+  border-radius: var(--radius-tight);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition:
-    transform 220ms var(--ease-out),
-    box-shadow 220ms var(--ease-out),
-    border-color 220ms var(--ease-out);
+  position: relative;
+  transition: transform var(--duration-fast) var(--ease-snap);
 }
 .card:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
-  box-shadow:
-    var(--shadow-soft),
-    0 0 0 1px rgba(255, 95, 50, 0.18);
+  transform: translate(-1px, -1px);
 }
 
-.art {
-  aspect-ratio: 1 / 1;
-  background:
-    radial-gradient(
-      circle at 50% 40%,
-      rgba(255, 141, 89, 0.08),
-      transparent 70%
-    ),
-    var(--bg-raised);
+.strip {
+  background: var(--strip);
+  color: var(--color-ink);
+  font-family: var(--font-brand);
+  padding: 0.875rem 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1;
+  text-align: center;
+  border-bottom: var(--border-bone);
+}
+
+.image-tape {
+  position: relative;
+  background: var(--strip);
+  height: 7rem;
+  margin: 0.875rem;
+  border: var(--border-ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 0.5rem;
 }
-.art img {
-  width: 100%;
-  height: 100%;
+.image-tape img {
+  max-height: 100%;
+  max-width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+}
+.image-tape::before,
+.image-tape::after {
+  content: "";
+  position: absolute;
+  background: var(--color-bone);
+  height: 0.875rem;
+  width: 2.25rem;
+  border: 1px solid var(--color-ink);
+}
+.image-tape::before {
+  top: -0.5rem;
+  left: 0.625rem;
+  transform: rotate(-6deg);
+}
+.image-tape::after {
+  bottom: -0.5rem;
+  right: 0.625rem;
+  transform: rotate(6deg);
 }
 
 .meta {
-  padding: 1rem 1.1rem 1.1rem;
+  padding: 0 0.875rem 0.875rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  flex: 1;
+  gap: 0.5rem;
 }
 
-.type {
-  margin: 0;
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-soft);
-  font-weight: 600;
-}
-
-.meta h3 {
-  margin: 0;
-  font-family: var(--font-display);
+.title {
+  font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
+  font-size: 0.8125rem;
   line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--fg);
-}
-
-.desc {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--fg-muted);
+  /* 3 lines of 0.8125rem * 1.2 line-height — long titles wrap to 3 lines at
+     narrow grid widths; this keeps cards aligned vertically across the grid. */
+  min-height: calc(0.8125rem * 1.2 * 3);
 }
 
 .row {
-  margin-top: auto;
-  padding-top: 0.6rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .price {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: var(--fg);
-  letter-spacing: 0.02em;
+  font-size: 1.375rem;
+  color: var(--strip);
+  line-height: 1;
 }
 
-.add-btn {
-  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
-  color: #fff9f1;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 0.9rem;
+.add {
+  background: transparent;
+  color: var(--fg);
   border: none;
-  border-radius: 9999px;
+  font-family: var(--font-zine);
+  font-size: 0.7rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(255, 95, 50, 0.22);
-  transition:
-    transform 200ms var(--ease-out),
-    box-shadow 200ms var(--ease-out);
+  padding: 0.25rem 0;
 }
-.add-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(255, 95, 50, 0.3);
+.add:hover {
+  color: var(--strip);
 }
-.add-btn:active {
-  transform: translateY(0);
+.add:focus-visible {
+  outline: 2px solid var(--color-acid-blue);
+  outline-offset: 2px;
 }
 </style>
