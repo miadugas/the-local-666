@@ -4,11 +4,17 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "web"
+    "web",
+    "backend",
+    "shared"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace web",
-    "build": "npm run build --workspace web",
-    "preview": "npm run preview --workspace web"
+    "dev": "concurrently -n web,backend -c blue,magenta \"npm run dev --workspace web\" \"npm run dev --workspace backend\"",
+    "build": "npm run build --workspace shared && npm run build --workspace web && npm run build --workspace backend",
+    "preview": "npm run preview --workspace web",
+    "db:migrate": "npm run db:migrate --workspace backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
