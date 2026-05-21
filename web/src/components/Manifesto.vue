@@ -4,7 +4,7 @@
 
 <template>
   <section id="manifesto" class="manifesto" aria-label="Manifesto">
-    <span class="eyebrow">The part where we get serious</span>
+    <span class="eyebrow tape">The part where we get serious</span>
     <p class="quote">
       We don't sell merch. We sell vinyl
       <em class="hl">visible dissent</em>
@@ -22,18 +22,10 @@
 }
 
 .eyebrow {
-  display: inline-block;
-  background: var(--color-acid-lime);
-  color: var(--color-ink);
-  padding: 0.3125rem 0.875rem;
-  font-family: var(--font-zine);
-  font-size: 0.7rem;
-  letter-spacing: var(--tracking-shout);
-  text-transform: uppercase;
-  transform: rotate(var(--rotate-stencil));
-  border: var(--border-ink);
+  --tape-color: var(--color-acid-lime);
+  --tape-rotate: var(--rotate-stencil);
+  --tape-mask: url(/torn-tape-3.svg);
   margin-bottom: 1.75rem;
-  font-weight: 700;
 }
 
 .quote {

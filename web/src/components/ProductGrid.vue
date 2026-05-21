@@ -29,7 +29,7 @@ function handleClose() {
     <div class="shop-inner">
       <header class="head">
         <div>
-          <span class="eyebrow">★ Fresh out of the ground</span>
+          <span class="eyebrow tape">★ Fresh out of the ground</span>
           <h2 class="title">In the catalog</h2>
         </div>
         <!-- Decorative until /catalog ships — swap to <router-link> then. -->
@@ -93,17 +93,9 @@ function handleClose() {
 }
 
 .eyebrow {
-  display: inline-block;
-  background: var(--color-acid-blue);
-  color: var(--color-ink);
-  padding: 0.3125rem 0.75rem;
-  font-family: var(--font-zine);
-  font-size: 0.7rem;
-  letter-spacing: var(--tracking-shout);
-  text-transform: uppercase;
-  transform: rotate(var(--rotate-strip));
-  border: var(--border-ink);
-  font-weight: 700;
+  --tape-color: var(--color-acid-blue);
+  --tape-rotate: var(--rotate-strip);
+  --tape-mask: url(/torn-tape-4.svg);
 }
 
 .title {

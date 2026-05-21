@@ -6,7 +6,7 @@
   <section class="hero">
     <span class="splatter" aria-hidden="true"></span>
 
-    <span class="eyebrow">Vol. I · A Catalog of Refusals</span>
+    <span class="eyebrow tape">Vol. I · A Catalog of Refusals</span>
 
     <h1 class="headline">
       Stickers for<br />
@@ -74,20 +74,11 @@
 }
 
 .eyebrow {
-  position: relative;
-  display: inline-block;
-  font-family: var(--font-zine);
-  background: var(--color-acid-yellow);
-  color: var(--color-ink);
-  padding: 0.25rem 0.85rem;
-  font-size: 0.7rem;
-  letter-spacing: var(--tracking-shout);
-  text-transform: uppercase;
-  transform: rotate(var(--rotate-stencil));
-  border: var(--border-ink);
+  --tape-color: var(--color-acid-yellow);
+  --tape-rotate: var(--rotate-stencil);
+  --tape-mask: url(/torn-tape-2.svg);
   margin-bottom: 1.5rem;
   z-index: 1;
-  font-weight: 700;
 }
 
 .headline {
