@@ -89,6 +89,55 @@ h3 {
   mask: var(--tape-mask, url(/torn-tape.svg)) center / 100% 100% no-repeat;
 }
 
+/* Rendered-markdown prose (product descriptions). Lives in global (not scoped)
+   because it styles v-html output, which scoped selectors don't reach. Inherits
+   font/size/color from the container (.description in the modal, .md-preview in
+   admin); only block rhythm + inline marks are set here. Links pick up the
+   surrounding --accent. */
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+.prose p {
+  margin: 0 0 0.85em;
+}
+.prose a {
+  color: var(--accent, var(--color-acid-pink));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose strong,
+.prose b {
+  font-weight: 700;
+}
+.prose em,
+.prose i {
+  font-style: italic;
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 0.85em;
+  padding-left: 1.25em;
+}
+.prose li {
+  margin: 0.2em 0;
+}
+.prose blockquote {
+  margin: 0 0 0.85em;
+  padding-left: 0.9em;
+  font-style: italic;
+  opacity: 0.85;
+}
+.prose code {
+  font-family: var(--font-zine);
+  font-size: 0.9em;
+  background: color-mix(in oklab, var(--color-bone) 16%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-tight);
+}
+
 /* Respect users who've opted out of motion. Block-shadow translates and
    hover lifts are sub-vestibular at 1-2px but still honor the preference. */
 @media (prefers-reduced-motion: reduce) {

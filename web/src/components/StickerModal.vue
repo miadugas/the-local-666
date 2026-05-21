@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Product } from "@grave-goods/shared";
 import { formatPrice } from "../lib/format";
+import { renderMarkdown } from "../lib/markdown";
 
 const props = defineProps<{ product: Product }>();
 const emit = defineEmits<{
@@ -11,6 +12,10 @@ const emit = defineEmits<{
 
 const FALLBACK_DESCRIPTION =
   "No description yet — it's a sticker. Slap it on something.";
+
+const descriptionHtml = computed(() =>
+  renderMarkdown(props.product.description ?? FALLBACK_DESCRIPTION),
+);
 
 const closeBtn = ref<HTMLButtonElement | null>(null);
 const addBtn = ref<HTMLButtonElement | null>(null);
@@ -101,9 +106,8 @@ onBeforeUnmount(() => {
       <div class="meta">
         <h2 id="modal-title" class="title">{{ product.title }}</h2>
         <p class="spec">{{ product.spec }}</p>
-        <p class="description">
-          {{ product.description ?? FALLBACK_DESCRIPTION }}
-        </p>
+        <!-- eslint-disable-next-line vue/no-v-html — sanitized in renderMarkdown -->
+        <div class="description prose" v-html="descriptionHtml"></div>
         <div class="buy">
           <span class="price">{{ formatPrice(product.priceCents) }}</span>
           <button

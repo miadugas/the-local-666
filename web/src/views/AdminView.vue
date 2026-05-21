@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import type { AdminProduct } from "@grave-goods/shared";
 import { useAdminStore } from "../stores/admin";
+import { renderMarkdown } from "../lib/markdown";
 import ImageUploader from "../components/ImageUploader.vue";
 
 const admin = useAdminStore();
@@ -28,6 +29,10 @@ type FormModel = {
 const editing = ref<FormModel | null>(null);
 const saving = ref(false);
 const formError = ref("");
+
+const descriptionPreview = computed(() =>
+  editing.value ? renderMarkdown(editing.value.description) : "",
+);
 
 function blankForm(): FormModel {
   return {
@@ -205,10 +210,24 @@ onMounted(load);
           ><span>Display order</span
           ><input v-model.number="editing.displayOrder" type="number"
         /></label>
-        <label class="field"
-          ><span>Description</span
-          ><textarea v-model="editing.description" rows="3" />
-        </label>
+        <div class="field">
+          <span>
+            Description
+            <em class="md-hint"
+              >markdown: **bold**, _italic_, [link](url), - list</em
+            >
+          </span>
+          <textarea
+            v-model="editing.description"
+            rows="7"
+            class="md-input"
+          ></textarea>
+          <div v-if="editing.description.trim()" class="md-preview">
+            <span class="md-preview-label">Preview</span>
+            <!-- eslint-disable-next-line vue/no-v-html — sanitized in renderMarkdown -->
+            <div class="prose" v-html="descriptionPreview"></div>
+          </div>
+        </div>
         <label class="check"
           ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
         >
@@ -346,6 +365,42 @@ onMounted(load);
   color: var(--color-ink);
   border: var(--border-ink);
   border-radius: var(--radius-tight);
+}
+.md-input {
+  resize: vertical;
+  min-height: 6rem;
+  line-height: 1.5;
+}
+/* Lowercase mono hint inside the uppercase field label. */
+.md-hint {
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  color: color-mix(in oklab, var(--color-bone) 55%, transparent);
+}
+.md-preview {
+  border: var(--border-ink);
+  border-radius: var(--radius-tight);
+  background: color-mix(in oklab, var(--color-bone) 8%, transparent);
+  padding: 0.65rem 0.8rem;
+}
+.md-preview-label {
+  display: block;
+  font-family: var(--font-zine);
+  font-size: 0.6rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-bone) 55%, transparent);
+  margin-bottom: 0.4rem;
+}
+/* The rendered preview itself reads as body copy, not the uppercase label. */
+.md-preview .prose {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-bone);
 }
 .check {
   display: flex;
