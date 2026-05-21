@@ -5,6 +5,7 @@ import { env, isDev } from "./env.js";
 import { pool } from "./db/pool.js";
 import { up as migrateUp } from "./db/migrate.js";
 import { seedAdminIfEmpty } from "./auth/seed.js";
+import { healthRouter } from "./routes/health.js";
 
 async function boot(): Promise<void> {
   // 1. Run pending migrations
@@ -25,10 +26,7 @@ async function boot(): Promise<void> {
   );
   app.use(express.json({ limit: "1mb" }));
 
-  // Routes registered in later tasks (Task 8 health, Task 9 admin, Task 10 me)
-  app.get("/", (_req, res) => {
-    res.json({ name: "grave-goods backend", phase: 1 });
-  });
+  app.use(healthRouter);
 
   // Error handler — JSON shape, no stack in prod
   app.use(
