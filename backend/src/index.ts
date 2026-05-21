@@ -13,6 +13,7 @@ import { productsRouter } from "./routes/products.js";
 import { uploadsRouter } from "./routes/uploads.js";
 import { adminProductsRouter } from "./routes/admin-products.js";
 import { checkoutRouter } from "./routes/checkout.js";
+import { stripeWebhookHandler } from "./routes/stripe-webhook.js";
 
 async function boot(): Promise<void> {
   // 1. Run pending migrations
@@ -34,6 +35,14 @@ async function boot(): Promise<void> {
       credentials: true,
     }),
   );
+  // Stripe webhook needs the raw body for signature verification — must be
+  // registered before the JSON body parser consumes it.
+  app.post(
+    "/api/webhooks/stripe",
+    express.raw({ type: "application/json" }),
+    stripeWebhookHandler,
+  );
+
   app.use(express.json({ limit: "1mb" }));
 
   app.use(healthRouter);
