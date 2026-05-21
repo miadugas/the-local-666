@@ -10,10 +10,11 @@ type ProductRow = {
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
+  image_url: string;
 };
 
 const SELECT_COLUMNS =
-  "id, slug, title, spec, price_cents, accent_hex, description, is_sold_out";
+  "id, slug, title, spec, price_cents, accent_hex, description, is_sold_out, image_url";
 
 function mapRow(row: ProductRow): Product {
   return {
@@ -25,6 +26,7 @@ function mapRow(row: ProductRow): Product {
     accentHex: row.accent_hex,
     description: row.description,
     isSoldOut: row.is_sold_out,
+    imageUrl: row.image_url,
   };
 }
 

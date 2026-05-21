@@ -24,4 +24,21 @@ export type Product = {
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
+  imageUrl: string;
+};
+
+export type AdminProduct = {
+  id: number;
+  slug: string;
+  title: string;
+  spec: string;
+  priceCents: number;
+  accentHex: string;
+  description: string | null;
+  isSoldOut: boolean;
+  displayOrder: number;
+  imageUrl: string;
+  imagePublicId: string | null;
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 };
