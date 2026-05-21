@@ -89,8 +89,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   {
     slug: "deny-defend-depose",
     title: "Deny Defend Depose",
-    spec: '3" die-cut vinyl',
-    priceCents: 400,
+    spec: '2.5" x 2.5" die-cut vinyl',
+    priceCents: 300,
     accentHex: "#a8c8f0",
     description: null,
     displayOrder: 7,
@@ -128,13 +128,13 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     isSoldOut: false,
   },
   {
-    slug: "eat-the-rich",
-    title: "Eat the Rich",
+    slug: "war-criminal",
+    title: "War Criminal",
     spec: '3" die-cut vinyl',
     priceCents: 400,
-    accentHex: "#34d399",
+    accentHex: "#00d4ff",
     description:
-      "The rich aren't coming to save you. Slap this on a water bottle, a hard hat, or the tip jar at the third job you work just to make rent.",
+      "No memorial, no honorary degree, and no soft-focus documentary launders this title. Slap it wherever someone's busy calling a war criminal a 'respected elder statesman.'",
     displayOrder: 11,
     isSoldOut: true,
   },
