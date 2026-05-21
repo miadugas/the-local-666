@@ -14,3 +14,14 @@ export type AdminUser = {
 export type SessionInfo = {
   expiresAt: string; // ISO 8601
 };
+
+export type Product = {
+  id: number;
+  slug: string;
+  title: string;
+  spec: string;
+  priceCents: number;
+  accentHex: string;
+  description: string | null;
+  isSoldOut: boolean;
+};
