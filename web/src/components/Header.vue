@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useCartStore } from "../stores/cart";
+
+const cart = useCartStore();
+
 const NAV = [
   { label: "Shop", href: "#shop" },
   { label: "Manifesto", href: "#manifesto" },
@@ -18,7 +22,9 @@ const NAV = [
       </a>
     </nav>
 
-    <button type="button" class="cart-btn">Cart · 0</button>
+    <button type="button" class="cart-btn" @click="cart.open()">
+      Cart · {{ cart.count }}
+    </button>
   </header>
 </template>
 

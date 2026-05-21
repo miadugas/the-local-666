@@ -2,14 +2,17 @@
 import { ref } from "vue";
 import type { Product } from "@grave-goods/shared";
 import { useProducts } from "../composables/useProducts";
+import { useCartStore } from "../stores/cart";
 import StickerCard from "./StickerCard.vue";
 import StickerModal from "./StickerModal.vue";
 
 const { products, loading, error, reload } = useProducts();
+const cart = useCartStore();
 const selectedProduct = ref<Product | null>(null);
 
-function handleAddToCart(_product: Product) {
-  // No-op until Pinia cart store lands (Phase 4).
+function handleAddToCart(product: Product) {
+  cart.addItem(product);
+  selectedProduct.value = null;
 }
 
 function handleViewDetail(product: Product) {
