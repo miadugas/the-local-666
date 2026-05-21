@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { pool } from "./pool.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -66,18 +66,24 @@ export async function up(): Promise<void> {
   console.log("[migrate] up complete");
 }
 
-const command = process.argv[2];
+// Only run the CLI when migrate.ts is the entry point — not when imported
+// by the boot orchestration in index.ts.
+const isMain = import.meta.url === pathToFileURL(process.argv[1] ?? "").href;
 
-if (command === "up") {
-  up()
-    .then(() => pool.end())
-    .then(() => process.exit(0))
-    .catch((err) => {
-      console.error(err);
-      pool.end();
-      process.exit(1);
-    });
-} else {
-  console.error(`Unknown command: ${command ?? "(none)"}. Usage: migrate up`);
-  process.exit(1);
+if (isMain) {
+  const command = process.argv[2];
+
+  if (command === "up") {
+    up()
+      .then(() => pool.end())
+      .then(() => process.exit(0))
+      .catch((err) => {
+        console.error(err);
+        pool.end();
+        process.exit(1);
+      });
+  } else {
+    console.error(`Unknown command: ${command ?? "(none)"}. Usage: migrate up`);
+    process.exit(1);
+  }
 }
