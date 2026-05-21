@@ -121,7 +121,7 @@ Patterns that recur across sections — keep them in their defined slots, never 
 - **Bulk-order + self-ship.** No POD API.
 - **Cloudflare Tunnel** for public exposure. Not port forwarding, not Tailscale Funnel, not ngrok.
 - **No UI library.** Components hand-built so the horror-punk pop-art aesthetic stays distinctive.
-- **No Shopify, no Medusa, no Snipcart.** Stripe Products is the catalog source of truth (when wired).
+- **No Shopify, no Medusa, no Snipcart.** The local Postgres `products` table is the catalog source of truth. Stripe is used only at checkout (Phase 5) via inline `price_data` line_items — there are no Stripe Products.
 
 ---
 
@@ -184,7 +184,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 **Replace before launch:**
 
-- Product prices in `web/src/data/products.ts` are uniform `$4` placeholders. Real prices come from Stripe Products (phase 5).
+- Product prices are uniform `$4` (`400` cents) placeholders. The catalog now lives in the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); real prices come from Sticky Brand order costs, set via the Phase 3 admin editor. `web/src/data/products.ts` still backs the UI until the frontend is wired to the API.
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
 - Google Fonts (Permanent Marker + Bowlby One + Special Elite + Inter) loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
 
