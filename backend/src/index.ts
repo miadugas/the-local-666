@@ -7,6 +7,7 @@ import { up as migrateUp } from "./db/migrate.js";
 import { seedAdminIfEmpty } from "./auth/seed.js";
 import { healthRouter } from "./routes/health.js";
 import { adminRouter } from "./routes/admin.js";
+import { meRouter } from "./routes/me.js";
 
 async function boot(): Promise<void> {
   // 1. Run pending migrations
@@ -29,6 +30,7 @@ async function boot(): Promise<void> {
 
   app.use(healthRouter);
   app.use(adminRouter);
+  app.use(meRouter);
 
   // Error handler — JSON shape, no stack in prod
   app.use(
