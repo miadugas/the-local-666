@@ -138,4 +138,14 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     displayOrder: 11,
     isSoldOut: true,
   },
+  {
+    slug: "luigi",
+    title: "Saint Luigi",
+    spec: '3" die-cut vinyl',
+    priceCents: 400,
+    accentHex: "#a3e635",
+    description: null,
+    displayOrder: 12,
+    isSoldOut: false,
+  },
 ] as const;
