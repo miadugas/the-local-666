@@ -3,6 +3,10 @@ import type Stripe from "stripe";
 import { getStripe } from "../payments/stripe.js";
 import { env } from "../env.js";
 import { insertPaidOrder, type OrderItem } from "../orders/queries.js";
+import {
+  isConfigured as emailIsConfigured,
+  sendOrderConfirmation,
+} from "../emails/orderConfirmation.js";
 
 export async function stripeWebhookHandler(
   req: Request,
@@ -39,12 +43,21 @@ export async function stripeWebhookHandler(
     } catch {
       items = [];
     }
-    await insertPaidOrder({
+    const email = session.customer_details?.email ?? null;
+    const totalCents = session.amount_total ?? 0;
+    const inserted = await insertPaidOrder({
       stripeSessionId: session.id,
-      email: session.customer_details?.email ?? null,
+      email,
       items,
-      totalCents: session.amount_total ?? 0,
+      totalCents,
     });
+    if (inserted && email && emailIsConfigured()) {
+      try {
+        await sendOrderConfirmation({ email, items, totalCents });
+      } catch (err) {
+        console.error("[email] order confirmation failed", err);
+      }
+    }
   }
 
   res.status(200).json({ received: true });
