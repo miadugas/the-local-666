@@ -74,7 +74,7 @@ grave-goods-store/
 - **Special Elite** (`--font-zine`) — eyebrows, micro-CTAs (`Add ↗`), footer caps lines. Typewriter / photocopy register.
 - **Inter** (`--font-body`) — body, nav links, card titles in caps. 400/500/700 only.
 
-Removed: Cinzel, Cormorant Garamond, Instrument Sans, Anton SC. Fonts loaded via Google Fonts CDN in `web/index.html`. Self-host before launch.
+Removed: Cinzel, Cormorant Garamond, Instrument Sans, Anton SC. Fonts are **self-hosted** (latin woff2 in `web/public/fonts/`, `@font-face` in `web/src/styles/fonts.css`); Inter is the variable font (one file, weights 100–900). No Google Fonts CDN.
 
 ### Body atmosphere
 
@@ -83,7 +83,7 @@ Body bg is pure `#000000`. **No** radial gradients, **no** grain overlay (both w
 ### Geometry
 
 - **Radii:** `--radius-tight: 2px` for cards / inputs, `--radius-sm: 4px` for occasional moments, `--radius-pill: 9999px` reserved for the nav cart pill. **No 14/18px panel rounding.**
-- **Shadows:** hard offset blocky shadows REQUIRED — `--shadow-block-bone`, `--shadow-block-ink`, `--shadow-block-pink`, `--shadow-block-blue`. No blur. Hero h1 uses a layered text-shadow (`4px 4px 0 #ff2d8a, 8px 8px 0 #00d4ff`) — too one-off to token.
+- **Shadows:** hard offset blocky shadows REQUIRED — `--shadow-block-bone`, `--shadow-block-ink`, `--shadow-block-pink`, `--shadow-block-blue`. No blur. Hero h1 uses a layered text-shadow (`4px 4px 0 #ff2d8a, 8px 8px 0 #00d4ff`) — too one-off to token. **One sanctioned exception:** the torn taped eyebrow uses a soft `drop-shadow()` filter so the shadow follows its ragged masked silhouette (see Taped eyebrow under Punk-moment vocabulary).
 - **Borders:** heavy ink-line REQUIRED — `--border-bone: 3px solid #f4ecd8`, `--border-ink: 2px solid #050505`. No hairline borders on dark surfaces.
 - **Rotations:** small surgical applications — `--rotate-tape: 6deg`, `--rotate-stencil: -2deg`, `--rotate-strip: -1deg`. Used on taped eyebrows, photocopy labels, card brand strips.
 
@@ -103,7 +103,7 @@ Body bg is pure `#000000`. **No** radial gradients, **no** grain overlay (both w
 
 Patterns that recur across sections — keep them in their defined slots, never as ambient texture:
 
-- **Taped eyebrow** — acid-color bg, Special Elite caps, 2px ink border, slight rotation. Section eyebrows only.
+- **Taped eyebrow** — torn masking-tape strip. Shared `.tape` class in `global.css`: Special Elite caps, acid fill + wrinkle sheen on `::before`, slight rotation. The ragged edge is a hand-traced torn SVG used as a CSS `mask` (`web/public/torn-tape*.svg`), NOT an ink border — long top/bottom edges near-straight, short left/right ends torn. A soft `drop-shadow()` on the element follows that silhouette (the one sanctioned blur exception). Each eyebrow sets `--tape-color`, `--tape-rotate`, and a distinct `--tape-mask` so no two tears look die-stamped. Section eyebrows only.
 - **Brand strip** — acid-color band across top of card, Permanent Marker text in ink-black. Top of every product card; color rotates by index.
 - **Image tape** — acid-color rectangle with two bone-cream tape-corner pieces. Card image area until real photos exist.
 - **Layered offset shadow** — two overlapping text-shadows in accent colors. Hero h1 only — too loud anywhere else.
@@ -164,7 +164,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ `axios` — use native `fetch`
 - ❌ Tailwind v3 syntax (`@tailwind base/components/utilities`)
 - ❌ Tailwind `group` utility class
-- ❌ **Soft drop shadows** with blur on any UI element — hard offset blocky only
+- ❌ **Soft drop shadows** with blur on any UI element — hard offset blocky only (sole exception: the torn taped eyebrow's `drop-shadow()`, which must follow its masked silhouette)
 - ❌ **14/18px or pill-rounded** panels — `--radius-tight: 2px` for cards / inputs; pill reserved for the cart only
 - ❌ **Hairline borders** on dark cards — `--border-bone` (3px solid) is the rule
 - ❌ **Soft radial-gradient body backgrounds** or grain overlays — pure `#000000` only
@@ -186,7 +186,6 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 - Product prices are uniform `$4` (`400` cents) placeholders. The catalog now lives in the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); real prices come from Sticky Brand order costs, set via the Phase 3 admin editor. `web/src/data/products.ts` still backs the UI until the frontend is wired to the API.
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
-- Google Fonts (Permanent Marker + Bowlby One + Special Elite + Inter) loaded from CDN via `<link>` in `web/index.html` — self-host from the_litterbox before launch.
 
 ---
 
