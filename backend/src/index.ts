@@ -11,6 +11,7 @@ import { adminRouter } from "./routes/admin.js";
 import { meRouter } from "./routes/me.js";
 import { productsRouter } from "./routes/products.js";
 import { uploadsRouter } from "./routes/uploads.js";
+import { adminProductsRouter } from "./routes/admin-products.js";
 
 async function boot(): Promise<void> {
   // 1. Run pending migrations
@@ -39,6 +40,7 @@ async function boot(): Promise<void> {
   app.use(meRouter);
   app.use(productsRouter);
   app.use(uploadsRouter);
+  app.use(adminProductsRouter);
 
   // Error handler — JSON shape, no stack in prod
   app.use(
