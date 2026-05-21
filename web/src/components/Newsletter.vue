@@ -79,6 +79,17 @@ function handleSubmit() {
   background: #fff;
   /* outline handled globally; bg lift signals "field active" on top */
 }
+/* Invalid email — only after the user types something. acid-red is the
+   reserved warning semantic per CLAUDE.md. */
+.email-input:invalid:not(:placeholder-shown) {
+  border-color: var(--color-acid-red);
+  box-shadow:
+    var(--shadow-block-ink),
+    inset 0 0 0 2px var(--color-acid-red);
+}
+.email-input:invalid:not(:placeholder-shown) + .subscribe-btn {
+  cursor: not-allowed;
+}
 
 .subscribe-btn {
   background: var(--color-ink);
