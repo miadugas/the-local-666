@@ -1,0 +1,38 @@
+/* Self-hosted fonts — replaces the Google Fonts CDN <link> in index.html.
+   Latin-subset woff2, pulled from Google's gstatic. Inter is the variable
+   font (one file covers weights 100–900); the rest are single-weight (400).
+   font-display: swap matches the old CDN behavior (text shows in fallback,
+   then swaps in). The two most-visible faces (Inter body + Bowlby display)
+   are <link rel="preload">-ed in index.html to cut the swap flash. */
+
+@font-face {
+  font-family: "Bowlby One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/bowlby-one-400.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Permanent Marker";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/permanent-marker-400.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Special Elite";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/special-elite-400.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/inter-latin.woff2) format("woff2");
+}
