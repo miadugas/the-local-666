@@ -87,6 +87,7 @@
   border: var(--border-ink);
   margin-bottom: 1.5rem;
   z-index: 1;
+  font-weight: 700;
 }
 
 .headline {

@@ -33,6 +33,7 @@
   transform: rotate(var(--rotate-stencil));
   border: var(--border-ink);
   margin-bottom: 1.75rem;
+  font-weight: 700;
 }
 
 .quote {

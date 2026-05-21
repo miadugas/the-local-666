@@ -103,6 +103,7 @@ function handleClose() {
   text-transform: uppercase;
   transform: rotate(var(--rotate-strip));
   border: var(--border-ink);
+  font-weight: 700;
 }
 
 .title {
