@@ -22,6 +22,8 @@ export type Product = {
   price: number;
   /** hex tint for the card panel radial gradient (matches sticker accent) */
   ring: string;
+  /** Optional long-form description shown in the detail modal. */
+  description?: string;
 };
 
 export const PRODUCTS: readonly Product[] = [
@@ -31,6 +33,8 @@ export const PRODUCTS: readonly Product[] = [
     spec: '3" die-cut vinyl',
     price: 4,
     ring: "#5BCEFA",
+    description:
+      "Trans kids exist, trans kids deserve protection, trans kids are not a debate. Slap this on a laptop, a locker, or every door at your kid's school district HQ.",
   },
   {
     id: "cops-arent-your-friends",
@@ -38,6 +42,8 @@ export const PRODUCTS: readonly Product[] = [
     spec: '3" die-cut vinyl',
     price: 4,
     ring: "#2ad6a0",
+    description:
+      "They're not. They never have been. Stick it somewhere a friendly officer might see it — your bumper, your laptop, the door of the cafe with the 'free coffee for cops' sign.",
   },
   {
     id: "you-are-not-immune",
@@ -94,6 +100,8 @@ export const PRODUCTS: readonly Product[] = [
     spec: '3" die-cut vinyl',
     price: 4,
     ring: "#f0bcc7",
+    description:
+      "You are a magical piece of stardust having a small terrestrial moment. Behave accordingly. Pairs well with bathroom mirrors and the back of any van that's seen too many highway miles.",
   },
   {
     id: "i-did-that",

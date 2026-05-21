@@ -11,7 +11,10 @@ const props = defineProps<{
   index: number;
 }>();
 
-const emit = defineEmits<{ "add-to-cart": [product: Product] }>();
+const emit = defineEmits<{
+  "add-to-cart": [product: Product];
+  "view-detail": [product: Product];
+}>();
 
 // MUST stay a closed token list — `color` values flow into inline style as
 // raw CSS. Never derive from product data or user input.
@@ -38,7 +41,19 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
     </div>
 
     <div class="meta">
-      <h3 class="title">{{ product.title }}</h3>
+      <h3 class="title">
+        <!-- The view-detail trigger. The ::before overlay extends this button's
+             hit area over the entire card surface, so clicks anywhere on the
+             card (except the Add button) open the modal. -->
+        <button
+          type="button"
+          class="title-btn"
+          :aria-label="`View details for ${product.title}`"
+          @click="emit('view-detail', product)"
+        >
+          {{ product.title }}
+        </button>
+      </h3>
       <div class="row">
         <span class="price">${{ product.price }}</span>
         <button
@@ -58,7 +73,6 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
   background: var(--color-pitch);
   border: var(--border-bone);
   border-radius: var(--radius-tight);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -66,6 +80,15 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 }
 .card:hover {
   transform: translate(-1px, -1px);
+}
+/* Title button's ::before extends across the whole card so any click on
+   the card opens the modal — except the Add button which has z-index: 1. */
+.title-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 0;
 }
 
 .strip {
@@ -123,6 +146,16 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 }
 
 .title {
+  /* 3 lines of 0.8125rem * 1.2 line-height — long titles wrap to 3 lines at
+     narrow grid widths; this keeps cards aligned vertically across the grid. */
+  min-height: calc(0.8125rem * 1.2 * 3);
+  margin: 0;
+}
+.title-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-align: left;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.8125rem;
@@ -130,12 +163,12 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--fg);
-  /* 3 lines of 0.8125rem * 1.2 line-height — long titles wrap to 3 lines at
-     narrow grid widths; this keeps cards aligned vertically across the grid. */
-  min-height: calc(0.8125rem * 1.2 * 3);
+  cursor: pointer;
 }
 
 .row {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -149,6 +182,10 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 }
 
 .add {
+  /* z-index keeps Add above the title-btn ::before overlay so it stays
+     independently clickable. */
+  position: relative;
+  z-index: 1;
   background: transparent;
   color: var(--fg);
   border: none;

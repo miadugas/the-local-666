@@ -1,9 +1,21 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { PRODUCTS, type Product } from "../data/products";
 import StickerCard from "./StickerCard.vue";
+import StickerModal from "./StickerModal.vue";
+
+const selectedProduct = ref<Product | null>(null);
 
 function handleAddToCart(_product: Product) {
   // No-op until Pinia cart store lands (later slice).
+}
+
+function handleViewDetail(product: Product) {
+  selectedProduct.value = product;
+}
+
+function handleClose() {
+  selectedProduct.value = null;
 }
 </script>
 
@@ -28,9 +40,17 @@ function handleAddToCart(_product: Product) {
           :product="product"
           :index="i"
           @add-to-cart="handleAddToCart"
+          @view-detail="handleViewDetail"
         />
       </div>
     </div>
+
+    <StickerModal
+      v-if="selectedProduct"
+      :product="selectedProduct"
+      @close="handleClose"
+      @add-to-cart="handleAddToCart"
+    />
   </section>
 </template>
 
