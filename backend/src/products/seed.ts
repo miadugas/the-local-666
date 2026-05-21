@@ -18,8 +18,8 @@ export async function seedProductsIfEmpty(): Promise<void> {
     for (const product of SEED_PRODUCTS) {
       await client.query(
         `INSERT INTO products
-           (slug, title, spec, price_cents, accent_hex, description, display_order)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+           (slug, title, spec, price_cents, accent_hex, description, display_order, is_sold_out)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
           product.slug,
           product.title,
@@ -28,6 +28,7 @@ export async function seedProductsIfEmpty(): Promise<void> {
           product.accentHex,
           product.description,
           product.displayOrder,
+          product.isSoldOut,
         ],
       );
     }

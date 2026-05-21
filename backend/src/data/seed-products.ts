@@ -10,6 +10,7 @@ export type SeedProduct = {
   accentHex: string;
   description: string | null;
   displayOrder: number;
+  isSoldOut: boolean;
 };
 
 export const SEED_PRODUCTS: readonly SeedProduct[] = [
@@ -22,6 +23,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     description:
       "Trans kids exist, trans kids deserve protection, trans kids are not a debate. Slap this on a laptop, a locker, or every door at your kid's school district HQ.",
     displayOrder: 0,
+    isSoldOut: false,
   },
   {
     slug: "cops-arent-your-friends",
@@ -32,6 +34,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     description:
       "They're not. They never have been. Stick it somewhere a friendly officer might see it — your bumper, your laptop, the door of the cafe with the 'free coffee for cops' sign.",
     displayOrder: 1,
+    isSoldOut: false,
   },
   {
     slug: "you-are-not-immune",
@@ -41,6 +44,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#150b1c",
     description: null,
     displayOrder: 2,
+    isSoldOut: false,
   },
   {
     slug: "class-consciousness",
@@ -50,6 +54,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#f4ecd8",
     description: null,
     displayOrder: 3,
+    isSoldOut: false,
   },
   {
     slug: "follow-your-leader",
@@ -59,6 +64,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#f4ecd8",
     description: null,
     displayOrder: 4,
+    isSoldOut: false,
   },
   {
     slug: "devour-feculence",
@@ -68,6 +74,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#a3e635",
     description: null,
     displayOrder: 5,
+    isSoldOut: false,
   },
   {
     slug: "throbbing-middle-finger",
@@ -77,6 +84,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#150b1c",
     description: null,
     displayOrder: 6,
+    isSoldOut: false,
   },
   {
     slug: "deny-defend-depose",
@@ -86,6 +94,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#a8c8f0",
     description: null,
     displayOrder: 7,
+    isSoldOut: false,
   },
   {
     slug: "scream-fuck-die",
@@ -95,6 +104,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#34d399",
     description: null,
     displayOrder: 8,
+    isSoldOut: false,
   },
   {
     slug: "magical-stardust",
@@ -105,6 +115,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     description:
       "You are a magical piece of stardust having a small terrestrial moment. Behave accordingly. Pairs well with bathroom mirrors and the back of any van that's seen too many highway miles.",
     displayOrder: 9,
+    isSoldOut: false,
   },
   {
     slug: "i-did-that",
@@ -114,5 +125,17 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     accentHex: "#f4ecd8",
     description: null,
     displayOrder: 10,
+    isSoldOut: false,
+  },
+  {
+    slug: "eat-the-rich",
+    title: "Eat the Rich",
+    spec: '3" die-cut vinyl',
+    priceCents: 400,
+    accentHex: "#34d399",
+    description:
+      "The rich aren't coming to save you. Slap this on a water bottle, a hard hat, or the tip jar at the third job you work just to make rent.",
+    displayOrder: 11,
+    isSoldOut: true,
   },
 ] as const;
