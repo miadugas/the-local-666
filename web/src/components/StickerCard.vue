@@ -39,7 +39,9 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 
     <div class="image-tape">
       <span v-if="product.isSoldOut" class="sold-out-badge">Sold Out</span>
-      <img :src="product.imageUrl" :alt="product.title" draggable="false" />
+      <div class="disc">
+        <img :src="product.imageUrl" :alt="product.title" draggable="false" />
+      </div>
     </div>
 
     <div class="meta">
@@ -113,18 +115,26 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
   border-bottom: var(--border-bone);
 }
 
+/* Outer box stays square + holds the tape corners (no overflow clip, so the
+   tape isn't cut). The inner .disc is the round sticker that clips the art. */
 .image-tape {
   position: relative;
-  background: var(--strip);
-  height: 7rem;
+  aspect-ratio: 1 / 1;
   margin: 0.875rem;
+}
+.disc {
+  position: absolute;
+  inset: 0;
+  background: var(--strip);
   border: var(--border-ink);
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.875rem;
 }
-.image-tape img {
+.disc img {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
@@ -133,20 +143,22 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 .image-tape::after {
   content: "";
   position: absolute;
+  z-index: 1;
   background: var(--color-bone);
   height: 0.875rem;
   width: 2.25rem;
   border: 1px solid var(--color-ink);
 }
+/* Tape pieces sit across the top and bottom of the round sticker. */
 .image-tape::before {
-  top: -0.5rem;
-  left: 0.625rem;
-  transform: rotate(-6deg);
+  top: -0.4rem;
+  left: 50%;
+  transform: translateX(-65%) rotate(-6deg);
 }
 .image-tape::after {
-  bottom: -0.5rem;
-  right: 0.625rem;
-  transform: rotate(6deg);
+  bottom: -0.4rem;
+  left: 50%;
+  transform: translateX(-35%) rotate(6deg);
 }
 
 .meta {

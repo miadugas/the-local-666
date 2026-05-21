@@ -93,7 +93,9 @@ onBeforeUnmount(() => {
       </button>
 
       <div class="image-tape">
-        <img :src="product.imageUrl" :alt="product.title" draggable="false" />
+        <div class="disc">
+          <img :src="product.imageUrl" :alt="product.title" draggable="false" />
+        </div>
       </div>
 
       <div class="meta">
@@ -181,18 +183,26 @@ onBeforeUnmount(() => {
   transform: translate(2px, 2px);
 }
 
+/* Outer box stays square + holds the tape corners (no overflow clip). The
+   inner .disc is the round sticker that clips the art. Mirrors StickerCard. */
 .image-tape {
   position: relative;
-  background: var(--accent);
   aspect-ratio: 1 / 1;
+  align-self: start;
+}
+.disc {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
   border: var(--border-ink);
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  align-self: start;
 }
-.image-tape img {
+.disc img {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
@@ -201,20 +211,21 @@ onBeforeUnmount(() => {
 .image-tape::after {
   content: "";
   position: absolute;
+  z-index: 1;
   background: var(--color-bone);
   height: 0.875rem;
   width: 3rem;
   border: 1px solid var(--color-ink);
 }
 .image-tape::before {
-  top: -0.5rem;
-  left: 1rem;
-  transform: rotate(-6deg);
+  top: -0.4rem;
+  left: 50%;
+  transform: translateX(-65%) rotate(-6deg);
 }
 .image-tape::after {
-  bottom: -0.5rem;
-  right: 1rem;
-  transform: rotate(6deg);
+  bottom: -0.4rem;
+  left: 50%;
+  transform: translateX(-35%) rotate(6deg);
 }
 
 .meta {
@@ -302,8 +313,9 @@ onBeforeUnmount(() => {
     gap: 1.25rem;
   }
   .image-tape {
-    aspect-ratio: auto;
-    height: 200px;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
   }
   .buy {
     flex-direction: column;
