@@ -4,7 +4,7 @@ import { useCartStore } from "../stores/cart";
 import { formatPrice } from "../lib/format";
 
 const cart = useCartStore();
-const showCheckoutNote = ref(false);
+const checkoutError = ref("");
 const closeBtn = ref<HTMLButtonElement | null>(null);
 
 let previouslyFocused: HTMLElement | null = null;
@@ -21,8 +21,32 @@ function onBackdropClick(event: MouseEvent) {
   if (event.target === event.currentTarget) cart.close();
 }
 
-function onCheckout() {
-  showCheckoutNote.value = true;
+async function onCheckout() {
+  checkoutError.value = "";
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: cart.items.map((i) => ({ slug: i.slug, quantity: i.quantity })),
+      }),
+    });
+    if (res.status === 503) {
+      checkoutError.value = "Checkout isn't wired up yet.";
+      return;
+    }
+    if (!res.ok) {
+      const data = await res
+        .json()
+        .catch(() => ({ message: "Checkout failed." }));
+      checkoutError.value = data.message ?? "Checkout failed.";
+      return;
+    }
+    const { url } = (await res.json()) as { url: string };
+    window.location.href = url;
+  } catch {
+    checkoutError.value = "Checkout failed. Try again.";
+  }
 }
 
 onMounted(() => {
@@ -107,9 +131,7 @@ onBeforeUnmount(() => {
         <button type="button" class="checkout" @click="onCheckout">
           Checkout
         </button>
-        <p v-if="showCheckoutNote" class="note">
-          Checkout lands in the next drop — payments aren't wired yet.
-        </p>
+        <p v-if="checkoutError" class="note">{{ checkoutError }}</p>
       </footer>
     </aside>
   </div>
@@ -288,7 +310,7 @@ onBeforeUnmount(() => {
 .note {
   font-family: var(--font-zine);
   font-size: 0.75rem;
-  color: var(--color-acid-yellow);
+  color: var(--color-acid-red);
   margin: 0;
 }
 </style>

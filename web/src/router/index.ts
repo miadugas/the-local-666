@@ -7,6 +7,16 @@ const router = createRouter({
   routes: [
     { path: "/", name: "storefront", component: StorefrontView },
     {
+      path: "/checkout/success",
+      name: "checkout-success",
+      component: () => import("../views/CheckoutSuccessView.vue"),
+    },
+    {
+      path: "/checkout/cancel",
+      name: "checkout-cancel",
+      component: () => import("../views/CheckoutCancelView.vue"),
+    },
+    {
       path: "/admin/login",
       name: "admin-login",
       component: () => import("../views/AdminLoginView.vue"),
