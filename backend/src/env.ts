@@ -28,6 +28,10 @@ export const env = {
   adminPassword: process.env.ADMIN_PASSWORD ?? null,
   adminFullName: optional("ADMIN_FULL_NAME", "Store Admin"),
   nodeEnv: optional("NODE_ENV", "development"),
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME?.trim() ?? null,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY?.trim() ?? null,
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET ?? null,
+  cloudinaryFolder: optional("CLOUDINARY_FOLDER", "grave-goods"),
 };
 
 export const isDev = env.nodeEnv !== "production";
