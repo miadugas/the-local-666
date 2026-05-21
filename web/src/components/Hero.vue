@@ -155,10 +155,7 @@
   transform: translate(2px, 2px);
 }
 
-.cta:focus-visible {
-  outline: 3px solid var(--color-acid-blue);
-  outline-offset: 3px;
-}
+/* :focus-visible handled globally in global.css */
 
 @media (max-width: 640px) {
   .headline {

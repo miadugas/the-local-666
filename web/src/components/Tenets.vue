@@ -69,7 +69,7 @@ const TENETS = [
   margin: 0;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 640px) {
   .tenets {
     grid-template-columns: 1fr;
   }

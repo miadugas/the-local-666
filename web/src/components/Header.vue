@@ -73,6 +73,8 @@ const NAV = [
   background: var(--color-acid-pink);
   color: var(--color-ink);
   border: var(--border-ink);
+  /* 44px min for touch — meets iOS tap-target guideline */
+  min-height: 44px;
   padding: 0.5rem 0.95rem;
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -92,13 +94,7 @@ const NAV = [
   box-shadow: 2px 2px 0 var(--color-bone);
 }
 
-/* Keyboard focus — visible against pitch-black header */
-.brand:focus-visible,
-.site-nav a:focus-visible,
-.cart-btn:focus-visible {
-  outline: 3px solid var(--color-acid-blue);
-  outline-offset: 3px;
-}
+/* :focus-visible handled globally in global.css */
 
 @media (max-width: 640px) {
   .site-nav {

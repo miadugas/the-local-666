@@ -162,8 +162,5 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 .add:hover {
   color: var(--strip);
 }
-.add:focus-visible {
-  outline: 2px solid var(--color-acid-blue);
-  outline-offset: 2px;
-}
+/* :focus-visible handled globally in global.css */
 </style>

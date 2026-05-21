@@ -32,3 +32,24 @@ h3 {
   text-transform: uppercase;
   margin: 0;
 }
+
+/* Single source of truth for keyboard focus rings — 3px acid-blue with 3px
+   offset across every interactive surface. Per-component overrides are an
+   anti-pattern; if you need a different ring, name a real reason. */
+:is(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-acid-blue);
+  outline-offset: 3px;
+}
+
+/* Respect users who've opted out of motion. Block-shadow translates and
+   hover lifts are sub-vestibular at 1-2px but still honor the preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

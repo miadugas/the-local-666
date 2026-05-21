@@ -38,7 +38,7 @@
   letter-spacing: 0.01em;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 640px) {
   .site-footer {
     flex-direction: column;
     text-align: center;

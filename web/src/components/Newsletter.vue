@@ -62,6 +62,8 @@ function handleSubmit() {
 .email-input {
   background: var(--color-bone);
   border: var(--border-ink);
+  /* 44px min for touch — meets iOS tap-target guideline */
+  min-height: 44px;
   padding: 0.8125rem 1.125rem;
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -75,14 +77,15 @@ function handleSubmit() {
 }
 .email-input:focus-visible {
   background: #fff;
-  outline: 3px solid var(--color-acid-blue);
-  outline-offset: 2px;
+  /* outline handled globally; bg lift signals "field active" on top */
 }
 
 .subscribe-btn {
   background: var(--color-ink);
   color: var(--color-acid-yellow);
   border: var(--border-ink);
+  /* 44px min for touch — meets iOS tap-target guideline */
+  min-height: 44px;
   padding: 0.8125rem 1.375rem;
   font-family: var(--font-body);
   font-weight: 700;
@@ -99,10 +102,7 @@ function handleSubmit() {
 .subscribe-btn:active {
   transform: translate(2px, 2px);
 }
-.subscribe-btn:focus-visible {
-  outline: 3px solid var(--color-acid-blue);
-  outline-offset: 2px;
-}
+/* :focus-visible handled globally */
 
 @media (max-width: 640px) {
   .form {
