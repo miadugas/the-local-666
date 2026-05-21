@@ -39,11 +39,7 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 
     <div class="image-tape">
       <span v-if="product.isSoldOut" class="sold-out-badge">Sold Out</span>
-      <img
-        :src="`/stickers/${product.slug}.png`"
-        :alt="product.title"
-        draggable="false"
-      />
+      <img :src="product.imageUrl" :alt="product.title" draggable="false" />
     </div>
 
     <div class="meta">

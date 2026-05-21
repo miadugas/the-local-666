@@ -93,11 +93,7 @@ onBeforeUnmount(() => {
       </button>
 
       <div class="image-tape">
-        <img
-          :src="`/stickers/${product.slug}.png`"
-          :alt="product.title"
-          draggable="false"
-        />
+        <img :src="product.imageUrl" :alt="product.title" draggable="false" />
       </div>
 
       <div class="meta">
