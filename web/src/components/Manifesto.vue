@@ -6,8 +6,8 @@
   <section id="manifesto" class="manifesto" aria-label="Manifesto">
     <span class="eyebrow">The part where we get serious</span>
     <p class="quote">
-      We don't sell merch. We sell little plastic
-      <em class="hl">refusals</em>
+      We don't sell merch. We sell little vinyl
+      <em class="hl">fuck you's</em>
       — and we are never, ever going to ask you to manifest abundance.
     </p>
   </section>
