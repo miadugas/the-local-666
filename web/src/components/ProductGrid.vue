@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { PRODUCTS, type Product } from "../data/products";
+import type { Product } from "@grave-goods/shared";
+import { useProducts } from "../composables/useProducts";
 import StickerCard from "./StickerCard.vue";
 import StickerModal from "./StickerModal.vue";
 
+const { products, loading, error, reload } = useProducts();
 const selectedProduct = ref<Product | null>(null);
 
 function handleAddToCart(_product: Product) {
-  // No-op until Pinia cart store lands (later slice).
+  // No-op until Pinia cart store lands (Phase 4).
 }
 
 function handleViewDetail(product: Product) {
@@ -29,13 +31,20 @@ function handleClose() {
         </div>
         <!-- Decorative until /catalog ships — swap to <router-link> then. -->
         <span class="head-link" aria-hidden="true">
-          all {{ PRODUCTS.length }} →
+          all {{ products.length }} →
         </span>
       </header>
 
-      <div class="grid">
+      <p v-if="loading" class="state">Digging up the goods…</p>
+
+      <div v-else-if="error" class="state state-error">
+        <p>The crypt door's stuck — couldn't load the goods.</p>
+        <button type="button" class="retry" @click="reload">Retry</button>
+      </div>
+
+      <div v-else class="grid">
         <StickerCard
-          v-for="(product, i) in PRODUCTS"
+          v-for="(product, i) in products"
           :key="product.id"
           :product="product"
           :index="i"
@@ -124,5 +133,40 @@ function handleClose() {
   .grid {
     grid-template-columns: 1fr;
   }
+}
+
+.state {
+  font-family: var(--font-zine);
+  font-size: 0.95rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-bone);
+  padding: 2rem 0;
+}
+.state-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.retry {
+  background: var(--color-acid-pink);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-block-bone);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-snap);
+}
+.retry:hover {
+  transform: translate(-1px, -1px);
+}
+.retry:active {
+  transform: translate(2px, 2px);
 }
 </style>

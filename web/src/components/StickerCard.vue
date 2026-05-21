@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Product } from "../data/products";
+import type { Product } from "@grave-goods/shared";
+import { formatPrice } from "../lib/format";
 
 const props = defineProps<{
   product: Product;
@@ -29,12 +30,17 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 </script>
 
 <template>
-  <article class="card" :style="{ '--strip': strip.color }">
+  <article
+    class="card"
+    :class="{ 'is-sold-out': product.isSoldOut }"
+    :style="{ '--strip': strip.color }"
+  >
     <div class="strip">{{ strip.label }}</div>
 
     <div class="image-tape">
+      <span v-if="product.isSoldOut" class="sold-out-badge">Sold Out</span>
       <img
-        :src="`/stickers/${product.id}.png`"
+        :src="`/stickers/${product.slug}.png`"
         :alt="product.title"
         draggable="false"
       />
@@ -55,8 +61,17 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
         </button>
       </h3>
       <div class="row">
-        <span class="price">${{ product.price }}</span>
+        <span class="price">{{ formatPrice(product.priceCents) }}</span>
         <button
+          v-if="product.isSoldOut"
+          type="button"
+          class="add add-disabled"
+          disabled
+        >
+          Sold out
+        </button>
+        <button
+          v-else
           type="button"
           class="add"
           @click.stop="emit('add-to-cart', product)"
@@ -200,4 +215,30 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
   color: var(--strip);
 }
 /* :focus-visible handled globally in global.css */
+
+.image-tape .sold-out-badge {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--rotate-stencil));
+  background: var(--color-acid-red);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  font-family: var(--font-zine);
+  font-size: 0.8rem;
+  letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+}
+.is-sold-out .image-tape img {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+.add-disabled,
+.add-disabled:hover {
+  color: color-mix(in oklab, var(--color-bone) 45%, transparent);
+  cursor: not-allowed;
+}
 </style>

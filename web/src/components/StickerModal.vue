@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import type { Product } from "../data/products";
+import type { Product } from "@grave-goods/shared";
+import { formatPrice } from "../lib/format";
 
 const props = defineProps<{ product: Product }>();
 const emit = defineEmits<{
@@ -30,7 +31,7 @@ function onKeydown(event: KeyboardEvent) {
   if (event.key === "Tab") {
     // Trap focus inside the modal: cycle between closeBtn and addBtn.
     const focusables = [closeBtn.value, addBtn.value].filter(
-      (el): el is HTMLButtonElement => el !== null,
+      (el): el is HTMLButtonElement => el !== null && !el.disabled,
     );
     if (focusables.length === 0) return;
     const first = focusables[0];
@@ -79,7 +80,7 @@ onBeforeUnmount(() => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      :style="{ '--accent': product.ring }"
+      :style="{ '--accent': product.accentHex }"
     >
       <button
         ref="closeBtn"
@@ -93,7 +94,7 @@ onBeforeUnmount(() => {
 
       <div class="image-tape">
         <img
-          :src="`/stickers/${product.id}.png`"
+          :src="`/stickers/${product.slug}.png`"
           :alt="product.title"
           draggable="false"
         />
@@ -106,8 +107,18 @@ onBeforeUnmount(() => {
           {{ product.description ?? FALLBACK_DESCRIPTION }}
         </p>
         <div class="buy">
-          <span class="price">${{ product.price }}</span>
+          <span class="price">{{ formatPrice(product.priceCents) }}</span>
           <button
+            v-if="product.isSoldOut"
+            ref="addBtn"
+            type="button"
+            class="add add-disabled"
+            disabled
+          >
+            Sold out
+          </button>
+          <button
+            v-else
             ref="addBtn"
             type="button"
             class="add"
@@ -277,6 +288,16 @@ onBeforeUnmount(() => {
 }
 .add:active {
   transform: translate(2px, 2px);
+}
+.add.add-disabled {
+  background: var(--color-acid-red);
+  color: var(--color-ink);
+  opacity: 0.55;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.add.add-disabled:hover {
+  transform: none;
 }
 
 @media (max-width: 640px) {
