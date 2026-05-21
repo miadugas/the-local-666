@@ -32,6 +32,8 @@ export const env = {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY?.trim() ?? null,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET ?? null,
   cloudinaryFolder: optional("CLOUDINARY_FOLDER", "grave-goods"),
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? null,
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? null,
 };
 
 export const isDev = env.nodeEnv !== "production";
