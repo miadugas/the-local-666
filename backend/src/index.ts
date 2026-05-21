@@ -6,6 +6,7 @@ import { pool } from "./db/pool.js";
 import { up as migrateUp } from "./db/migrate.js";
 import { seedAdminIfEmpty } from "./auth/seed.js";
 import { healthRouter } from "./routes/health.js";
+import { adminRouter } from "./routes/admin.js";
 
 async function boot(): Promise<void> {
   // 1. Run pending migrations
@@ -27,6 +28,7 @@ async function boot(): Promise<void> {
   app.use(express.json({ limit: "1mb" }));
 
   app.use(healthRouter);
+  app.use(adminRouter);
 
   // Error handler — JSON shape, no stack in prod
   app.use(
