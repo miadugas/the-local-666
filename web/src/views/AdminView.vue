@@ -163,67 +163,69 @@ onMounted(load);
 
     <p v-if="loadError" class="warn">Couldn't load products.</p>
 
-    <ul class="list">
-      <li v-for="p in products" :key="p.id" class="row">
-        <img :src="p.imageUrl" alt="" class="thumb" />
-        <div class="row-meta">
-          <strong>{{ p.title }}</strong>
-          <span class="muted">
-            {{ p.slug }} · ${{ (p.priceCents / 100).toFixed(2)
-            }}{{ p.isSoldOut ? " · SOLD OUT" : "" }}
-          </span>
-        </div>
-        <div class="row-actions">
-          <button class="ghost" @click="startEdit(p)">Edit</button>
-          <button class="ghost danger" @click="remove(p)">Delete</button>
-        </div>
-      </li>
-    </ul>
+    <div class="workspace" :class="{ split: editing }">
+      <ul class="list">
+        <li v-for="p in products" :key="p.id" class="row">
+          <img :src="p.imageUrl" alt="" class="thumb" />
+          <div class="row-meta">
+            <strong>{{ p.title }}</strong>
+            <span class="muted">
+              {{ p.slug }} · ${{ (p.priceCents / 100).toFixed(2)
+              }}{{ p.isSoldOut ? " · SOLD OUT" : "" }}
+            </span>
+          </div>
+          <div class="row-actions">
+            <button class="ghost" @click="startEdit(p)">Edit</button>
+            <button class="ghost danger" @click="remove(p)">Delete</button>
+          </div>
+        </li>
+      </ul>
 
-    <div v-if="editing" class="editor">
-      <h2 class="editor-title">
-        {{ editing.id === null ? "New product" : "Edit product" }}
-      </h2>
-      <label class="field"
-        ><span>Title</span><input v-model="editing.title"
-      /></label>
-      <label class="field"
-        ><span>Slug (blank = from title)</span><input v-model="editing.slug"
-      /></label>
-      <label class="field"
-        ><span>Spec</span><input v-model="editing.spec"
-      /></label>
-      <label class="field"
-        ><span>Price (USD)</span
-        ><input v-model="editing.priceDollars" inputmode="decimal"
-      /></label>
-      <label class="field"
-        ><span>Accent hex</span><input v-model="editing.accentHex"
-      /></label>
-      <label class="field"
-        ><span>Display order</span
-        ><input v-model.number="editing.displayOrder" type="number"
-      /></label>
-      <label class="field"
-        ><span>Description</span
-        ><textarea v-model="editing.description" rows="3" />
-      </label>
-      <label class="check"
-        ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
-      >
-      <div class="field">
-        <span>Image</span>
-        <ImageUploader
-          :current-url="editing.imageUrl || null"
-          @uploaded="onUploaded"
-        />
-      </div>
-      <p v-if="formError" class="warn">{{ formError }}</p>
-      <div class="editor-actions">
-        <button class="btn" :disabled="saving" @click="save">
-          {{ saving ? "Saving…" : "Save" }}
-        </button>
-        <button class="ghost" @click="cancel">Cancel</button>
+      <div v-if="editing" class="editor">
+        <h2 class="editor-title">
+          {{ editing.id === null ? "New product" : "Edit product" }}
+        </h2>
+        <label class="field"
+          ><span>Title</span><input v-model="editing.title"
+        /></label>
+        <label class="field"
+          ><span>Slug (blank = from title)</span><input v-model="editing.slug"
+        /></label>
+        <label class="field"
+          ><span>Spec</span><input v-model="editing.spec"
+        /></label>
+        <label class="field"
+          ><span>Price (USD)</span
+          ><input v-model="editing.priceDollars" inputmode="decimal"
+        /></label>
+        <label class="field"
+          ><span>Accent hex</span><input v-model="editing.accentHex"
+        /></label>
+        <label class="field"
+          ><span>Display order</span
+          ><input v-model.number="editing.displayOrder" type="number"
+        /></label>
+        <label class="field"
+          ><span>Description</span
+          ><textarea v-model="editing.description" rows="3" />
+        </label>
+        <label class="check"
+          ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
+        >
+        <div class="field">
+          <span>Image</span>
+          <ImageUploader
+            :current-url="editing.imageUrl || null"
+            @uploaded="onUploaded"
+          />
+        </div>
+        <p v-if="formError" class="warn">{{ formError }}</p>
+        <div class="editor-actions">
+          <button class="btn" :disabled="saving" @click="save">
+            {{ saving ? "Saving…" : "Save" }}
+          </button>
+          <button class="ghost" @click="cancel">Cancel</button>
+        </div>
       </div>
     </div>
   </main>
@@ -235,7 +237,7 @@ onMounted(load);
   background: var(--color-pitch);
   color: var(--color-bone);
   padding: 1.5rem;
-  width: min(900px, 94vw);
+  width: min(1180px, 94vw);
   margin: 0 auto;
 }
 .bar {
@@ -255,9 +257,18 @@ onMounted(load);
   display: flex;
   gap: 0.5rem;
 }
+.workspace {
+  display: grid;
+  gap: 1.25rem;
+}
+/* Two columns only while editing: inventory left, editor right. */
+.workspace.split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+}
 .list {
   list-style: none;
-  margin: 0 0 1.5rem;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -299,6 +310,19 @@ onMounted(load);
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
+}
+/* Editor tracks the list as you scroll the inventory column. */
+.workspace.split .editor {
+  position: sticky;
+  top: 1.5rem;
+}
+@media (max-width: 760px) {
+  .workspace.split {
+    grid-template-columns: 1fr;
+  }
+  .workspace.split .editor {
+    position: static;
+  }
 }
 .editor-title {
   font-family: var(--font-display);
