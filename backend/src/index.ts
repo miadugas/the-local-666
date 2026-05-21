@@ -5,6 +5,7 @@ import { env, isDev } from "./env.js";
 import { pool } from "./db/pool.js";
 import { up as migrateUp } from "./db/migrate.js";
 import { seedAdminIfEmpty } from "./auth/seed.js";
+import { seedProductsIfEmpty } from "./products/seed.js";
 import { healthRouter } from "./routes/health.js";
 import { adminRouter } from "./routes/admin.js";
 import { meRouter } from "./routes/me.js";
@@ -15,6 +16,9 @@ async function boot(): Promise<void> {
 
   // 2. Seed admin user if needed
   await seedAdminIfEmpty();
+
+  // 2b. Seed product catalog if needed
+  await seedProductsIfEmpty();
 
   // 3. Build the Express app
   const app = express();
