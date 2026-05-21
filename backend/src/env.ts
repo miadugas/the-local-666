@@ -34,6 +34,11 @@ export const env = {
   cloudinaryFolder: optional("CLOUDINARY_FOLDER", "grave-goods"),
   stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? null,
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? null,
+  resendApiKey: process.env.RESEND_API_KEY ?? null,
+  emailFrom: optional(
+    "EMAIL_FROM",
+    "Grave Goods <orders@gravegoodsgoodies.com>",
+  ),
 };
 
 export const isDev = env.nodeEnv !== "production";
