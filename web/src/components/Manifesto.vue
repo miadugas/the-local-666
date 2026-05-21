@@ -8,7 +8,7 @@
     <p class="quote">
       We don't sell merch. We sell little plastic
       <em class="hl">refusals</em>
-      you can stick on the world until the world feels less like a cage.
+      — and we are never, ever going to ask you to manifest abundance.
     </p>
   </section>
 </template>
