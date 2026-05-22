@@ -1,6 +1,8 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { env, isDev } from "./env.js";
 import { pool } from "./db/pool.js";
 import { up as migrateUp } from "./db/migrate.js";
@@ -52,6 +54,21 @@ async function boot(): Promise<void> {
   app.use(uploadsRouter);
   app.use(adminProductsRouter);
   app.use(checkoutRouter);
+
+  // Serve the built SPA in production (dev uses Vite on :5173). cloudflared has
+  // no static origin of its own, so the app container serves web/dist directly,
+  // keeping frontend + API same-origin (required for the SameSite=Strict cookie).
+  if (!isDev) {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const webDist =
+      process.env.WEB_DIST_PATH?.trim() || path.resolve(here, "../../web/dist");
+    app.use(express.static(webDist));
+    // SPA history fallback: any non-API GET route returns index.html so
+    // client-side routes (e.g. /admin) survive a hard refresh.
+    app.get(/^(?!\/api\/).*/, (_req, res) => {
+      res.sendFile(path.join(webDist, "index.html"));
+    });
+  }
 
   // Error handler — JSON shape, no stack in prod
   app.use(
