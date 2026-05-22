@@ -6,7 +6,7 @@
   <footer class="site-footer">
     <span class="left">© Grave Goods · Made by hand</span>
     <span class="center">hail thyself</span>
-    <span class="right">Bulk-printed by Sticky Brand</span>
+    <span class="right">Bulk-printed in Denver, Colorado</span>
   </footer>
 </template>
 
