@@ -11,6 +11,11 @@
 # Smoke test (no tunnel):   docker compose up -d --build
 # With the tunnel (Phase 5): docker compose --profile tunnel up -d --build
 
+# Explicit project name → predictable container/volume/network names
+# (grave-goods_app, grave-goods_pgdata, …), so this stack stays cleanly
+# separated from other sites you host on the box.
+name: grave-goods
+
 services:
   postgres:
     image: postgres:16
