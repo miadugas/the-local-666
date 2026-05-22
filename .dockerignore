@@ -1,0 +1,21 @@
+# Never bake host deps (arm64 + native bcrypt) or build output into the image —
+# npm ci + npm run build regenerate them for the image's platform.
+node_modules
+**/node_modules
+**/dist
+*.tsbuildinfo
+
+# Secrets stay out of the image; env is injected at runtime via compose.
+.env
+.env.*
+!.env.example
+
+# Not needed at build time
+.git
+.gitignore
+.github
+docs
+*.log
+.DS_Store
+.vscode
+.idea

@@ -1,0 +1,61 @@
+# Grave Goods — 3-service stack for the_litterbox.
+#
+#   postgres     internal-only DB, data in a named volume
+#   app          Express (API + built SPA), boots migrations + seed
+#   cloudflared  Cloudflare Tunnel (profile "tunnel" — added in Phase 5)
+#
+# Env comes from two gitignored files on the box:
+#   ./.env           POSTGRES_PASSWORD, CLOUDFLARE_TUNNEL_TOKEN  (compose interpolation)
+#   ./backend/.env   app secrets: Cloudinary / Stripe / Resend / ADMIN_* / FRONTEND_URL / EMAIL_FROM
+#
+# Smoke test (no tunnel):   docker compose up -d --build
+# With the tunnel (Phase 5): docker compose --profile tunnel up -d --build
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: grave_goods
+      POSTGRES_USER: grave_goods
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in ./.env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U grave_goods -d grave_goods"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      # These override anything in backend/.env (compose env wins over env_file).
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_URL: postgres://grave_goods:${POSTGRES_PASSWORD}@postgres:5432/grave_goods
+    ports:
+      # Box-local only — for smoke testing over SSH. cloudflared reaches the app
+      # via the compose network (app:4000), not this mapping.
+      - "127.0.0.1:4000:4000"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    profiles: ["tunnel"]
+    depends_on:
+      - app
+    command: tunnel --no-autoupdate run
+    environment:
+      # Public hostname routing is configured in the Cloudflare Zero Trust
+      # dashboard (Phase 5); this token binds the container to that tunnel.
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:-}
+
+volumes:
+  pgdata:

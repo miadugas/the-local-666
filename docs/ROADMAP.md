@@ -65,17 +65,22 @@ Cloudflare Tunnel needs the zone on Cloudflare. The domain is on Namecheap. This
 
 ---
 
-## Phase 2 — Provision: Docker Compose stack _(can scaffold on this Mac — no box needed)_
+## Phase 2 — Provision: Docker Compose stack _(scaffolded on this Mac — DONE 2026-05-22)_
 
-3 containers: `postgres`, `app` (multi-stage build → Express serves API + `web/dist`), `cloudflared`.
+3 services: `postgres`, `app` (Express serves API + `web/dist`), `cloudflared` (profile `tunnel`).
 
-- [ ] **Code change first:** Express serves `web/dist` (static + SPA history fallback) so the `app` container is self-contained (per D3)
-- [ ] Multi-stage `Dockerfile` (`node:20`): build stage `npm ci` + `npm run build`; runtime stage copies `dist` + `web/dist`, runs `node backend/dist/index.js`
-- [ ] `docker-compose.yml`: `postgres` (named volume + healthcheck), `app` (depends_on postgres healthy, reads `.env`), `cloudflared` (token-based, depends_on app)
-- [ ] `.dockerignore` (node_modules, .env, .git)
-- [ ] `postgres` stays internal to the compose network (no host 5432 exposure); `app` exposes 4000 only to the network for `cloudflared`
+- [x] **Code change:** Express serves `web/dist` (static + SPA history fallback), gated on `!isDev` — verified locally (`/` + `/admin` → 200 html, `/api/*` intact)
+- [x] **`Dockerfile`** — single-stage `node:20` (full image carries bcrypt's native toolchain; box has ample disk). `npm ci` → `npm run build` → `node backend/dist/index.js`
+- [x] **`docker-compose.yml`** — `postgres` (named `pgdata` volume + `pg_isready` healthcheck, internal-only), `app` (waits for healthy postgres, `env_file: backend/.env`, `DATABASE_URL`→`postgres` service, host-local `127.0.0.1:4000`), `cloudflared` (profile `tunnel`, token-based)
+- [x] **`.dockerignore`** — excludes host `node_modules`/`dist`/`.env` (no arm64 native modules or secrets in the image)
+- [x] Compose YAML validated (parses; correct services/volume/profile/depends_on)
 
-**Gate:** `docker compose up` locally (or on box) brings the stack healthy and `/api/products` answers.
+**Verification deferred to the box** — this Mac has no Docker daemon (arm64 vs the box's x86_64 anyway). `docker compose up -d --build` runs in Phase 3/4 on the_litterbox.
+
+**Env files needed on the box (both gitignored):**
+
+- `./.env` — `POSTGRES_PASSWORD`, `CLOUDFLARE_TUNNEL_TOKEN` (Phase 5)
+- `./backend/.env` — `FRONTEND_URL`, Cloudinary / Stripe / Resend / `ADMIN_*` / `EMAIL_FROM`. (`NODE_ENV`/`PORT`/`DATABASE_URL` are set by compose and override env_file.)
 
 ---
 
