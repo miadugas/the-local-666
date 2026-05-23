@@ -3,23 +3,26 @@ import { useCartStore } from "../stores/cart";
 
 const cart = useCartStore();
 
+// RouterLinks so nav works from any page (incl. the content pages where the
+// Header now lives). Hash items route home first, then scrollBehavior (router)
+// scrolls to the section; About is a real route.
 const NAV = [
-  { label: "Shop", href: "#shop" },
-  { label: "Manifesto", href: "#manifesto" },
-  { label: "About", href: "#about" },
+  { label: "Shop", to: { path: "/", hash: "#shop" } },
+  { label: "Manifesto", to: { path: "/", hash: "#manifesto" } },
+  { label: "About", to: { path: "/about" } },
 ];
 </script>
 
 <template>
   <header class="site-header">
-    <a href="/" class="brand" aria-label="Grave Goods — home">
+    <RouterLink to="/" class="brand" aria-label="Grave Goods — home">
       grave<span class="brand-accent">goods</span>
-    </a>
+    </RouterLink>
 
     <nav class="site-nav" aria-label="Primary">
-      <a v-for="item in NAV" :key="item.label" :href="item.href">
+      <RouterLink v-for="item in NAV" :key="item.label" :to="item.to">
         {{ item.label }}
-      </a>
+      </RouterLink>
     </nav>
 
     <button type="button" class="cart-btn" @click="cart.open()">
