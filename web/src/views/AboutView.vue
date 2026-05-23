@@ -5,7 +5,7 @@ import ContentPage from "../components/ContentPage.vue";
 <template>
   <ContentPage title="About" eyebrow="The people, not the brand">
     <p>
-      Grave Goods is a two-person operation run out of <strong>Denver</strong> —
+      Grave Goods is a two-person DIY operation based in <strong>Denver</strong> —
       design, packing, shipping, all of it by hand. No warehouse, no investors,
       no growth-hacking. Just vinyl with something to say.
     </p>
