@@ -65,6 +65,31 @@ const cart = useCartStore();
 .content-body :slotted(p:last-child) {
   margin-bottom: 0;
 }
+.content-body :slotted(h2) {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.1;
+  color: var(--color-bone);
+  margin: 2.25rem 0 0.6rem;
+}
+.content-body :slotted(h2:first-child) {
+  margin-top: 0;
+}
+.content-body :slotted(strong) {
+  color: var(--color-bone);
+  font-weight: 700;
+}
+.content-body :slotted(ul) {
+  margin: 0 0 1.15rem;
+  padding-left: 1.25rem;
+  list-style: square;
+}
+.content-body :slotted(li) {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
 .content-body :slotted(a) {
   color: var(--color-acid-blue);
 }

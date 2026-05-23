@@ -12,9 +12,12 @@
     </p>
     <p class="pledge">
       <strong class="pledge-amt">25%</strong> of net profit, every quarter — to
-      community bail funds and rotating mutual aid: trans mutual aid, abortion
-      access, Indigenous land back. After the lights stay on, a quarter of every
-      dollar goes back to the people. Receipts when the checks clear.
+      mutual aid and the people doing the work this moment is trying to crush.
+      After the lights stay on, a quarter of every dollar goes back to where
+      it's needed.
+      <RouterLink to="/about" class="pledge-link"
+        >See where it goes →</RouterLink
+      >
     </p>
   </section>
 </template>
@@ -69,5 +72,18 @@
   font-size: 1.4rem;
   color: var(--color-acid-lime);
   letter-spacing: 0.01em;
+}
+
+.pledge-link {
+  font-family: var(--font-zine);
+  font-size: 0.8rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-acid-pink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.pledge-link:hover {
+  text-decoration: underline;
 }
 </style>
