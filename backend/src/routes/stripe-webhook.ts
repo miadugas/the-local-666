@@ -1,12 +1,22 @@
 import type { Request, Response } from "express";
 import type Stripe from "stripe";
+import { parseCartItems } from "@grave-goods/shared";
 import { getStripe } from "../payments/stripe.js";
 import { env } from "../env.js";
 import { insertPaidOrder, type OrderItem } from "../orders/queries.js";
+import { getProductBySlug } from "../products/queries.js";
 import {
   isConfigured as emailIsConfigured,
   sendOrderConfirmation,
 } from "../emails/orderConfirmation.js";
+
+function parseMetadataInt(value: string | undefined, name: string): number {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    throw new Error(`Invalid ${name} metadata`);
+  }
+  return parsed;
+}
 
 export async function stripeWebhookHandler(
   req: Request,
@@ -37,19 +47,86 @@ export async function stripeWebhookHandler(
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    let items: OrderItem[] = [];
-    try {
-      items = JSON.parse(session.metadata?.items ?? "[]") as OrderItem[];
-    } catch {
-      items = [];
+    if (typeof session.amount_total !== "number") {
+      console.error("[stripe] checkout session missing amount_total", {
+        sessionId: session.id,
+      });
+      res.status(500).json({ message: "Invalid checkout session total" });
+      return;
     }
+
+    let metadataItems;
+    try {
+      metadataItems = parseCartItems(session.metadata?.items ?? "");
+    } catch (err) {
+      console.error("[stripe] malformed checkout metadata items", {
+        sessionId: session.id,
+        rawItems: session.metadata?.items,
+        err,
+      });
+      res.status(500).json({ message: "Invalid checkout metadata" });
+      return;
+    }
+
+    let listSubtotalCents: number;
+    let bundleSubtotalCents: number;
+    let itemCount: number;
+    try {
+      listSubtotalCents = parseMetadataInt(
+        session.metadata?.list_subtotal_cents,
+        "list_subtotal_cents",
+      );
+      bundleSubtotalCents = parseMetadataInt(
+        session.metadata?.bundle_subtotal_cents,
+        "bundle_subtotal_cents",
+      );
+      itemCount = parseMetadataInt(session.metadata?.item_count, "item_count");
+    } catch (err) {
+      console.error("[stripe] malformed checkout numeric metadata", {
+        sessionId: session.id,
+        metadata: session.metadata,
+        err,
+      });
+      res.status(500).json({ message: "Invalid checkout metadata" });
+      return;
+    }
+
+    const metadataQty = metadataItems.reduce((sum, item) => sum + item.qty, 0);
+    if (
+      bundleSubtotalCents !== session.amount_total ||
+      metadataQty !== itemCount
+    ) {
+      console.error("[stripe] checkout metadata reconciliation failed", {
+        sessionId: session.id,
+        amountTotal: session.amount_total,
+        bundleSubtotalCents,
+        metadataQty,
+        itemCount,
+      });
+      res.status(500).json({ message: "Checkout metadata mismatch" });
+      return;
+    }
+
+    const items: OrderItem[] = [];
+    for (const item of metadataItems) {
+      const product = await getProductBySlug(item.slug);
+      items.push({
+        slug: item.slug,
+        title: product?.title ?? item.slug,
+        quantity: item.qty,
+        unitPriceCents: item.unitPriceCents,
+      });
+    }
+
     const email = session.customer_details?.email ?? null;
-    const totalCents = session.amount_total ?? 0;
+    const totalCents = session.amount_total;
     const inserted = await insertPaidOrder({
       stripeSessionId: session.id,
       email,
       items,
       totalCents,
+      listSubtotalCents,
+      bundleSubtotalCents,
     });
     if (inserted && email && emailIsConfigured()) {
       try {

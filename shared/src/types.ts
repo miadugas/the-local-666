@@ -21,6 +21,8 @@ export type Product = {
   title: string;
   spec: string;
   priceCents: number;
+  salePriceCents: number | null;
+  saleLabel: string | null;
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
@@ -33,6 +35,9 @@ export type AdminProduct = {
   title: string;
   spec: string;
   priceCents: number;
+  salePriceCents: number | null;
+  saleLabel: string | null;
+  saleEndsAt: string | null;
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;

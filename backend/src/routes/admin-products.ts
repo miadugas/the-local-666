@@ -1,7 +1,9 @@
-import { Router } from "express";
+import { Router, type Response } from "express";
+import { validateSalePrice } from "@grave-goods/shared";
 import { requireAuth } from "../auth/middleware.js";
 import {
   listAdminProducts,
+  getAdminProductById,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -25,6 +27,74 @@ function isUniqueViolation(err: unknown): boolean {
     err !== null &&
     (err as { code?: string }).code === "23505"
   );
+}
+
+function parseSalePriceCents(
+  value: unknown,
+  res: Response,
+): number | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const salePriceCents = Number(value);
+  if (!Number.isInteger(salePriceCents)) {
+    res
+      .status(400)
+      .json({ message: "salePriceCents must be an integer or null" });
+    return undefined;
+  }
+  return salePriceCents;
+}
+
+function parseSaleLabel(
+  value: unknown,
+  res: Response,
+): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const saleLabel = String(value).trim();
+  if (saleLabel.length > 50) {
+    res
+      .status(400)
+      .json({ message: "saleLabel must be 50 characters or less" });
+    return undefined;
+  }
+  return saleLabel || null;
+}
+
+function parseSaleEndsAt(
+  value: unknown,
+  res: Response,
+): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const saleEndsAt = String(value).trim();
+  const timestamp = Date.parse(saleEndsAt);
+  if (!saleEndsAt || Number.isNaN(timestamp) || timestamp <= Date.now()) {
+    res
+      .status(400)
+      .json({ message: "saleEndsAt must be a future ISO timestamp or null" });
+    return undefined;
+  }
+  return saleEndsAt;
+}
+
+function validateFinalSale(
+  salePriceCents: number | null,
+  priceCents: number,
+  res: Response,
+): boolean {
+  if (salePriceCents === null) return true;
+
+  const validation = validateSalePrice(salePriceCents);
+  if (!validation.ok) {
+    res.status(400).json({ message: validation.reason });
+    return false;
+  }
+  if (salePriceCents >= priceCents) {
+    res.status(400).json({ message: "Sale price must be below priceCents" });
+    return false;
+  }
+  return true;
 }
 
 adminProductsRouter.get(
@@ -64,12 +134,24 @@ adminProductsRouter.post(
       res.status(400).json({ message: "imageUrl is required" });
       return;
     }
+    const salePriceCents = parseSalePriceCents(b.salePriceCents, res);
+    if (b.salePriceCents !== undefined && salePriceCents === undefined) return;
+    const saleLabel = parseSaleLabel(b.saleLabel, res);
+    if (b.saleLabel !== undefined && saleLabel === undefined) return;
+    const saleEndsAt = parseSaleEndsAt(b.saleEndsAt, res);
+    if (b.saleEndsAt !== undefined && saleEndsAt === undefined) return;
+
+    const finalSalePriceCents = salePriceCents ?? null;
+    if (!validateFinalSale(finalSalePriceCents, priceCents, res)) return;
 
     const input: CreateProductInput = {
       slug,
       title,
       spec: String(b.spec ?? "").trim(),
       priceCents,
+      salePriceCents: finalSalePriceCents,
+      saleLabel,
+      saleEndsAt,
       accentHex: String(b.accentHex ?? "").trim(),
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
@@ -128,6 +210,28 @@ adminProductsRouter.patch(
     if (b.imagePublicId !== undefined)
       input.imagePublicId =
         b.imagePublicId === null ? null : String(b.imagePublicId);
+    const salePriceCents = parseSalePriceCents(b.salePriceCents, res);
+    if (b.salePriceCents !== undefined && salePriceCents === undefined) return;
+    if (b.salePriceCents !== undefined) input.salePriceCents = salePriceCents;
+    const saleLabel = parseSaleLabel(b.saleLabel, res);
+    if (b.saleLabel !== undefined && saleLabel === undefined) return;
+    if (b.saleLabel !== undefined) input.saleLabel = saleLabel;
+    const saleEndsAt = parseSaleEndsAt(b.saleEndsAt, res);
+    if (b.saleEndsAt !== undefined && saleEndsAt === undefined) return;
+    if (b.saleEndsAt !== undefined) input.saleEndsAt = saleEndsAt;
+
+    const current = await getAdminProductById(id);
+    if (!current) {
+      res.status(404).json({ message: "Product not found" });
+      return;
+    }
+    const finalSalePriceCents =
+      input.salePriceCents !== undefined
+        ? input.salePriceCents
+        : current.salePriceCents;
+    const finalPriceCents =
+      input.priceCents !== undefined ? input.priceCents : current.priceCents;
+    if (!validateFinalSale(finalSalePriceCents, finalPriceCents, res)) return;
 
     try {
       const updated = await updateProduct(id, input);

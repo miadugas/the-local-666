@@ -7,6 +7,9 @@ type AdminProductRow = {
   title: string;
   spec: string;
   price_cents: number;
+  sale_price_cents: number | null;
+  sale_label: string | null;
+  sale_ends_at: Date | null;
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
@@ -18,7 +21,7 @@ type AdminProductRow = {
 };
 
 const COLS =
-  "id, slug, title, spec, price_cents, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, created_at, updated_at";
+  "id, slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, created_at, updated_at";
 
 function mapRow(r: AdminProductRow): AdminProduct {
   return {
@@ -27,6 +30,9 @@ function mapRow(r: AdminProductRow): AdminProduct {
     title: r.title,
     spec: r.spec,
     priceCents: r.price_cents,
+    salePriceCents: r.sale_price_cents,
+    saleLabel: r.sale_label,
+    saleEndsAt: r.sale_ends_at ? r.sale_ends_at.toISOString() : null,
     accentHex: r.accent_hex,
     description: r.description,
     isSoldOut: r.is_sold_out,
@@ -43,6 +49,9 @@ export type CreateProductInput = {
   title: string;
   spec: string;
   priceCents: number;
+  salePriceCents?: number | null;
+  saleLabel?: string | null;
+  saleEndsAt?: string | null;
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
@@ -52,6 +61,16 @@ export type CreateProductInput = {
 };
 
 export type UpdateProductInput = Partial<CreateProductInput>;
+
+export async function getAdminProductById(
+  id: number,
+): Promise<AdminProduct | null> {
+  const result = await pool.query<AdminProductRow>(
+    `SELECT ${COLS} FROM products WHERE id = $1 LIMIT 1`,
+    [id],
+  );
+  return result.rows[0] ? mapRow(result.rows[0]) : null;
+}
 
 export async function listAdminProducts(): Promise<AdminProduct[]> {
   const result = await pool.query<AdminProductRow>(
@@ -63,16 +82,23 @@ export async function listAdminProducts(): Promise<AdminProduct[]> {
 export async function createProduct(
   input: CreateProductInput,
 ): Promise<AdminProduct> {
+  const salePriceCents = input.salePriceCents ?? null;
+  const saleLabel = salePriceCents === null ? null : (input.saleLabel ?? null);
+  const saleEndsAt =
+    salePriceCents === null ? null : (input.saleEndsAt ?? null);
   const result = await pool.query<AdminProductRow>(
     `INSERT INTO products
-       (slug, title, spec, price_cents, accent_hex, description, is_sold_out, display_order, image_url, image_public_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       (slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
      RETURNING ${COLS}`,
     [
       input.slug,
       input.title,
       input.spec,
       input.priceCents,
+      salePriceCents,
+      saleLabel,
+      saleEndsAt,
       input.accentHex,
       input.description,
       input.isSoldOut,
@@ -88,6 +114,13 @@ export async function updateProduct(
   id: number,
   input: UpdateProductInput,
 ): Promise<AdminProduct | null> {
+  const cur = await pool.query<AdminProductRow>(
+    `SELECT ${COLS} FROM products WHERE id = $1`,
+    [id],
+  );
+  const current = cur.rows[0];
+  if (!current) return null;
+
   const fields: string[] = [];
   const values: unknown[] = [];
   let i = 1;
@@ -100,6 +133,20 @@ export async function updateProduct(
   if (input.title !== undefined) set("title", input.title);
   if (input.spec !== undefined) set("spec", input.spec);
   if (input.priceCents !== undefined) set("price_cents", input.priceCents);
+
+  const finalSalePriceCents =
+    input.salePriceCents !== undefined
+      ? input.salePriceCents
+      : current.sale_price_cents;
+  if (input.salePriceCents !== undefined)
+    set("sale_price_cents", input.salePriceCents);
+  if (finalSalePriceCents === null) {
+    set("sale_label", null);
+    set("sale_ends_at", null);
+  } else {
+    if (input.saleLabel !== undefined) set("sale_label", input.saleLabel);
+    if (input.saleEndsAt !== undefined) set("sale_ends_at", input.saleEndsAt);
+  }
   if (input.accentHex !== undefined) set("accent_hex", input.accentHex);
   if (input.description !== undefined) set("description", input.description);
   if (input.isSoldOut !== undefined) set("is_sold_out", input.isSoldOut);
@@ -110,11 +157,7 @@ export async function updateProduct(
     set("image_public_id", input.imagePublicId);
 
   if (fields.length === 0) {
-    const cur = await pool.query<AdminProductRow>(
-      `SELECT ${COLS} FROM products WHERE id = $1`,
-      [id],
-    );
-    return cur.rows[0] ? mapRow(cur.rows[0]) : null;
+    return mapRow(current);
   }
 
   fields.push("updated_at = NOW()");
