@@ -10,9 +10,9 @@ import ContentPage from "../components/ContentPage.vue";
       no growth-hacking. Just vinyl with something to say.
     </p>
     <p>
-      We make stickers for the people this moment is trying to erase or exhaust:
-      trans folks, the broke, the furious, the ones who read one book about
-      class and never recovered. If a sticker makes a fascist uncomfortable on
+      We make stickers for the people this moment is trying to erase, exhaust, and exterminate:
+      trans fam, trying to make sense of the daily firehose of fresh hell, the furious, those who read one book about
+      class warfare and never recovered. If a sticker makes a fascist uncomfortable on
       someone's water bottle, it's doing its job.
     </p>
 
@@ -20,7 +20,7 @@ import ContentPage from "../components/ContentPage.vue";
     <p>
       <strong>25% of net profit, every quarter</strong> — to the people and orgs
       doing the work this moment is trying to crush. Not 1%. Not "a portion of
-      proceeds." A full quarter, with receipts when the checks clear.
+      proceeds." A full quarter of every dollar, with receipts when the checks clear.
     </p>
     <p>Right now, that quarter is split between:</p>
     <ul>
