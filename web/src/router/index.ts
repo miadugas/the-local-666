@@ -4,6 +4,10 @@ import { useAdminStore } from "../stores/admin";
 
 const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to) {
+    if (to.hash) return { el: to.hash, top: 80 };
+    return { top: 0 };
+  },
   routes: [
     { path: "/", name: "storefront", component: StorefrontView },
     {
@@ -26,6 +30,26 @@ const router = createRouter({
       name: "admin",
       component: () => import("../views/AdminView.vue"),
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/shipping",
+      name: "shipping",
+      component: () => import("../views/ShippingView.vue"),
+    },
+    {
+      path: "/privacy",
+      name: "privacy",
+      component: () => import("../views/PrivacyView.vue"),
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      component: () => import("../views/NotFoundView.vue"),
     },
   ],
 });
