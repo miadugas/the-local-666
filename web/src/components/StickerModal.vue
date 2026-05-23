@@ -107,12 +107,10 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <div class="meta">
+      <div class="info">
         <h2 id="modal-title" class="title">{{ product.title }}</h2>
         <p class="spec">{{ product.spec }}</p>
         <p v-if="onSale" class="sale-tag">{{ product.saleLabel ?? "Sale" }}</p>
-        <!-- eslint-disable-next-line vue/no-v-html — sanitized in renderMarkdown -->
-        <div class="description prose" v-html="descriptionHtml"></div>
         <div class="buy">
           <span class="price">
             <template v-if="onSale">
@@ -143,6 +141,9 @@ onBeforeUnmount(() => {
           </button>
         </div>
       </div>
+
+      <!-- eslint-disable-next-line vue/no-v-html — sanitized in renderMarkdown -->
+      <div class="description prose" v-html="descriptionHtml"></div>
     </div>
   </div>
 </template>
@@ -169,7 +170,10 @@ onBeforeUnmount(() => {
   max-height: 85vh;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: minmax(0, 300px) 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "image info"
+    "desc desc";
   gap: clamp(1.5rem, 3vw, 2rem);
   padding: clamp(1.25rem, 3vw, 2rem);
 }
@@ -203,8 +207,8 @@ onBeforeUnmount(() => {
 /* Outer box stays square + holds the tape corners (no overflow clip). The
    inner .disc is the round sticker that clips the art. Mirrors StickerCard. */
 .image-tape {
-  position: sticky;
-  top: 0.5rem;
+  grid-area: image;
+  position: relative;
   aspect-ratio: 1 / 1;
   align-self: start;
 }
@@ -246,7 +250,8 @@ onBeforeUnmount(() => {
   transform: translateX(-35%) rotate(6deg);
 }
 
-.meta {
+.info {
+  grid-area: info;
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
@@ -284,12 +289,15 @@ onBeforeUnmount(() => {
 }
 
 .description {
+  grid-area: desc;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.55;
   color: var(--color-bone);
   margin: 0;
+  border-top: var(--border-bone);
+  padding-top: clamp(1rem, 2vw, 1.5rem);
 }
 
 .buy {
@@ -354,10 +362,10 @@ onBeforeUnmount(() => {
 @media (max-width: 640px) {
   .panel {
     grid-template-columns: 1fr;
+    grid-template-areas: "image" "info" "desc";
     gap: 1.25rem;
   }
   .image-tape {
-    position: static;
     width: 100%;
     max-width: 260px;
     margin: 0 auto;
