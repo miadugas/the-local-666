@@ -10,6 +10,12 @@
       <em class="hl">visible dissent</em>
       — and we are never, ever going to ask you to manifest abundance.
     </p>
+    <p class="pledge">
+      <strong class="pledge-amt">25%</strong> of net profit, every quarter — to
+      community bail funds and rotating mutual aid: trans mutual aid, abortion
+      access, Indigenous land back. After the lights stay on, a quarter of every
+      dollar goes back to the people. Receipts when the checks clear.
+    </p>
   </section>
 </template>
 
@@ -44,5 +50,24 @@
   padding: 0 0.5rem;
   transform: rotate(-1deg);
   display: inline-block;
+}
+
+.pledge {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 60ch;
+  margin: 2rem auto 0;
+  text-align: left;
+  color: color-mix(in oklab, var(--color-bone) 88%, transparent);
+}
+
+.pledge-amt {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--color-acid-lime);
+  letter-spacing: 0.01em;
 }
 </style>
