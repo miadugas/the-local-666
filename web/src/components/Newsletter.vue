@@ -2,9 +2,31 @@
 import { ref } from "vue";
 
 const email = ref("");
+const status = ref<"idle" | "loading" | "done" | "error">("idle");
+const errorMsg = ref("");
 
-function handleSubmit() {
-  // TODO (phase 6): wire to Resend via POST /api/subscribe.
+async function handleSubmit() {
+  if (status.value === "loading") return;
+  status.value = "loading";
+  errorMsg.value = "";
+  try {
+    const res = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.value }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      status.value = "error";
+      errorMsg.value = data.message ?? "Couldn't sign you up — try again.";
+      return;
+    }
+    status.value = "done";
+    email.value = "";
+  } catch {
+    status.value = "error";
+    errorMsg.value = "Couldn't sign you up — try again.";
+  }
 }
 </script>
 
@@ -12,19 +34,31 @@ function handleSubmit() {
   <section class="newsletter" aria-label="Newsletter signup">
     <h2 class="head">Join the procession</h2>
     <p class="lede">
-      Drops, restocks, the occasional ritual. No spam, no salvation. no algorithm.
+      Drops, restocks, the occasional ritual. No spam, no salvation, no
+      algorithm.
     </p>
-    <form class="form" @submit.prevent="handleSubmit">
+    <p v-if="status === 'done'" class="confirm" role="status">
+      You're on the list. Welcome to the procession.
+    </p>
+    <form v-else class="form" @submit.prevent="handleSubmit">
       <input
         v-model="email"
         type="email"
         required
+        :disabled="status === 'loading'"
         placeholder="your@email.com"
         aria-label="Email address"
         class="email-input"
       />
-      <button type="submit" class="subscribe-btn">LET ME IN</button>
+      <button
+        type="submit"
+        class="subscribe-btn"
+        :disabled="status === 'loading'"
+      >
+        {{ status === "loading" ? "ADDING…" : "JOIN THE LIST" }}
+      </button>
     </form>
+    <p v-if="status === 'error'" class="error" role="alert">{{ errorMsg }}</p>
   </section>
 </template>
 
@@ -112,6 +146,25 @@ function handleSubmit() {
 }
 .subscribe-btn:active {
   transform: translate(2px, 2px);
+}
+.subscribe-btn:disabled,
+.email-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.confirm {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-ink);
+  margin: 0;
+}
+.error {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-ink);
+  margin: 0.75rem 0 0;
 }
 /* :focus-visible handled globally */
 

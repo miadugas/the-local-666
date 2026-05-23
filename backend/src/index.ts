@@ -15,6 +15,7 @@ import { productsRouter } from "./routes/products.js";
 import { uploadsRouter } from "./routes/uploads.js";
 import { adminProductsRouter } from "./routes/admin-products.js";
 import { checkoutRouter } from "./routes/checkout.js";
+import { subscribeRouter } from "./routes/subscribe.js";
 import { stripeWebhookHandler } from "./routes/stripe-webhook.js";
 
 async function boot(): Promise<void> {
@@ -54,6 +55,7 @@ async function boot(): Promise<void> {
   app.use(uploadsRouter);
   app.use(adminProductsRouter);
   app.use(checkoutRouter);
+  app.use(subscribeRouter);
 
   // Serve the built SPA in production (dev uses Vite on :5173). cloudflared has
   // no static origin of its own, so the app container serves web/dist directly,
