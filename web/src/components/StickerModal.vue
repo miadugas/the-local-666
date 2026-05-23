@@ -152,24 +152,24 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.72);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(0.5rem, 2vw, 1rem);
+  padding: clamp(1.5rem, 6vw, 4rem);
 }
 
 .panel {
   position: relative;
   background: var(--color-pitch);
   border: var(--border-bone);
-  border-radius: var(--radius-tight);
+  border-radius: 14px;
   box-shadow: var(--shadow-block-pink);
-  width: min(880px, 100%);
-  max-height: 90vh;
+  width: min(760px, 100%);
+  max-height: 85vh;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 300px) 1fr;
   gap: clamp(1.5rem, 3vw, 2rem);
   padding: clamp(1.25rem, 3vw, 2rem);
 }
@@ -203,7 +203,8 @@ onBeforeUnmount(() => {
 /* Outer box stays square + holds the tape corners (no overflow clip). The
    inner .disc is the round sticker that clips the art. Mirrors StickerCard. */
 .image-tape {
-  position: relative;
+  position: sticky;
+  top: 0.5rem;
   aspect-ratio: 1 / 1;
   align-self: start;
 }
@@ -256,6 +257,8 @@ onBeforeUnmount(() => {
   font-size: clamp(1.5rem, 3.5vw, 2.25rem);
   line-height: 0.95;
   color: var(--color-bone);
+  /* clear the absolutely-positioned close button in the top-right */
+  padding-right: 2.75rem;
 }
 
 .spec {
@@ -354,6 +357,7 @@ onBeforeUnmount(() => {
     gap: 1.25rem;
   }
   .image-tape {
+    position: static;
     width: 100%;
     max-width: 260px;
     margin: 0 auto;
