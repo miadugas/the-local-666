@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
       </header>
 
       <p v-if="cart.items.length === 0" class="empty">
-        Your cart's emptier than a cop's conscience. Go dig something up.
+        Your cart's clearer than a cop's conscience. Go dig something up.
       </p>
 
       <ul v-else class="lines">
