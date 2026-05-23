@@ -6,7 +6,7 @@
   <section id="manifesto" class="manifesto" aria-label="Manifesto">
     <span class="eyebrow tape">The part where we get serious</span>
     <p class="quote">
-      We don't sell merch. We sell vinyl
+      We don't sell merch. We sell
       <em class="hl">visible dissent</em>
       — and we are never, ever going to ask you to manifest abundance.
     </p>
@@ -75,8 +75,9 @@
 }
 
 .pledge-link {
-  font-family: var(--font-zine);
+  font-family: var(--font-body);
   font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-acid-pink);

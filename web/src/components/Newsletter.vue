@@ -10,9 +10,9 @@ function handleSubmit() {
 
 <template>
   <section class="newsletter" aria-label="Newsletter signup">
-    <h2 class="head">Join the wake</h2>
+    <h2 class="head">Join the procession</h2>
     <p class="lede">
-      Restocks, new drops, occasional manifestos. No spam, no algorithm.
+      Drops, restocks, the occasional ritual. No spam, no salvation. no algorithm.
     </p>
     <form class="form" @submit.prevent="handleSubmit">
       <input
@@ -23,7 +23,7 @@ function handleSubmit() {
         aria-label="Email address"
         class="email-input"
       />
-      <button type="submit" class="subscribe-btn">Sign me up</button>
+      <button type="submit" class="subscribe-btn">LET ME IN</button>
     </form>
   </section>
 </template>
