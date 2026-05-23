@@ -2,17 +2,17 @@
 const TENETS = [
   {
     num: "01",
-    text: "No gods.\nNo masters.",
+    text: "No gods. No masters.\nNo minimum orders.",
     color: "var(--color-acid-pink)",
   },
   {
     num: "02",
-    text: "Half the profits\nfund bail.",
+    text: "A quarter of profits\nfund the fight.",
     color: "var(--color-acid-blue)",
   },
   {
     num: "03",
-    text: "Stickers,\nnot merch.",
+    text: "Not merch.\nVisible dissent.",
     color: "var(--color-acid-lime)",
   },
 ] as const;
