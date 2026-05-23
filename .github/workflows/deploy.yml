@@ -1,0 +1,45 @@
+name: Deploy to the_litterbox
+
+# Self-hosted runner lives ON the_litterbox (outbound-only, tunnel-friendly).
+# On push to main it syncs the repo into the deploy dir — preserving
+# backend/.env (live secrets) and the Postgres volume — then rebuilds + restarts.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-litterbox
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync into deploy dir (keep .env + build artifacts)
+        run: |
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude 'dist' \
+            --exclude 'web-dist' \
+            --exclude '.env' \
+            --exclude 'backend/.env' \
+            ./ /home/mia/apps/grave-goods-store/
+
+      - name: Rebuild + restart stack
+        working-directory: /home/mia/apps/grave-goods-store
+        run: docker compose --profile tunnel up -d --build
+
+      - name: Health check
+        run: |
+          for i in $(seq 1 45); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' https://gravegoodsgoodies.com/api/products || true)
+            if [ "$code" = "200" ]; then echo "healthy ($code)"; exit 0; fi
+            sleep 2
+          done
+          echo "health check failed after ~90s"; exit 1
