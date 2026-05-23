@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
+import { calculateCart, getBundleNudge } from "@grave-goods/shared";
 import type { Product } from "@grave-goods/shared";
 
 export type CartItem = {
   slug: string;
   title: string;
   priceCents: number;
+  salePriceCents: number | null;
   imageUrl: string;
   quantity: number;
 };
@@ -18,15 +20,28 @@ function loadItems(): CartItem[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (i): i is CartItem =>
-        i &&
-        typeof i.slug === "string" &&
-        typeof i.title === "string" &&
-        typeof i.priceCents === "number" &&
-        typeof i.imageUrl === "string" &&
-        typeof i.quantity === "number",
-    );
+    return parsed
+      .filter(
+        (i) =>
+          i &&
+          typeof i.slug === "string" &&
+          typeof i.title === "string" &&
+          typeof i.priceCents === "number" &&
+          typeof i.imageUrl === "string" &&
+          typeof i.quantity === "number",
+      )
+      .map(
+        (i): CartItem => ({
+          slug: i.slug,
+          title: i.title,
+          priceCents: i.priceCents,
+          // Older carts predate sale support — default to no sale.
+          salePriceCents:
+            typeof i.salePriceCents === "number" ? i.salePriceCents : null,
+          imageUrl: i.imageUrl,
+          quantity: i.quantity,
+        }),
+      );
   } catch {
     return [];
   }
@@ -43,6 +58,35 @@ export const useCartStore = defineStore("cart", () => {
     items.value.reduce((sum, i) => sum + i.priceCents * i.quantity, 0),
   );
 
+  // Bundle pricing — uses the same locked engine the backend charges with, so
+  // the displayed total always matches what Stripe will charge. Server stays
+  // authoritative; this is display only.
+  const cartTotal = computed(() =>
+    calculateCart(
+      items.value.map((i) => ({
+        productId: i.slug,
+        qty: i.quantity,
+        salePriceCents: i.salePriceCents ?? undefined,
+      })),
+    ),
+  );
+  // What the line items add up to before the bundle discount (sale-aware).
+  const rowsSubtotalCents = computed(() =>
+    items.value.reduce(
+      (sum, i) => sum + (i.salePriceCents ?? i.priceCents) * i.quantity,
+      0,
+    ),
+  );
+  const bundleSubtotalCents = computed(
+    () => cartTotal.value.bundleSubtotalCents,
+  );
+  const bundleDiscountCents = computed(
+    () => rowsSubtotalCents.value - bundleSubtotalCents.value,
+  );
+  const nudge = computed(() =>
+    getBundleNudge(cartTotal.value.regularItemCount),
+  );
+
   function addItem(product: Product) {
     const existing = items.value.find((i) => i.slug === product.slug);
     if (existing) {
@@ -52,6 +96,7 @@ export const useCartStore = defineStore("cart", () => {
         slug: product.slug,
         title: product.title,
         priceCents: product.priceCents,
+        salePriceCents: product.salePriceCents,
         imageUrl: product.imageUrl,
         quantity: 1,
       });
@@ -118,6 +163,10 @@ export const useCartStore = defineStore("cart", () => {
     isOpen,
     count,
     subtotalCents,
+    rowsSubtotalCents,
+    bundleSubtotalCents,
+    bundleDiscountCents,
+    nudge,
     addItem,
     removeItem,
     setQuantity,

@@ -91,7 +91,15 @@ onBeforeUnmount(() => {
           <img :src="item.imageUrl" alt="" class="thumb" />
           <div class="line-meta">
             <strong class="line-title">{{ item.title }}</strong>
-            <span class="line-price">{{ formatPrice(item.priceCents) }}</span>
+            <span class="line-price">
+              <template v-if="item.salePriceCents != null">
+                <s class="line-was">{{ formatPrice(item.priceCents) }}</s>
+                <span class="line-sale">{{
+                  formatPrice(item.salePriceCents)
+                }}</span>
+              </template>
+              <template v-else>{{ formatPrice(item.priceCents) }}</template>
+            </span>
           </div>
           <div class="qty">
             <button
@@ -124,9 +132,20 @@ onBeforeUnmount(() => {
       </ul>
 
       <footer v-if="cart.items.length > 0" class="foot">
-        <div class="subtotal">
-          <span>Subtotal</span>
-          <span>{{ formatPrice(cart.subtotalCents) }}</span>
+        <p v-if="cart.nudge" class="nudge">{{ cart.nudge }}</p>
+        <div class="totals">
+          <div class="trow">
+            <span>Subtotal</span>
+            <span>{{ formatPrice(cart.rowsSubtotalCents) }}</span>
+          </div>
+          <div v-if="cart.bundleDiscountCents > 0" class="trow discount">
+            <span>Bundle discount</span>
+            <span>−{{ formatPrice(cart.bundleDiscountCents) }}</span>
+          </div>
+          <div class="trow total">
+            <span>Total</span>
+            <span>{{ formatPrice(cart.bundleSubtotalCents) }}</span>
+          </div>
         </div>
         <button type="button" class="checkout" @click="onCheckout">
           Checkout
@@ -242,6 +261,17 @@ onBeforeUnmount(() => {
   font-family: var(--font-display);
   color: var(--color-acid-pink);
   font-size: 1rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.line-was {
+  font-size: 0.8rem;
+  color: color-mix(in oklab, var(--color-bone) 45%, transparent);
+  text-decoration: line-through;
+}
+.line-sale {
+  color: var(--color-acid-red);
 }
 .qty {
   display: flex;
@@ -279,14 +309,47 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 0.75rem;
 }
-.subtotal {
+.nudge {
+  font-family: var(--font-zine);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  text-align: center;
+  background: var(--color-acid-yellow);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-block-bone);
+  padding: 0.5rem 0.7rem;
+  margin: 0;
+  transform: rotate(var(--rotate-strip));
+}
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.trow {
   display: flex;
   justify-content: space-between;
   font-family: var(--font-body);
   font-weight: 700;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--color-bone);
+}
+.trow.discount {
+  color: var(--color-acid-lime);
+}
+.trow.total {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  border-top: var(--border-bone);
+  padding-top: 0.5rem;
+}
+.trow.total span:last-child {
+  color: var(--color-acid-pink);
 }
 .checkout {
   background: var(--color-acid-pink);

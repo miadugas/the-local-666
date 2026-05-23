@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { validateSalePrice } from "@grave-goods/shared";
 import type { AdminProduct } from "@grave-goods/shared";
 import { useAdminStore } from "../stores/admin";
+import { formatPrice } from "../lib/format";
 import { renderMarkdown } from "../lib/markdown";
 import ImageUploader from "../components/ImageUploader.vue";
 
@@ -24,6 +26,10 @@ type FormModel = {
   displayOrder: number;
   imageUrl: string;
   imagePublicId: string | null;
+  saleEnabled: boolean;
+  salePriceDollars: string;
+  saleLabel: string;
+  saleEndsAt: string;
 };
 
 const editing = ref<FormModel | null>(null);
@@ -34,19 +40,52 @@ const descriptionPreview = computed(() =>
   editing.value ? renderMarkdown(editing.value.description) : "",
 );
 
+// Live margin preview — mirrors the server's validateSalePrice so the admin
+// sees the same verdict (and the same block) before saving.
+const salePreview = computed(() => {
+  const f = editing.value;
+  if (!f || !f.saleEnabled) return null;
+  if (!f.salePriceDollars.trim()) {
+    return { state: "error" as const, message: "Enter a sale price." };
+  }
+  const cents = Math.round(Number(f.salePriceDollars) * 100);
+  if (!Number.isInteger(cents)) {
+    return { state: "error" as const, message: "Sale price must be a number." };
+  }
+  const priceCents = Math.round(Number(f.priceDollars) * 100);
+  if (Number.isInteger(priceCents) && cents >= priceCents) {
+    return {
+      state: "error" as const,
+      message: "Sale must be below the regular price.",
+    };
+  }
+  const result = validateSalePrice(cents);
+  if (!result.ok) return { state: "error" as const, message: result.reason };
+  return {
+    state: result.level === "warn" ? ("warn" as const) : ("safe" as const),
+    message: `Nets ${formatPrice(result.netCents)}/order · ~${result.marginPct}% margin${
+      result.level === "warn" ? " — thin" : ""
+    }`,
+  };
+});
+
 function blankForm(): FormModel {
   return {
     id: null,
     title: "",
     slug: "",
     spec: '3" die-cut vinyl',
-    priceDollars: "4",
+    priceDollars: "5",
     accentHex: "#ff2d8a",
     description: "",
     isSoldOut: false,
     displayOrder: products.value.length,
     imageUrl: "",
     imagePublicId: null,
+    saleEnabled: false,
+    salePriceDollars: "",
+    saleLabel: "",
+    saleEndsAt: "",
   };
 }
 
@@ -79,6 +118,11 @@ function startEdit(p: AdminProduct) {
     displayOrder: p.displayOrder,
     imageUrl: p.imageUrl,
     imagePublicId: p.imagePublicId,
+    saleEnabled: p.salePriceCents != null,
+    salePriceDollars:
+      p.salePriceCents != null ? (p.salePriceCents / 100).toString() : "",
+    saleLabel: p.saleLabel ?? "",
+    saleEndsAt: p.saleEndsAt ? p.saleEndsAt.slice(0, 10) : "",
   };
 }
 
@@ -108,7 +152,14 @@ async function save() {
     formError.value = "An image is required.";
     return;
   }
+  if (f.saleEnabled && salePreview.value?.state === "error") {
+    formError.value = salePreview.value.message;
+    return;
+  }
 
+  const saleCents = f.saleEnabled
+    ? Math.round(Number(f.salePriceDollars) * 100)
+    : null;
   const body = {
     title: f.title,
     slug: f.slug || undefined,
@@ -120,6 +171,12 @@ async function save() {
     displayOrder: f.displayOrder,
     imageUrl: f.imageUrl,
     imagePublicId: f.imagePublicId,
+    salePriceCents: saleCents,
+    saleLabel: f.saleEnabled && f.saleLabel.trim() ? f.saleLabel.trim() : null,
+    saleEndsAt:
+      f.saleEnabled && f.saleEndsAt
+        ? new Date(f.saleEndsAt).toISOString()
+        : null,
   };
 
   saving.value = true;
@@ -231,6 +288,42 @@ onMounted(load);
         <label class="check"
           ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
         >
+        <div class="field sale-box">
+          <label class="check">
+            <input v-model="editing.saleEnabled" type="checkbox" /> Put this
+            product on sale
+          </label>
+          <template v-if="editing.saleEnabled">
+            <label class="field">
+              <span
+                >Sale price (USD)
+                <em class="md-hint"
+                  >regular ${{ editing.priceDollars }}</em
+                ></span
+              >
+              <input v-model="editing.salePriceDollars" inputmode="decimal" />
+            </label>
+            <p
+              v-if="salePreview"
+              class="sale-preview"
+              :class="salePreview.state"
+            >
+              {{ salePreview.message }}
+            </p>
+            <label class="field">
+              <span>Sale badge label</span>
+              <input
+                v-model="editing.saleLabel"
+                maxlength="50"
+                placeholder="Clearance"
+              />
+            </label>
+            <label class="field">
+              <span>Sale ends (optional)</span>
+              <input v-model="editing.saleEndsAt" type="date" />
+            </label>
+          </template>
+        </div>
         <div class="field">
           <span>Image</span>
           <ImageUploader
@@ -240,7 +333,13 @@ onMounted(load);
         </div>
         <p v-if="formError" class="warn">{{ formError }}</p>
         <div class="editor-actions">
-          <button class="btn" :disabled="saving" @click="save">
+          <button
+            class="btn"
+            :disabled="
+              saving || (editing.saleEnabled && salePreview?.state === 'error')
+            "
+            @click="save"
+          >
             {{ saving ? "Saving…" : "Save" }}
           </button>
           <button class="ghost" @click="cancel">Cancel</button>
@@ -407,6 +506,28 @@ onMounted(load);
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-body);
+}
+.sale-box {
+  gap: 0.75rem;
+  border: var(--border-ink);
+  border-radius: var(--radius-tight);
+  padding: 0.875rem;
+  background: color-mix(in oklab, var(--color-bone) 6%, transparent);
+}
+.sale-preview {
+  font-family: var(--font-zine);
+  font-size: 0.75rem;
+  letter-spacing: var(--tracking-wide);
+  margin: 0;
+}
+.sale-preview.safe {
+  color: var(--color-acid-lime);
+}
+.sale-preview.warn {
+  color: var(--color-acid-yellow);
+}
+.sale-preview.error {
+  color: var(--color-acid-red);
 }
 .editor-actions {
   display: flex;

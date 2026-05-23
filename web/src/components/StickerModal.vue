@@ -17,6 +17,10 @@ const descriptionHtml = computed(() =>
   renderMarkdown(props.product.description ?? FALLBACK_DESCRIPTION),
 );
 
+const onSale = computed(
+  () => props.product.salePriceCents != null && !props.product.isSoldOut,
+);
+
 const closeBtn = ref<HTMLButtonElement | null>(null);
 const addBtn = ref<HTMLButtonElement | null>(null);
 
@@ -106,10 +110,19 @@ onBeforeUnmount(() => {
       <div class="meta">
         <h2 id="modal-title" class="title">{{ product.title }}</h2>
         <p class="spec">{{ product.spec }}</p>
+        <p v-if="onSale" class="sale-tag">{{ product.saleLabel ?? "Sale" }}</p>
         <!-- eslint-disable-next-line vue/no-v-html — sanitized in renderMarkdown -->
         <div class="description prose" v-html="descriptionHtml"></div>
         <div class="buy">
-          <span class="price">{{ formatPrice(product.priceCents) }}</span>
+          <span class="price">
+            <template v-if="onSale">
+              <s class="price-was">{{ formatPrice(product.priceCents) }}</s>
+              <span class="price-now">{{
+                formatPrice(product.salePriceCents!)
+              }}</span>
+            </template>
+            <template v-else>{{ formatPrice(product.priceCents) }}</template>
+          </span>
           <button
             v-if="product.isSoldOut"
             ref="addBtn"
@@ -253,6 +266,19 @@ onBeforeUnmount(() => {
   color: color-mix(in oklab, var(--color-bone) 70%, transparent);
   margin: 0;
 }
+.sale-tag {
+  align-self: flex-start;
+  font-family: var(--font-zine);
+  font-size: 0.7rem;
+  letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
+  background: var(--color-acid-red);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  padding: 0.2rem 0.55rem;
+  margin: 0;
+  transform: rotate(var(--rotate-stencil));
+}
 
 .description {
   font-family: var(--font-body);
@@ -277,6 +303,17 @@ onBeforeUnmount(() => {
   font-size: 2rem;
   color: var(--accent);
   line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.price-was {
+  font-size: 1.1rem;
+  color: color-mix(in oklab, var(--color-bone) 45%, transparent);
+  text-decoration: line-through;
+}
+.price-now {
+  color: var(--color-acid-red);
 }
 
 .add {

@@ -27,6 +27,11 @@ const STRIPS = [
 ] as const;
 
 const strip = computed(() => STRIPS[props.index % STRIPS.length]);
+
+const onSale = computed(
+  () => props.product.salePriceCents != null && !props.product.isSoldOut,
+);
+const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
 </script>
 
 <template>
@@ -39,6 +44,7 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 
     <div class="image-tape">
       <span v-if="product.isSoldOut" class="sold-out-badge">Sold Out</span>
+      <span v-else-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
       <div class="disc">
         <img :src="product.imageUrl" :alt="product.title" draggable="false" />
       </div>
@@ -59,7 +65,15 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
         </button>
       </h3>
       <div class="row">
-        <span class="price">{{ formatPrice(product.priceCents) }}</span>
+        <span class="price">
+          <template v-if="onSale">
+            <s class="price-was">{{ formatPrice(product.priceCents) }}</s>
+            <span class="price-now">{{
+              formatPrice(product.salePriceCents!)
+            }}</span>
+          </template>
+          <template v-else>{{ formatPrice(product.priceCents) }}</template>
+        </span>
         <button
           v-if="product.isSoldOut"
           type="button"
@@ -202,6 +216,17 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
   font-size: 1.375rem;
   color: var(--strip);
   line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.price-was {
+  font-size: 0.95rem;
+  color: color-mix(in oklab, var(--color-bone) 45%, transparent);
+  text-decoration: line-through;
+}
+.price-now {
+  color: var(--color-acid-red);
 }
 
 .add {
@@ -224,6 +249,22 @@ const strip = computed(() => STRIPS[props.index % STRIPS.length]);
 }
 /* :focus-visible handled globally in global.css */
 
+.image-tape .sale-badge {
+  position: absolute;
+  z-index: 2;
+  top: -0.4rem;
+  left: -0.4rem;
+  background: var(--color-acid-red);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  font-family: var(--font-zine);
+  font-size: 0.65rem;
+  letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  transform: rotate(var(--rotate-stencil));
+  white-space: nowrap;
+}
 .image-tape .sold-out-badge {
   position: absolute;
   z-index: 2;
