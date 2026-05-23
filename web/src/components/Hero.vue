@@ -4,8 +4,6 @@
 
 <template>
   <section class="hero">
-    <span class="splatter" aria-hidden="true"></span>
-
     <span class="eyebrow tape">Vol. I · A Catalog of Refusals</span>
 
     <h1 class="headline">
@@ -46,31 +44,6 @@
     ),
     var(--color-pitch);
   border-bottom: var(--border-bone);
-}
-
-/* Hand-tuned splatter constellation. Don't add a transform: translate to
-   "true center" — it pushes every dot onto half-pixels and they anti-alias
-   into mush. The 3px off-center is intentional. */
-.splatter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  background: var(--color-acid-pink);
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0.7;
-  box-shadow:
-    80px 40px 0 -1px var(--color-acid-blue),
-    -120px 80px 0 var(--color-acid-yellow),
-    200px -20px 0 -2px var(--color-acid-lime),
-    -80px -60px 0 -1px var(--color-acid-pink),
-    300px 100px 0 -2px var(--color-acid-blue),
-    -200px 30px 0 0 var(--color-acid-yellow),
-    120px -100px 0 -1px var(--color-acid-lime),
-    -260px -120px 0 -2px var(--color-acid-pink),
-    260px 160px 0 -1px var(--color-acid-blue);
 }
 
 .eyebrow {

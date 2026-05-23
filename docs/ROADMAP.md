@@ -86,46 +86,46 @@ Cloudflare Tunnel needs the zone on Cloudflare. The domain is on Namecheap. This
 
 ## Phase 3 — Code + env onto the box
 
-- [ ] Get repo on the box (git clone or push to the_litterbox remote)
-- [ ] `npm install`
-- [ ] Write `backend/.env` with **prod** values (STATUS §6). `NODE_ENV=production` (Secure cookie), prod `DATABASE_URL`, `FRONTEND_URL=https://gravegoodsgoodies.com`, Cloudinary/Stripe/Resend keys
-- [ ] **Secrets discipline:** `sk_live_` + prod `whsec` go _only_ on the box — never repo/local/chat
-- [ ] `npm run build` on the box (or build in the Docker image)
+- [x] Repo on box at `~/apps/grave-goods-store` (rsync'd from Mac — `gh`/git auth sidestepped; `node_modules`/`dist`/`.env`/`.git` excluded)
+- [x] `backend/.env` on box (copied from Mac, secrets never in chat); `FRONTEND_URL=https://gravegoodsgoodies.com`. `NODE_ENV`/`PORT`/`DATABASE_URL` set by compose. Still **test-mode** Stripe — switch in Phase 6.
+- [x] Root `.env` on box: generated `POSTGRES_PASSWORD`, empty `CLOUDFLARE_TUNNEL_TOKEN`
+- [x] `docker compose up -d --build` — image built (bcrypt compiled OK), 2 services up
 
-**Gate:** build succeeds in the prod environment.
+**Gate:** ✅ image built in prod env; `grave-goods-app` + `grave-goods-postgres` running.
 
 ---
 
-## Phase 4 — Database
+## Phase 4 — Database _(DONE 2026-05-22)_
 
-- [ ] `npm run db:migrate` — applies `001`–`004`
-- [ ] Boot the backend → seed fills the 13 products from `seed-products.ts`
-- [ ] Verify: `GET /api/products` returns 13 with real titles/descriptions
-- [ ] Re-create the admin user from env (Phase 1 auth migration handles this on boot)
+- [x] Migrations `001`–`004` applied on boot (fresh containerized Postgres)
+- [x] Seed inserted **13 products**; `GET /api/products` → 200/13
+- [x] Admin user `admin@gravegoodsgoodies.com` created from env on first boot
+- [x] SPA serves (`/` + `/admin` → 200 html); `/api/admin/*` → 401 guard intact
 
-**Gate:** catalog live in prod DB; admin user exists.
+**Gate:** ✅ catalog + admin live in the prod container DB (volume `grave-goods_pgdata`).
 
 ---
 
 ## Phase 5 — Cloudflare Tunnel _(needs Phase 1.5 zone Active)_
 
-- [ ] In Cloudflare Zero Trust: create a **named tunnel** → copy the tunnel **token**
-- [ ] Put the token in env; `cloudflared` container runs `tunnel run` (token-based, no local config.yml, survives reboot via `restart: unless-stopped`)
-- [ ] Public hostname route: `gravegoodsgoodies.com` → `http://app:4000` (single origin — Express serves both static + `/api`)
-- [ ] **Same-origin check:** one hostname → `SameSite=Strict` session cookie survives → admin login works
-- [ ] HTTPS loads the storefront over the public domain
+- [x] Named tunnel `grave-goods` created in Zero Trust (Networks → Connectors); token on box in root `.env`
+- [x] `cloudflared` container running (`--profile tunnel`), 4 edge connections (DEN/DFW), HEALTHY, `restart: unless-stopped`
+- [x] Public hostname `gravegoodsgoodies.com` → `http://app:4000`. Old Hostinger apex `A` + `www` CNAME deleted to clear the conflict; Cloudflare created the proxied tunnel CNAME
+- [x] HTTPS live: `https://gravegoodsgoodies.com/` → 200 html, `cf-ray …-DEN`; `/api/products` → 13
+- [x] **Same-origin cookie check** — admin login over HTTPS works; `Secure`+`SameSite=Strict` session sticks. Cloudinary images load in prod too.
+- [x] Added `www` published application route → `app:4000`; `https://www.gravegoodsgoodies.com` → 200. _(Both apex + www serve the app directly; add a canonical redirect later if SEO duplicate-content matters.)_
 
-**Gate:** storefront reachable at `https://gravegoodsgoodies.com`.
+**Gate:** ✅ storefront + admin fully working at `https://gravegoodsgoodies.com`.
 
 ---
 
 ## Phase 6 — Prod integrations _(per D4)_
 
-- [ ] **Stripe:** dashboard → add endpoint `https://gravegoodsgoodies.com/api/webhooks/stripe` → copy the **prod** `whsec` into env (different from the local CLI secret). Decide test vs live (D4).
-- [ ] **Resend domain:** verify `gravegoodsgoodies.com` (SPF/DKIM DNS in Cloudflare) → set `EMAIL_FROM=Grave Goods <orders@gravegoodsgoodies.com>`. Until verified, `onboarding@resend.dev` only reaches Mia's own inbox.
+- [x] **Resend domain verified** (2026-05-22) via Resend's Cloudflare Auto-configure (SPF/DKIM/MX written + verified automatically). `EMAIL_FROM=Grave Goods <orders@gravegoodsgoodies.com>` set on box; app recreated. Region us-east-1.
+- [x] **Stripe webhook** (Sandbox/test) — endpoint `https://gravegoodsgoodies.com/api/webhooks/stripe`, event `checkout.session.completed`, Snapshot payload. Endpoint `whsec` (len 38) on box, app recreated. Old Render endpoint (`gravegoods-krzk.onrender.com`) is stale — delete later. Flip to a _live_ endpoint at Phase 9 (D4).
 - [ ] Check Resend plan quota for expected volume
 
-**Gate:** a test order produces a real receipt to a non-owner address; webhook hits prod.
+**Gate:** a test order produces a real receipt to a non-owner address; webhook hits prod. _(Validated in Phase 8 smoke.)_
 
 ---
 
@@ -140,21 +140,23 @@ Cloudflare Tunnel needs the zone on Cloudflare. The domain is on Namecheap. This
 
 ---
 
-## Phase 8 — Prod smoke test
+## Phase 8 — Prod smoke test _(PASS 2026-05-22, test mode)_
 
-- [ ] Storefront loads; all 13 products render with real prices
-- [ ] Admin login over HTTPS → confirm **Secure** session cookie is set
-- [ ] Image upload via admin (Cloudinary) works in prod
-- [ ] Full checkout → Stripe (test card or live) → success page → **order row inserted** → **receipt email delivered**
-- [ ] 401 on `/api/admin/*` without a session (server-side guard intact)
+- [x] Storefront loads; 13 products render (placeholder `$4` — real prices in Phase 7)
+- [x] Admin login over HTTPS → `Secure` session cookie sticks (Phase 5)
+- [x] Cloudinary images load in prod (admin + storefront)
+- [x] **Full checkout → Stripe test card → success page → order #1 inserted (`status: paid`, $4, correct item) → receipt email delivered** from `orders@gravegoodsgoodies.com`
+- [x] `/api/admin/*` → 401 without session
 
-**Gate:** end-to-end works in prod exactly as it did locally.
+**Gate:** ✅ end-to-end works in prod. ⚠️ **Deliverability:** first receipt landed in Outlook **Junk** — expected for a cold sending domain. Before launch: confirm a **DMARC** record exists (`_dmarc` TXT), click "Not junk" to train, and let reputation warm up. Tracked in Phase 9.
 
 ---
 
 ## Phase 9 — Launch 🎉
 
-- [ ] If launching live: flip Stripe to `sk_live_` + live webhook secret; do one real low-value test purchase
+- [ ] **Pricing in** (Phase 7 done) — real prices live in admin
+- [ ] **Email deliverability:** confirm `_dmarc.gravegoodsgoodies.com` TXT exists (`v=DMARC1; p=none; rua=…`); send a couple test receipts and confirm inbox (not junk) placement
+- [ ] **Flip Stripe live:** swap box `STRIPE_SECRET_KEY` → `sk_live_`, create a **live**-mode webhook endpoint (new `whsec`), update box env, recreate app; one real low-value purchase
 - [ ] Announce / share the link
 - [ ] Tag the release commit
 
