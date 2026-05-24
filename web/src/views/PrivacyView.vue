@@ -35,8 +35,7 @@ import ContentPage from "../components/ContentPage.vue";
     <p>
       No ad trackers, no data brokers, no selling your info. Want your data
       gone, or have a question?
-      <a href="mailto:hello@gravegoodsgoodies.com">Email us</a> and we'll sort
-      it out.
+      <a href="mailto:hello@thelocal666.com">Email us</a> and we'll sort it out.
     </p>
   </ContentPage>
 </template>

@@ -15,8 +15,8 @@ const NAV = [
 
 <template>
   <header class="site-header">
-    <RouterLink to="/" class="brand" aria-label="Grave Goods — home">
-      grave<span class="brand-accent">goods</span>
+    <RouterLink to="/" class="brand" aria-label="The Local 666 — home">
+      <img src="/brand/wordmark.png" alt="" class="brand-logo" />
     </RouterLink>
 
     <nav class="site-nav" aria-label="Primary">
@@ -46,15 +46,15 @@ const NAV = [
 }
 
 .brand {
-  font-family: var(--font-brand);
-  font-size: clamp(1.3rem, 2.6vw, 1.625rem);
-  letter-spacing: 0.01em;
-  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  line-height: 1;
+  line-height: 0;
 }
-.brand-accent {
-  color: var(--color-acid-pink);
+.brand-logo {
+  height: clamp(26px, 4.5vw, 40px);
+  width: auto;
+  display: block;
 }
 
 .site-nav {

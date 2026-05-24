@@ -20,8 +20,10 @@
   --color-acid-red: #e3151f; /* reserved for warning semantics */
 
   /* COLOR — Brand --------------------------------------------------------- */
-  /* The "666" of the wordmark. Hotter/brighter than acid-red on purpose so a
-     sale/sold-out badge never reads as decoration. Brand-only — NOT a warning. */
+  /* Canonical brand red — the "666" accent. Hotter/brighter than acid-red so a
+     sale/sold-out badge never reads as decoration. Brand-only — NOT a warning.
+     The wordmark itself is now an image (brand/wordmark.png); keep this for any
+     other 666/brand accents and match it to the logo's red if used near it. */
   --color-brand-red: #ff1414;
 
   /* TYPE — Families ------------------------------------------------------- */

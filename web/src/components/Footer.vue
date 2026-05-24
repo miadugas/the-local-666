@@ -9,10 +9,10 @@
       <RouterLink to="/shipping">Shipping &amp; Returns</RouterLink>
       <RouterLink to="/privacy">Privacy</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-      <a href="mailto:hello@gravegoodsgoodies.com">Contact</a>
+      <a href="mailto:hello@thelocal666.com">Contact</a>
     </nav>
     <div class="footer-meta">
-      <span class="left">© Grave Goods · Made by hand</span>
+      <span class="left">© The Local 666 · Made by hand</span>
       <span class="center">hail thyself</span>
       <span class="right">Bulk-printed in Denver, Colorado</span>
     </div>

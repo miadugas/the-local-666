@@ -216,7 +216,7 @@ onMounted(load);
 <template>
   <main class="admin">
     <header class="bar">
-      <h1 class="brand">grave goods admin</h1>
+      <h1 class="brand">the local 666 admin</h1>
       <div class="bar-actions">
         <button class="ghost" @click="startCreate">+ New product</button>
         <button class="ghost" @click="signOut">Sign out</button>

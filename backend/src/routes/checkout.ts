@@ -97,8 +97,8 @@ checkoutRouter.post("/api/checkout", async (req, res) => {
         product_data: {
           name:
             cart.itemCount === 1
-              ? "Grave Goods sticker"
-              : `${cart.itemCount} Grave Goods stickers`,
+              ? "The Local 666 — sticker"
+              : `The Local 666 — ${cart.itemCount} stickers`,
           ...(description ? { description } : {}),
         },
         unit_amount: cart.bundleSubtotalCents,

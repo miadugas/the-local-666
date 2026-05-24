@@ -10,8 +10,8 @@ import ContentPage from "../components/ContentPage.vue";
       surprise fees at checkout. We pack and mail by hand within
       <strong>3–5 business days</strong>, then USPS takes it from there.
       Currently <strong>US only</strong>; if you're overseas and desperate for a
-      sticker, <a href="mailto:hello@gravegoodsgoodies.com">email us</a> and
-      we'll figure something out.
+      sticker, <a href="mailto:hello@thelocal666.com">email us</a> and we'll
+      figure something out.
     </p>
 
     <h2>If it shows up wrecked</h2>

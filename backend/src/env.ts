@@ -36,10 +36,7 @@ export const env = {
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? null,
   resendApiKey: process.env.RESEND_API_KEY ?? null,
   resendAudienceId: process.env.RESEND_AUDIENCE_ID?.trim() ?? null,
-  emailFrom: optional(
-    "EMAIL_FROM",
-    "Grave Goods <orders@gravegoodsgoodies.com>",
-  ),
+  emailFrom: optional("EMAIL_FROM", "The Local 666 <orders@thelocal666.com>"),
 };
 
 export const isDev = env.nodeEnv !== "production";

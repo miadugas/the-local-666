@@ -79,7 +79,7 @@ export async function sendOrderConfirmation(input: {
     </tfoot>
   </table>
   <p style="font-size:13px;color:#666;margin:24px 0 0;">Packed and shipped from home — give it a few days to reach you.</p>
-  <p style="font-size:13px;color:#666;margin:16px 0 0;">— Grave Goods</p>
+  <p style="font-size:13px;color:#666;margin:16px 0 0;">— The Local 666</p>
 </div>`;
 
   const text =
@@ -91,12 +91,12 @@ export async function sendOrderConfirmation(input: {
       )
       .join("\n") +
     `${textDiscount}\n\nTotal: ${formatCents(input.totalCents)}\n\n` +
-    `Packed and shipped from home — give it a few days.\n— Grave Goods`;
+    `Packed and shipped from home — give it a few days.\n— The Local 666`;
 
   await getResend().emails.send({
     from: env.emailFrom,
     to: input.email,
-    subject: "Your Grave Goods order",
+    subject: "Your order from The Local 666",
     html,
     text,
   });
