@@ -19,6 +19,11 @@
   --color-acid-yellow: #fff200;
   --color-acid-red: #e3151f; /* reserved for warning semantics */
 
+  /* COLOR — Brand --------------------------------------------------------- */
+  /* The "666" of the wordmark. Hotter/brighter than acid-red on purpose so a
+     sale/sold-out badge never reads as decoration. Brand-only — NOT a warning. */
+  --color-brand-red: #ff1414;
+
   /* TYPE — Families ------------------------------------------------------- */
   --font-brand: "Permanent Marker", "Brush Script MT", cursive;
   --font-display: "Bowlby One", Impact, "Arial Black", sans-serif;
