@@ -1,28 +1,32 @@
-# grave-goods-store
+# the-local-666
 
-**Grave Goods** — punk leftist sticker store. Solo-operator side project. Horror-Punk Pop-Art × Satan-positive aesthetic — neon-on-black, Misfits/Vampira tape-strip collage. Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home.
+**The Local 666** — punk leftist sticker store. Solo-operator side project. Horror-Punk Pop-Art × Satan-positive aesthetic — neon-on-black, Misfits/Vampira tape-strip collage; the brand wordmark is a grunge military stencil ("the LOCAL 666", bone + brand-red). Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home. **Live at thelocal666.com.**
 
 > Project-specific. Global rules live in `~/.claude/CLAUDE.md`. Don't duplicate.
+>
+> **Brand split (don't conflate):** the old name **Grave Goods** + `gravegoodsgoodies.com` are reserved for a _separate_ future gothic-coloring-books project. This repo was renamed `grave-goods-store` → `the-local-666`. The `@grave-goods/shared` package and `grave-goods` docker/volume names are kept as internal identifiers — renaming the volume orphans the DB.
 
 ---
 
 ## Stack (current)
 
-| Layer      | Choice                                                             |
-| ---------- | ------------------------------------------------------------------ |
-| Frontend   | Vue 3 + Vite + TypeScript                                          |
-| Styling    | Tailwind v4 (`@import "tailwindcss"` + `@tailwindcss/vite` plugin) |
-| Tokens     | `@theme` block in `web/src/styles/tokens.css`                      |
-| Workspaces | npm workspaces; root manages `web/` (backend/shared reserved)      |
-| Hosting    | the_litterbox (10.0.0.142) behind Cloudflare Tunnel                |
+| Layer      | Choice                                                                   |
+| ---------- | ------------------------------------------------------------------------ |
+| Frontend   | Vue 3 + Vite + TypeScript                                                |
+| Styling    | Tailwind v4 (`@import "tailwindcss"` + `@tailwindcss/vite` plugin)       |
+| Tokens     | `@theme` block in `web/src/styles/tokens.css`                            |
+| Workspaces | npm workspaces — `web/`, `backend/`, `shared/` all active (Pinia in web) |
+| Hosting    | the_litterbox (10.0.0.142) → Cloudflare Tunnel → thelocal666.com         |
 
-**Future (not yet wired):**
+**Backend + services — all LIVE:**
 
-- Backend: Express 5 + TypeScript (ESM, `tsx` dev, `tsc` build)
-- DB: PostgreSQL on the_litterbox
-- Payments: Stripe hosted Checkout
+- Backend: Express 5 + TypeScript (ESM, `tsx` dev, `tsc` build) — `backend/`
+- DB: PostgreSQL on the_litterbox — volume `grave-goods_pgdata` (**don't rename** the compose project/volume → orphans the DB)
+- Payments: Stripe hosted Checkout (**LIVE mode**) — single custom-amount line item
 - Images: Cloudinary signed uploads
-- Email: Resend transactional
+- Email: Resend (`orders@thelocal666.com`) + Cloudflare Email Routing (`hello@`)
+- Shared: `@grave-goods/shared` (money math / order metadata) — **must emit JS to `dist/`**; backend value-imports it at runtime, so a `.ts`-only export crashes prod
+- CI/CD: push `main` → self-hosted runner deploys (rsync + `compose up -d --build`). ⚠️ Env-only `.env` changes don't apply on push (identical image isn't recreated) — run `docker compose --profile tunnel up -d --force-recreate app` on the box.
 
 ---
 
@@ -41,10 +45,10 @@ grave-goods-store/
 │   │   ├── composables/       # API calls live here (when there are any)
 │   │   └── pages/             # HomePage.vue, ProductPage.vue (suffix `Page`)
 │   └── public/
-│       ├── brand/             # logo, hero illustration
-│       └── stickers/          # product photography (until phase 4 / Cloudinary)
-├── (backend/ — reserved)
-└── (shared/ — reserved)
+│       ├── brand/             # wordmark.png (header), logo.png (favicon), hero
+│       └── stickers/          # product photography
+├── backend/                   # Express 5 API + Postgres (migrations, Stripe, Resend)
+└── shared/                    # @grave-goods/shared — money math + types (emits to dist/)
 ```
 
 ---
@@ -61,11 +65,12 @@ grave-goods-store/
 
 **Acid accents** — rotating, one per card / section. Multiple acids can coexist in a frame but never blended in one element.
 
-- `--color-acid-pink: #ff2d8a` — primary CTA, brand "goods", manifesto highlight, newsletter section
+- `--color-acid-pink: #ff2d8a` — primary CTA, manifesto highlight, newsletter section
 - `--color-acid-blue: #00d4ff` — nav hover, card brand strip, divider accents
 - `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
 - `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, occasional tape
 - `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
+- `--color-brand-red: #ff1414` — **brand-only** (the "666" accent; hotter than acid-red so a sale badge never reads as decoration). NOT a warning.
 
 ### Type
 
@@ -97,7 +102,7 @@ Body bg is pure `#000000`. **No** radial gradients, **no** grain overlay (both w
 
 ### Header
 
-3px bone-cream bottom border on pure-pitch background. **No** backdrop-blur translucent. Brand: `grave` in bone-cream + `goods` in acid-pink, Permanent Marker. Caps Inter nav links. Pink cart pill.
+3px bone-cream bottom border on pure-pitch background. **No** backdrop-blur translucent. Brand: the stencil wordmark image (`/brand/wordmark.png` — bone "the LOCAL" + brand-red "666"), height-capped, links home. Caps Inter nav links. Pink cart pill.
 
 ### Punk-moment vocabulary
 
@@ -140,7 +145,7 @@ No thematic substitutions for utility UI ("Add to cart", "Checkout", "Subtotal" 
 
 ### API calls live in components or composables, never in stores
 
-Stores hold state, composables fetch. (Pinia not added yet — comes with cart state.)
+Stores hold state, composables fetch. (Pinia is wired — `useCartStore`, `useAdminStore`.)
 
 ### Pinia (when added) is for cross-page state only
 
@@ -184,7 +189,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 **Replace before launch:**
 
-- Product prices are uniform `$4` (`400` cents) placeholders. The catalog now lives in the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); real prices come from Sticky Brand order costs, set via the Phase 3 admin editor. `web/src/data/products.ts` still backs the UI until the frontend is wired to the API.
+- Pricing: **$5 flat** per sticker + automatic bundle discounts (3-pack $13 / 5-pack $20) — locked money math in `shared/src/pricing.ts` (tested). Per-product sales via the admin editor (margin floor $3.00 hard / $3.50 warn). Catalog is the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); frontend fetches it live via `useProducts`.
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
 
 ---
