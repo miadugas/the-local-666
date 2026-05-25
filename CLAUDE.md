@@ -1,6 +1,6 @@
 # the-local-666
 
-**The Local 666** — punk leftist sticker store. Solo-operator side project. Horror-Punk Pop-Art × Satan-positive aesthetic — neon-on-black, Misfits/Vampira tape-strip collage; the brand wordmark is a grunge military stencil ("the LOCAL 666", bone + brand-red). Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home. **Live at thelocal666.com.**
+**The Local 666** — punk leftist sticker store. Solo-operator side project. Horror-Punk Pop-Art × Satan-positive aesthetic — neon-on-black, Misfits/Vampira tape-strip collage; the brand wordmark is a grunge military stencil ("the LOCAL 666", bone + acid-pink). Die-cut vinyl stickers, bulk-printed by Sticky Brand, shipped from home. **Live at thelocal666.com.**
 
 > Project-specific. Global rules live in `~/.claude/CLAUDE.md`. Don't duplicate.
 >
@@ -70,7 +70,6 @@ grave-goods-store/
 - `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
 - `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, occasional tape
 - `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
-- `--color-brand-red: #ff1414` — **brand-only** (the "666" accent; hotter than acid-red so a sale badge never reads as decoration). NOT a warning.
 
 ### Type
 
@@ -102,7 +101,7 @@ Body bg is pure `#000000`. **No** radial gradients, **no** grain overlay (both w
 
 ### Header
 
-3px bone-cream bottom border on pure-pitch background. **No** backdrop-blur translucent. Brand: the stencil wordmark image (`/brand/wordmark.png` — bone "the LOCAL" + brand-red "666"), height-capped, links home. Caps Inter nav links. Pink cart pill.
+3px bone-cream bottom border on pure-pitch background. **No** backdrop-blur translucent. Brand: the stencil wordmark image (`/brand/wordmark.png` — bone "the LOCAL" + acid-pink "666"), height-capped, links home. Caps Inter nav links. Pink cart pill.
 
 ### Punk-moment vocabulary
 
