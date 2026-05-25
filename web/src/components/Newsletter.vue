@@ -34,7 +34,7 @@ async function handleSubmit() {
   <section class="newsletter" aria-label="Newsletter signup">
     <h2 class="head">Join the local</h2>
     <p class="lede">
-      Drops, restocks, the occasional call to arms. No spam, no salvation, no
+      Drops, restocks, the occasional call to arms. No spam, no eternal salvation, no
       algorithm.
     </p>
     <p v-if="status === 'done'" class="confirm" role="status">
