@@ -159,17 +159,18 @@ function handleClose() {
 .bundle-banner {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  text-align: center;
+  gap: 0.4rem;
   background: var(--color-acid-yellow);
   color: var(--color-ink);
   border: var(--border-ink);
   border-radius: var(--radius-tight);
   box-shadow: var(--shadow-block-bone);
-  padding: clamp(0.875rem, 2.5vw, 1.25rem) clamp(1.125rem, 3.5vw, 1.75rem);
-  padding-right: clamp(2.25rem, 5vw, 2.75rem);
+  /* Symmetric horizontal padding so the centered text is truly centered; the
+     dismiss × sits absolutely in the top-right corner, out of flow. */
+  padding: clamp(0.875rem, 2.5vw, 1.25rem) clamp(1.75rem, 4vw, 2.5rem);
   margin-bottom: 2.25rem;
 }
 .bundle-prices {
@@ -211,14 +212,6 @@ function handleClose() {
 }
 .bundle-dismiss:hover {
   opacity: 1;
-}
-@media (max-width: 640px) {
-  .bundle-banner {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.65rem;
-  }
 }
 
 .grid {
