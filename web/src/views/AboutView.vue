@@ -49,6 +49,10 @@ import ContentPage from "../components/ContentPage.vue";
         <a href="https://www.heyjane.com/" target="_blank" rel="noopener">Hey Jane</a>
         — abortion care, delivered.
       </li>
+      <li>
+        <a href="https://degenderettes.com/" target="_blank" rel="noopener">Degenderettes</a>
+        — Self defense classes for trans and queer adults.
+      </li>
     </ul>
     <p>That's the whole pitch. Buy a sticker, fund some good trouble.</p>
   </ContentPage>
