@@ -46,9 +46,9 @@ function handleClose() {
 
       <aside class="bundle-banner" aria-label="Bundle pricing">
         <p class="bundle-prices">
-          Any 3 → ${{ threePackDollars }}
+          <span class="clause">Any 3 → ${{ threePackDollars }}</span>
           <span class="bundle-sep" aria-hidden="true">·</span>
-          Any 5 → ${{ fivePackDollars }}
+          <span class="clause">Any 5 → ${{ fivePackDollars }}</span>
         </p>
         <p class="bundle-tag">Grab the set. Arm your friends.</p>
       </aside>
@@ -160,6 +160,23 @@ function handleClose() {
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   margin: 0;
+}
+.bundle-prices .clause {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .bundle-banner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+  }
+  .bundle-prices .clause {
+    display: block;
+  }
+  .bundle-sep {
+    display: none;
+  }
 }
 
 .grid {
