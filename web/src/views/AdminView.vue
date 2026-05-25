@@ -32,6 +32,7 @@ type FormModel = {
   saleEndsAt: string;
   stripLabel: string;
   stripColor: StripColor;
+  stock: string; // "" = unlimited
 };
 
 const editing = ref<FormModel | null>(null);
@@ -77,7 +78,7 @@ function blankForm(): FormModel {
     title: "",
     slug: "",
     spec: '3" die-cut vinyl',
-    priceDollars: "5",
+    priceDollars: "4",
     accentHex: "#ff2d8a",
     description: "",
     isSoldOut: false,
@@ -90,6 +91,7 @@ function blankForm(): FormModel {
     saleEndsAt: "",
     stripLabel: "",
     stripColor: "pink",
+    stock: "",
   };
 }
 
@@ -129,6 +131,7 @@ function startEdit(p: AdminProduct) {
     saleEndsAt: p.saleEndsAt ? p.saleEndsAt.slice(0, 10) : "",
     stripLabel: p.stripLabel ?? "",
     stripColor: p.stripColor ?? "pink",
+    stock: p.stock?.toString() ?? "",
   };
 }
 
@@ -163,6 +166,18 @@ async function save() {
     return;
   }
 
+  const stockTrimmed = f.stock.trim();
+  let stock: number | null = null;
+  if (stockTrimmed !== "") {
+    const n = Number(stockTrimmed);
+    if (!Number.isInteger(n) || n < 0) {
+      formError.value =
+        "Stock must be a whole number ≥ 0, or blank for unlimited.";
+      return;
+    }
+    stock = n;
+  }
+
   const saleCents = f.saleEnabled
     ? Math.round(Number(f.salePriceDollars) * 100)
     : null;
@@ -185,6 +200,7 @@ async function save() {
         : null,
     stripLabel: f.stripLabel.trim() ? f.stripLabel.trim() : null,
     stripColor: f.stripColor,
+    stock,
   };
 
   saving.value = true;
@@ -218,6 +234,20 @@ async function signOut() {
   router.push({ name: "admin-login" });
 }
 
+// Inventory list-row status. Shows effective sold-out (manual flag OR a tracked
+// count at zero) plus the remaining count, and disambiguates a manual sold-out
+// that still has positive stock so the row never reads as a contradiction.
+function rowStatus(p: AdminProduct): string {
+  const tracked = p.stock !== null;
+  if (p.isSoldOut) {
+    return tracked && p.stock! > 0
+      ? `SOLD OUT (manual) · ${p.stock} left`
+      : "SOLD OUT";
+  }
+  if (tracked && p.stock! <= 0) return "SOLD OUT (out of stock)";
+  return tracked ? `${p.stock} left` : "∞";
+}
+
 onMounted(load);
 </script>
 
@@ -240,8 +270,8 @@ onMounted(load);
           <div class="row-meta">
             <strong>{{ p.title }}</strong>
             <span class="muted">
-              {{ p.slug }} · ${{ (p.priceCents / 100).toFixed(2)
-              }}{{ p.isSoldOut ? " · SOLD OUT" : "" }}
+              {{ p.slug }} · ${{ (p.priceCents / 100).toFixed(2) }} ·
+              {{ rowStatus(p) }}
             </span>
           </div>
           <div class="row-actions">
@@ -312,6 +342,10 @@ onMounted(load);
         <label class="check"
           ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
         >
+        <label class="field"
+          ><span>Stock (blank = unlimited)</span
+          ><input v-model="editing.stock" inputmode="numeric" placeholder="∞"
+        /></label>
         <div class="field sale-box">
           <label class="check">
             <input v-model="editing.saleEnabled" type="checkbox" /> Put this

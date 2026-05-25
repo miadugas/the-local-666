@@ -17,8 +17,18 @@ const descriptionHtml = computed(() =>
   renderMarkdown(props.product.description ?? FALLBACK_DESCRIPTION),
 );
 
+// Effective sold-out: manual flag OR a tracked count at zero (mirrors the card
+// and the server-side checkout guard).
+const soldOut = computed(
+  () =>
+    props.product.isSoldOut ||
+    (props.product.stock !== null && props.product.stock <= 0),
+);
+const showStock = computed(
+  () => !soldOut.value && props.product.stock !== null,
+);
 const onSale = computed(
-  () => props.product.salePriceCents != null && !props.product.isSoldOut,
+  () => props.product.salePriceCents != null && !soldOut.value,
 );
 
 const closeBtn = ref<HTMLButtonElement | null>(null);
@@ -111,6 +121,7 @@ onBeforeUnmount(() => {
         <h2 id="modal-title" class="title">{{ product.title }}</h2>
         <p class="spec">{{ product.spec }}</p>
         <p v-if="onSale" class="sale-tag">{{ product.saleLabel ?? "Sale" }}</p>
+        <p v-if="showStock" class="stock-tag">Only {{ product.stock }} left</p>
         <div class="buy">
           <span class="price">
             <template v-if="onSale">
@@ -122,7 +133,7 @@ onBeforeUnmount(() => {
             <template v-else>{{ formatPrice(product.priceCents) }}</template>
           </span>
           <button
-            v-if="product.isSoldOut"
+            v-if="soldOut"
             ref="addBtn"
             type="button"
             class="add add-disabled"
@@ -286,6 +297,20 @@ onBeforeUnmount(() => {
   padding: 0.2rem 0.55rem;
   margin: 0;
   transform: rotate(var(--rotate-stencil));
+}
+/* Low-stock urgency — acid-yellow (acid-red is reserved for warnings). */
+.stock-tag {
+  align-self: flex-start;
+  font-family: var(--font-zine);
+  font-size: 0.7rem;
+  letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
+  background: var(--color-acid-yellow);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  padding: 0.2rem 0.55rem;
+  margin: 0;
+  transform: rotate(var(--rotate-tape));
 }
 
 .description {

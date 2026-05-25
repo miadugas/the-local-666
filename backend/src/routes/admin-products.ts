@@ -113,6 +113,19 @@ function parseStripColor(
   return value;
 }
 
+function parseStock(value: unknown, res: Response): number | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const stock = Number(value);
+  if (!Number.isInteger(stock) || stock < 0) {
+    res
+      .status(400)
+      .json({ message: "stock must be a non-negative integer or null" });
+    return undefined;
+  }
+  return stock;
+}
+
 function validateFinalSale(
   salePriceCents: number | null,
   priceCents: number,
@@ -179,6 +192,8 @@ adminProductsRouter.post(
     if (b.stripLabel !== undefined && stripLabel === undefined) return;
     const stripColor = parseStripColor(b.stripColor, res);
     if (b.stripColor !== undefined && stripColor === undefined) return;
+    const stock = parseStock(b.stock, res);
+    if (b.stock !== undefined && stock === undefined) return;
 
     const finalSalePriceCents = salePriceCents ?? null;
     if (!validateFinalSale(finalSalePriceCents, priceCents, res)) return;
@@ -193,6 +208,7 @@ adminProductsRouter.post(
       saleEndsAt,
       stripLabel,
       stripColor,
+      stock,
       accentHex: String(b.accentHex ?? "").trim(),
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
@@ -266,6 +282,9 @@ adminProductsRouter.patch(
     const stripColor = parseStripColor(b.stripColor, res);
     if (b.stripColor !== undefined && stripColor === undefined) return;
     if (b.stripColor !== undefined) input.stripColor = stripColor;
+    const stock = parseStock(b.stock, res);
+    if (b.stock !== undefined && stock === undefined) return;
+    if (b.stock !== undefined) input.stock = stock;
 
     const current = await getAdminProductById(id);
     if (!current) {

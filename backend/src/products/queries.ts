@@ -14,6 +14,7 @@ type ProductRow = {
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
+  stock: number | null;
   image_url: string;
 };
 
@@ -33,6 +34,7 @@ const SELECT_COLUMNS = `
   accent_hex,
   description,
   is_sold_out,
+  stock,
   image_url
 `;
 
@@ -50,6 +52,7 @@ function mapRow(row: ProductRow): Product {
     accentHex: row.accent_hex,
     description: row.description,
     isSoldOut: row.is_sold_out,
+    stock: row.stock,
     imageUrl: row.image_url,
   };
 }
@@ -68,4 +71,25 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   );
   const row = result.rows[0];
   return row ? mapRow(row) : null;
+}
+
+/**
+ * Best-effort stock decrement, called from the Stripe webhook on each newly
+ * recorded paid order. Only touches tracked rows (`stock IS NOT NULL`); clamps
+ * at 0 (`GREATEST`) so it never goes negative. No row locking — the accepted
+ * oversell tradeoff at current volume. Returns the new stock, or `null` when no
+ * tracked row matched (untracked product or unknown slug). A returned 0 means
+ * the decrement hit the floor — a possible oversell the caller can log.
+ */
+export async function decrementProductStock(
+  slug: string,
+  qty: number,
+): Promise<number | null> {
+  const result = await pool.query<{ stock: number }>(
+    `UPDATE products SET stock = GREATEST(stock - $2, 0)
+       WHERE slug = $1 AND stock IS NOT NULL
+     RETURNING stock`,
+    [slug, qty],
+  );
+  return result.rows[0]?.stock ?? null;
 }

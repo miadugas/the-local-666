@@ -48,8 +48,20 @@ const strip = computed(() => {
   };
 });
 
+// Effective sold-out: manual flag OR a tracked count at zero. The backend
+// enforces the same at checkout — this just drives the UI.
+const soldOut = computed(
+  () =>
+    props.product.isSoldOut ||
+    (props.product.stock !== null && props.product.stock <= 0),
+);
+// Show the remaining count for any tracked, in-stock product (Mia only tracks
+// stock on limited test runs, so a count is always meaningful when present).
+const showStock = computed(
+  () => !soldOut.value && props.product.stock !== null,
+);
 const onSale = computed(
-  () => props.product.salePriceCents != null && !props.product.isSoldOut,
+  () => props.product.salePriceCents != null && !soldOut.value,
 );
 const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
 </script>
@@ -57,14 +69,19 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
 <template>
   <article
     class="card"
-    :class="{ 'is-sold-out': product.isSoldOut }"
+    :class="{ 'is-sold-out': soldOut }"
     :style="{ '--strip': strip.color }"
   >
     <div class="strip">{{ strip.label }}</div>
 
     <div class="image-tape">
-      <span v-if="product.isSoldOut" class="sold-out-badge">Sold Out</span>
-      <span v-else-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
+      <span v-if="soldOut" class="sold-out-badge">Sold Out</span>
+      <template v-else>
+        <span v-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
+        <span v-if="showStock" class="stock-badge"
+          >Only {{ product.stock }} left</span
+        >
+      </template>
       <div class="disc">
         <img :src="product.imageUrl" :alt="product.title" draggable="false" />
       </div>
@@ -94,12 +111,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
           </template>
           <template v-else>{{ formatPrice(product.priceCents) }}</template>
         </span>
-        <button
-          v-if="product.isSoldOut"
-          type="button"
-          class="add add-disabled"
-          disabled
-        >
+        <button v-if="soldOut" type="button" class="add add-disabled" disabled>
           Sold out
         </button>
         <button
@@ -285,6 +297,25 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   text-transform: uppercase;
   padding: 0.2rem 0.5rem;
   transform: rotate(var(--rotate-stencil));
+  white-space: nowrap;
+}
+/* Low-stock urgency. acid-red is reserved for warnings (CLAUDE.md), so this
+   uses acid-yellow. Top-RIGHT so it never collides with a top-left sale badge
+   when a tracked product is also on sale. */
+.image-tape .stock-badge {
+  position: absolute;
+  z-index: 2;
+  top: -0.4rem;
+  right: -0.4rem;
+  background: var(--color-acid-yellow);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  font-family: var(--font-zine);
+  font-size: 0.65rem;
+  letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  transform: rotate(var(--rotate-tape));
   white-space: nowrap;
 }
 .image-tape .sold-out-badge {

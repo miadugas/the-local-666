@@ -188,7 +188,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 
 **Replace before launch:**
 
-- Pricing: **$5 flat** per sticker + automatic bundle discounts (3-pack $13 / 5-pack $20) — locked money math in `shared/src/pricing.ts` (tested). Per-product sales via the admin editor (margin floor $3.00 hard / $3.50 warn). Catalog is the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); frontend fetches it live via `useProducts`.
+- Pricing: **Single $4 · 3-pack $10 · 5-pack $15** — locked money math in `shared/src/pricing.ts` (tested). Per-product sales via the admin editor (margin floor $2.50 hard / $3.00 warn). Per-product `stock` (nullable: blank = unlimited, a number = limited test run) auto-decrements on sale and auto-flips to Sold Out at 0; settable in admin. Catalog is the Postgres `products` table (seeded from `backend/src/data/seed-products.ts`); frontend fetches it live via `useProducts`.
 - Product specs are uniform `3" die-cut vinyl` placeholders. Real specs come from Sticky Brand orders.
 
 ---

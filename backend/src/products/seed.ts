@@ -18,8 +18,8 @@ export async function seedProductsIfEmpty(): Promise<void> {
     for (const product of SEED_PRODUCTS) {
       await client.query(
         `INSERT INTO products
-           (slug, title, spec, price_cents, accent_hex, description, display_order, is_sold_out, image_url, strip_label, strip_color)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+           (slug, title, spec, price_cents, accent_hex, description, display_order, is_sold_out, image_url, strip_label, strip_color, stock)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
         [
           product.slug,
           product.title,
@@ -32,6 +32,7 @@ export async function seedProductsIfEmpty(): Promise<void> {
           `/stickers/${product.slug}.png`,
           product.stripLabel,
           product.stripColor,
+          product.stock ?? null,
         ],
       );
     }

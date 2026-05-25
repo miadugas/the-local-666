@@ -44,6 +44,8 @@ export type Product = {
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
+  /** null = unlimited/untracked; a number = limited (test run). */
+  stock: number | null;
   imageUrl: string;
 };
 
@@ -61,6 +63,8 @@ export type AdminProduct = {
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
+  /** null = unlimited/untracked; a number = limited (test run). */
+  stock: number | null;
   displayOrder: number;
   imageUrl: string;
   imagePublicId: string | null;

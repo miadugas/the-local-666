@@ -47,8 +47,21 @@ checkoutRouter.post("/api/checkout", async (req, res) => {
       res.status(400).json({ message: `Unknown product: ${slug}` });
       return;
     }
-    if (product.isSoldOut) {
+    // Server-authoritative sold-out: manual flag OR a tracked count at zero.
+    // The frontend "Only X left" / Sold Out badges are cosmetic — this is the
+    // gate that actually blocks a sale.
+    const effectiveSoldOut =
+      product.isSoldOut || (product.stock !== null && product.stock <= 0);
+    if (effectiveSoldOut) {
       res.status(409).json({ message: `${product.title} is sold out` });
+      return;
+    }
+    // Reject ordering more than the remaining tracked stock (test-run cap).
+    // Doesn't solve concurrent-checkout races — accepted, best-effort.
+    if (product.stock !== null && quantity > product.stock) {
+      res
+        .status(409)
+        .json({ message: `Only ${product.stock} left of ${product.title}` });
       return;
     }
     lines.push({

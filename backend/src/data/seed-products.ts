@@ -17,6 +17,8 @@ export type SeedProduct = {
   isSoldOut: boolean;
   stripLabel: string;
   stripColor: StripColor;
+  /** Optional. Omitted = unlimited (NULL in DB). Set only for test runs. */
+  stock?: number | null;
 };
 
 export const SEED_PRODUCTS: readonly SeedProduct[] = [

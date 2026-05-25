@@ -4,7 +4,10 @@ import { parseCartItems } from "@grave-goods/shared";
 import { getStripe } from "../payments/stripe.js";
 import { env } from "../env.js";
 import { insertPaidOrder, type OrderItem } from "../orders/queries.js";
-import { getProductBySlug } from "../products/queries.js";
+import {
+  decrementProductStock,
+  getProductBySlug,
+} from "../products/queries.js";
 import {
   isConfigured as emailIsConfigured,
   sendOrderConfirmation,
@@ -128,6 +131,31 @@ export async function stripeWebhookHandler(
       listSubtotalCents,
       bundleSubtotalCents,
     });
+    // Decrement stock ONLY on the first record. `inserted` is false on Stripe
+    // retries (ON CONFLICT DO NOTHING), so retries never double-decrement.
+    // Best-effort: the order record is sacred, so a stock failure is logged but
+    // never throws past here. Not wrapped in the order-insert transaction by
+    // design — never roll back a real payment over a stock hiccup.
+    if (inserted) {
+      for (const item of metadataItems) {
+        try {
+          const remaining = await decrementProductStock(item.slug, item.qty);
+          if (remaining === 0) {
+            console.warn("[stock] decrement hit zero (possible oversell)", {
+              sessionId: session.id,
+              slug: item.slug,
+              qty: item.qty,
+            });
+          }
+        } catch (err) {
+          console.error("[stock] decrement failed", {
+            sessionId: session.id,
+            slug: item.slug,
+            err,
+          });
+        }
+      }
+    }
     if (inserted && email && emailIsConfigured()) {
       try {
         await sendOrderConfirmation({ email, items, totalCents });
