@@ -12,8 +12,9 @@
     </h1>
 
     <p class="lede">
-      Die-cut vinyl from a punk-leftist sticker shop. Slapped on laptops,
-      lockers, gas pumps, hearses, and the back of every cop car we can find.
+      Die-cut vinyl, built for daily abuse — not your junk drawer. Slapped on
+      laptops, lockers, gas pumps, hearses, and the back of every cop car we can
+      find.
     </p>
 
     <div class="ctas">
