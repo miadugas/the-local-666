@@ -325,26 +325,46 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   transform: rotate(var(--rotate-stencil));
   white-space: nowrap;
 }
-/* "Only X left" urgency banner — RESERVED for the low-stock callout (< 20).
-   Electric acid-orange fill + bone (white) border + Permanent Marker text so
-   it jumps off the dark card. Top-RIGHT so it never collides with a top-left
-   sale badge. */
+/* Low-stock urgency banner — RESERVED for the < 20 callout. Torn-tape
+   silhouette: a bone (white) torn backing (::before) under an inset electric-
+   orange torn fill (::after), so the bone reads as a ragged white edge.
+   Permanent Marker text on top. The drop-shadow follows the torn edge (the
+   sanctioned blur exception, same as .tape). Top-RIGHT so it never collides
+   with a top-left sale badge. */
 .image-tape .stock-badge {
   position: absolute;
   z-index: 2;
   top: -0.4rem;
   right: -0.4rem;
-  background: var(--color-acid-orange);
   color: var(--color-ink);
-  border: var(--border-bone);
   font-family: var(--font-brand);
   font-size: 1rem;
   line-height: 1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.85rem;
   transform: rotate(var(--rotate-tape));
   white-space: nowrap;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+.image-tape .stock-badge::before,
+.image-tape .stock-badge::after {
+  content: "";
+  position: absolute;
+  -webkit-mask: url(/torn-tape-5.svg) center / 100% 100% no-repeat;
+  mask: url(/torn-tape-5.svg) center / 100% 100% no-repeat;
+}
+/* bone torn backing = the ragged white border */
+.image-tape .stock-badge::before {
+  inset: 0;
+  z-index: -2;
+  background: var(--color-bone);
+}
+/* electric-orange torn fill, inset so the bone shows through as a torn edge */
+.image-tape .stock-badge::after {
+  inset: 2px;
+  z-index: -1;
+  background: var(--color-acid-orange);
 }
 .image-tape .sold-out-badge {
   position: absolute;

@@ -330,16 +330,35 @@ onBeforeUnmount(() => {
   color: color-mix(in oklab, var(--color-bone) 70%, transparent);
   margin: 0;
 }
+/* Torn-tape silhouette mirroring the card badge: bone torn backing under an
+   inset orange torn fill = a ragged white edge. drop-shadow follows the tear. */
 .stock-tag.stock-tag--low {
-  background: var(--color-acid-orange);
+  position: relative;
   color: var(--color-ink);
-  border: var(--border-bone);
   font-family: var(--font-brand);
   font-size: 1.05rem;
   line-height: 1;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.9rem;
   letter-spacing: 0.02em;
   transform: rotate(var(--rotate-tape));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+.stock-tag.stock-tag--low::before,
+.stock-tag.stock-tag--low::after {
+  content: "";
+  position: absolute;
+  -webkit-mask: url(/torn-tape-5.svg) center / 100% 100% no-repeat;
+  mask: url(/torn-tape-5.svg) center / 100% 100% no-repeat;
+}
+.stock-tag.stock-tag--low::before {
+  inset: 0;
+  z-index: -2;
+  background: var(--color-bone);
+}
+.stock-tag.stock-tag--low::after {
+  inset: 2px;
+  z-index: -1;
+  background: var(--color-acid-orange);
 }
 
 .description {
