@@ -7,8 +7,8 @@ import ContentPage from "../components/ContentPage.vue";
     <p>
       The Local 666 is a two-person DIY operation based in
       <strong>Denver</strong> — design, packing, shipping, all of it by hand. No
-      warehouse, no investors, no growth-hacking. Just vinyl with something to
-      say.
+      warehouse, no investors, no growth-hacking. Just vinyl for people who'd
+      rather say it on their laptop than say it to HR.
     </p>
     <p>
       We make stickers for the people this moment is trying to erase, exhaust,
