@@ -12,8 +12,8 @@
     </h1>
 
     <p class="lede">
-      Die-cut vinyl, built for daily abuse — not your junk drawer. Slapped on
-      laptops, lockers, gas pumps, hearses, and the back of every cop car we can
+      Die-cut vinyl, built for daily abuse — not your junk drawer. Slap them on
+      laptops, lockers, gas pumps, hearses, and the back of every cop car you can
       find.
     </p>
 
