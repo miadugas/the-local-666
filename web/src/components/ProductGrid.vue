@@ -50,7 +50,7 @@ function handleClose() {
     <div class="shop-inner">
       <header class="head">
         <div>
-          <span class="eyebrow tape">★ Fresh out of the ground</span>
+          <span class="eyebrow tape">★ Fresh off the line ★</span>
           <h2 class="title">In the catalog</h2>
         </div>
         <!-- Decorative until /catalog ships — swap to <router-link> then. -->
