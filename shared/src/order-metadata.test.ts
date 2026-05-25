@@ -10,7 +10,7 @@ import {
 describe("order metadata cart item codec", () => {
   it("round-trips serialized cart items", () => {
     const items = [
-      { slug: "grave-goods", qty: 2, unitPriceCents: 500 },
+      { slug: "the-local-666", qty: 2, unitPriceCents: 500 },
       { slug: "sale-sticker", qty: 1, unitPriceCents: 425 },
     ];
 

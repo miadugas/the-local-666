@@ -1,4 +1,4 @@
-# Grave Goods — 3-service stack for the_litterbox.
+# The Local 666 — 3-service stack for the_litterbox.
 #
 #   postgres     internal-only DB, data in a named volume
 #   app          Express (API + built SPA), boots migrations + seed
