@@ -7,9 +7,8 @@
     <span class="eyebrow tape">Vol. I · A Catalog of Refusals</span>
 
     <h1 class="headline">
-      Stickers for<br />
-      the positively<br />
-      damned
+      Solidarity is <br />
+      Eternal
     </h1>
 
     <p class="lede">
