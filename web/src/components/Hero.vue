@@ -47,7 +47,7 @@
 }
 
 .eyebrow {
-  --tape-color: var(--color-acid-orange);
+  --tape-color: var(--color-acid-yellow);
   --tape-rotate: var(--rotate-stencil);
   --tape-mask: url(/torn-tape-2.svg);
   margin-bottom: 1.5rem;

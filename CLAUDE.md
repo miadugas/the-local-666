@@ -67,9 +67,9 @@ grave-goods-store/
 
 - `--color-acid-pink: #ff2d8a` — primary CTA, manifesto highlight, newsletter section
 - `--color-acid-blue: #00d4ff` — nav hover, card brand strip, divider accents
-- `--color-acid-lime: #a3e635` — tenet 03 numeral
-- `--color-acid-yellow: #fff200` — newsletter submit button text, low-stock "Only X left" banner, occasional tape
-- `--color-acid-orange: #ff5e00` — **electric/neon orange (NOT the dead boutique ember).** All taped section eyebrows (hero, shop, manifesto, content pages).
+- `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
+- `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, low-stock "Only X left" banner, occasional tape
+- `--color-acid-orange: #ff5e00` — **electric/neon orange (NOT the dead boutique ember).** Available acid accent — use selectively; not assigned to a fixed slot.
 - `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
 
 ### Type
