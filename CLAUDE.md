@@ -70,7 +70,15 @@ grave-goods-store/
 - `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
 - `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, low-stock "Only X left" banner, occasional tape
 - `--color-acid-orange: #ff5e00` — **electric/neon orange (NOT the dead boutique ember).** Available acid accent — use selectively; not assigned to a fixed slot.
+- `--color-acid-mint: #34d399` — neon jade-green. Product accent / disc backing; available accent.
+- `--color-acid-sky: #5bcefa` — bright sky / trans-flag blue. Product accent / disc backing.
+- `--color-acid-violet: #b026ff` — electric purple; rounds out the neon set. Available accent (no fixed slot yet).
 - `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
+
+**Pastels** — soft sticker-art backings only (the round disc behind product art). NOT neon, never used as an accent/CTA/eyebrow. Kept out of the `acid-*` family on purpose.
+
+- `--color-pastel-peri: #a8c8f0` — periwinkle (disc backing)
+- `--color-pastel-blush: #f0bcc7` — blush pink (disc backing)
 
 ### Type
 

@@ -18,7 +18,14 @@
   --color-acid-lime: #a3e635;
   --color-acid-yellow: #fff200;
   --color-acid-orange: #ff5e00; /* electric/neon orange — NOT the dead boutique ember */
+  --color-acid-mint: #34d399; /* neon jade-green */
+  --color-acid-sky: #5bcefa; /* bright sky / trans-flag blue */
+  --color-acid-violet: #b026ff; /* electric purple — rounds out the neon set */
   --color-acid-red: #e3151f; /* reserved for warning semantics */
+
+  /* COLOR — Pastels (soft sticker-art backings; NOT neon, never an accent) - */
+  --color-pastel-peri: #a8c8f0; /* periwinkle */
+  --color-pastel-blush: #f0bcc7; /* blush pink */
 
   /* TYPE — Families ------------------------------------------------------- */
   --font-brand: "Permanent Marker", "Brush Script MT", cursive;

@@ -82,7 +82,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   <article
     class="card"
     :class="{ 'is-sold-out': soldOut }"
-    :style="{ '--strip': strip.color }"
+    :style="{ '--strip': strip.color, '--accent': product.accentHex }"
   >
     <div class="strip">{{ strip.label }}</div>
 
@@ -184,7 +184,9 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
 .disc {
   position: absolute;
   inset: 0;
-  background: var(--strip);
+  /* Disc backing = the product accent (matches the modal). The strip band +
+     price keep the strip color; this circle is the per-product art backing. */
+  background: var(--accent);
   border: var(--border-ink);
   border-radius: 50%;
   overflow: hidden;
