@@ -1,5 +1,9 @@
 import { pool } from "../db/pool.js";
-import type { AdminProduct } from "@grave-goods/shared";
+import {
+  isStripColor,
+  type AdminProduct,
+  type StripColor,
+} from "@grave-goods/shared";
 
 type AdminProductRow = {
   id: number;
@@ -10,6 +14,8 @@ type AdminProductRow = {
   sale_price_cents: number | null;
   sale_label: string | null;
   sale_ends_at: Date | null;
+  strip_label: string | null;
+  strip_color: string | null;
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
@@ -21,7 +27,7 @@ type AdminProductRow = {
 };
 
 const COLS =
-  "id, slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, created_at, updated_at";
+  "id, slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, strip_label, strip_color, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, created_at, updated_at";
 
 function mapRow(r: AdminProductRow): AdminProduct {
   return {
@@ -33,6 +39,8 @@ function mapRow(r: AdminProductRow): AdminProduct {
     salePriceCents: r.sale_price_cents,
     saleLabel: r.sale_label,
     saleEndsAt: r.sale_ends_at ? r.sale_ends_at.toISOString() : null,
+    stripLabel: r.strip_label,
+    stripColor: isStripColor(r.strip_color) ? r.strip_color : null,
     accentHex: r.accent_hex,
     description: r.description,
     isSoldOut: r.is_sold_out,
@@ -52,6 +60,8 @@ export type CreateProductInput = {
   salePriceCents?: number | null;
   saleLabel?: string | null;
   saleEndsAt?: string | null;
+  stripLabel?: string | null;
+  stripColor?: StripColor | null;
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
@@ -86,10 +96,12 @@ export async function createProduct(
   const saleLabel = salePriceCents === null ? null : (input.saleLabel ?? null);
   const saleEndsAt =
     salePriceCents === null ? null : (input.saleEndsAt ?? null);
+  const stripLabel = input.stripLabel ?? null;
+  const stripColor = input.stripColor ?? "pink";
   const result = await pool.query<AdminProductRow>(
     `INSERT INTO products
-       (slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+       (slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, strip_label, strip_color)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
      RETURNING ${COLS}`,
     [
       input.slug,
@@ -105,6 +117,8 @@ export async function createProduct(
       input.displayOrder,
       input.imageUrl,
       input.imagePublicId,
+      stripLabel,
+      stripColor,
     ],
   );
   return mapRow(result.rows[0]);
@@ -155,6 +169,9 @@ export async function updateProduct(
   if (input.imageUrl !== undefined) set("image_url", input.imageUrl);
   if (input.imagePublicId !== undefined)
     set("image_public_id", input.imagePublicId);
+  // null is a real "clear" here (gated on !== undefined, not collapsed by ??).
+  if (input.stripLabel !== undefined) set("strip_label", input.stripLabel);
+  if (input.stripColor !== undefined) set("strip_color", input.stripColor);
 
   if (fields.length === 0) {
     return mapRow(current);

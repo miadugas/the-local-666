@@ -1,5 +1,5 @@
 import { pool } from "../db/pool.js";
-import type { Product } from "@grave-goods/shared";
+import { isStripColor, type Product } from "@grave-goods/shared";
 
 type ProductRow = {
   id: number;
@@ -9,6 +9,8 @@ type ProductRow = {
   price_cents: number;
   effective_sale_price_cents: number | null;
   effective_sale_label: string | null;
+  strip_label: string | null;
+  strip_color: string | null;
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
@@ -26,6 +28,8 @@ const SELECT_COLUMNS = `
   price_cents,
   CASE WHEN ${SALE_IS_ACTIVE} THEN sale_price_cents ELSE NULL END AS effective_sale_price_cents,
   CASE WHEN ${SALE_IS_ACTIVE} THEN sale_label ELSE NULL END AS effective_sale_label,
+  strip_label,
+  strip_color,
   accent_hex,
   description,
   is_sold_out,
@@ -41,6 +45,8 @@ function mapRow(row: ProductRow): Product {
     priceCents: row.price_cents,
     salePriceCents: row.effective_sale_price_cents,
     saleLabel: row.effective_sale_label,
+    stripLabel: row.strip_label,
+    stripColor: isStripColor(row.strip_color) ? row.strip_color : null,
     accentHex: row.accent_hex,
     description: row.description,
     isSoldOut: row.is_sold_out,

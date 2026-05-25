@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Product } from "@grave-goods/shared";
+import type { Product, StripColor } from "@grave-goods/shared";
 import { formatPrice } from "../lib/format";
 
 const props = defineProps<{
@@ -26,7 +26,27 @@ const STRIPS = [
   { color: "var(--color-acid-lime)", label: "Class!" },
 ] as const;
 
-const strip = computed(() => STRIPS[props.index % STRIPS.length]);
+// Closed map: a validated StripColor enum → a hardcoded CSS var. The color
+// flows into the inline `--strip` style, so it MUST come from here — never
+// interpolate product.stripColor (a DB string) into the style directly.
+const STRIP_COLOR_VARS: Record<StripColor, string> = {
+  pink: "var(--color-acid-pink)",
+  blue: "var(--color-acid-blue)",
+  yellow: "var(--color-acid-yellow)",
+  lime: "var(--color-acid-lime)",
+};
+
+// Per-field fallback: a product can set just the label, just the color, or
+// both; whatever's unset falls back to the positional STRIPS rotation.
+const strip = computed(() => {
+  const fallback = STRIPS[props.index % STRIPS.length];
+  return {
+    color: props.product.stripColor
+      ? STRIP_COLOR_VARS[props.product.stripColor]
+      : fallback.color,
+    label: props.product.stripLabel ?? fallback.label,
+  };
+});
 
 const onSale = computed(
   () => props.product.salePriceCents != null && !props.product.isSoldOut,

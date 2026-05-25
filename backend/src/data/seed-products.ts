@@ -4,6 +4,8 @@
 // so a fresh deploy reproduces the real catalog. image_url is derived from the
 // slug in seed.ts (`/stickers/<slug>.png`).
 
+import type { StripColor } from "@grave-goods/shared";
+
 export type SeedProduct = {
   slug: string;
   title: string;
@@ -13,11 +15,15 @@ export type SeedProduct = {
   description: string | null;
   displayOrder: number;
   isSoldOut: boolean;
+  stripLabel: string;
+  stripColor: StripColor;
 };
 
 export const SEED_PRODUCTS: readonly SeedProduct[] = [
   {
     slug: "protect-trans-kids",
+    stripLabel: "Protect",
+    stripColor: "pink",
     title:
       '"Protect Trans Kids" A Multi-Headed Dragon On The Right Side Of History Sticker',
     spec: '3" die-cut vinyl',
@@ -30,6 +36,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "cops-arent-your-friends",
+    stripLabel: "A.C.A.B.",
+    stripColor: "blue",
     title: '"Cops Aren\'t Your Friends" A Cheerful Reminder Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -41,6 +49,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "you-are-not-immune",
+    stripLabel: "Wake up",
+    stripColor: "yellow",
     title:
       '"You Are Not Immune To Propaganda" A Junji Ito Public Service Announcement Sticker',
     spec: '3" die-cut vinyl',
@@ -53,6 +63,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "class-consciousness",
+    stripLabel: "Class!",
+    stripColor: "lime",
     title:
       '"All The Cool Kids Have Class Consciousness" A Retro Radicalization Sticker',
     spec: '3" die-cut vinyl',
@@ -65,6 +77,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "follow-your-leader",
+    stripLabel: "Obey.",
+    stripColor: "pink",
     title: '"Follow Your Leader" An Obedience Study Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -76,6 +90,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "devour-feculence",
+    stripLabel: "Devour.",
+    stripColor: "blue",
     title: '"Devour Feculence" A Milchick Moment Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -87,6 +103,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "throbbing-middle-finger",
+    stripLabel: "Up yours.",
+    stripColor: "yellow",
     title: '"Throbbing Middle Finger to God" Fuck Charlie Kirk',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -98,6 +116,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "deny-defend-depose",
+    stripLabel: "Deny.",
+    stripColor: "lime",
     title: '"Deny. Defend. Depose." A Healthcare Bouquet Sticker',
     spec: '2.5" x 2.5" die-cut vinyl',
     priceCents: 400,
@@ -109,6 +129,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "scream-fuck-die",
+    stripLabel: "Briefly.",
+    stripColor: "pink",
     title: '"Scream F*ck Die" A Cicada\'s Life Philosophy Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -120,6 +142,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "magical-stardust",
+    stripLabel: "Hail.",
+    stripColor: "blue",
     title:
       '"Listen Up, Bitch — You Are A Magical Piece Of F*cking Stardust" A Satanic Affirmation Sticker',
     spec: '3" die-cut vinyl',
@@ -132,6 +156,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "i-did-that",
+    stripLabel: "I did that.",
+    stripColor: "yellow",
     title: '"I Did That!" A Sticker Of Accountability',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -143,6 +169,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "war-criminal",
+    stripLabel: "Guilty.",
+    stripColor: "lime",
     title: '"War Criminal" The Cost of an Ally',
     spec: '3" die-cut vinyl',
     priceCents: 400,
@@ -154,6 +182,8 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
   },
   {
     slug: "luigi",
+    stripLabel: "A guy.",
+    stripColor: "pink",
     title: '"Luigi" A Sticker About A Guy Named Luigi',
     spec: '3" die-cut vinyl',
     priceCents: 400,

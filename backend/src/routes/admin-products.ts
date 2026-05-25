@@ -1,5 +1,9 @@
 import { Router, type Response } from "express";
-import { validateSalePrice } from "@grave-goods/shared";
+import {
+  validateSalePrice,
+  isStripColor,
+  type StripColor,
+} from "@grave-goods/shared";
 import { requireAuth } from "../auth/middleware.js";
 import {
   listAdminProducts,
@@ -78,6 +82,37 @@ function parseSaleEndsAt(
   return saleEndsAt;
 }
 
+function parseStripLabel(
+  value: unknown,
+  res: Response,
+): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const label = String(value).trim();
+  if (label.length > 30) {
+    res
+      .status(400)
+      .json({ message: "stripLabel must be 30 characters or less" });
+    return undefined;
+  }
+  return label || null;
+}
+
+function parseStripColor(
+  value: unknown,
+  res: Response,
+): StripColor | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (!isStripColor(value)) {
+    res
+      .status(400)
+      .json({ message: "stripColor must be one of: pink, blue, yellow, lime" });
+    return undefined;
+  }
+  return value;
+}
+
 function validateFinalSale(
   salePriceCents: number | null,
   priceCents: number,
@@ -140,6 +175,10 @@ adminProductsRouter.post(
     if (b.saleLabel !== undefined && saleLabel === undefined) return;
     const saleEndsAt = parseSaleEndsAt(b.saleEndsAt, res);
     if (b.saleEndsAt !== undefined && saleEndsAt === undefined) return;
+    const stripLabel = parseStripLabel(b.stripLabel, res);
+    if (b.stripLabel !== undefined && stripLabel === undefined) return;
+    const stripColor = parseStripColor(b.stripColor, res);
+    if (b.stripColor !== undefined && stripColor === undefined) return;
 
     const finalSalePriceCents = salePriceCents ?? null;
     if (!validateFinalSale(finalSalePriceCents, priceCents, res)) return;
@@ -152,6 +191,8 @@ adminProductsRouter.post(
       salePriceCents: finalSalePriceCents,
       saleLabel,
       saleEndsAt,
+      stripLabel,
+      stripColor,
       accentHex: String(b.accentHex ?? "").trim(),
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
@@ -219,6 +260,12 @@ adminProductsRouter.patch(
     const saleEndsAt = parseSaleEndsAt(b.saleEndsAt, res);
     if (b.saleEndsAt !== undefined && saleEndsAt === undefined) return;
     if (b.saleEndsAt !== undefined) input.saleEndsAt = saleEndsAt;
+    const stripLabel = parseStripLabel(b.stripLabel, res);
+    if (b.stripLabel !== undefined && stripLabel === undefined) return;
+    if (b.stripLabel !== undefined) input.stripLabel = stripLabel;
+    const stripColor = parseStripColor(b.stripColor, res);
+    if (b.stripColor !== undefined && stripColor === undefined) return;
+    if (b.stripColor !== undefined) input.stripColor = stripColor;
 
     const current = await getAdminProductById(id);
     if (!current) {

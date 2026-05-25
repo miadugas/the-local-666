@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { validateSalePrice } from "@grave-goods/shared";
-import type { AdminProduct } from "@grave-goods/shared";
+import type { AdminProduct, StripColor } from "@grave-goods/shared";
 import { useAdminStore } from "../stores/admin";
 import { formatPrice } from "../lib/format";
 import { renderMarkdown } from "../lib/markdown";
@@ -30,6 +30,8 @@ type FormModel = {
   salePriceDollars: string;
   saleLabel: string;
   saleEndsAt: string;
+  stripLabel: string;
+  stripColor: StripColor;
 };
 
 const editing = ref<FormModel | null>(null);
@@ -86,6 +88,8 @@ function blankForm(): FormModel {
     salePriceDollars: "",
     saleLabel: "",
     saleEndsAt: "",
+    stripLabel: "",
+    stripColor: "pink",
   };
 }
 
@@ -123,6 +127,8 @@ function startEdit(p: AdminProduct) {
       p.salePriceCents != null ? (p.salePriceCents / 100).toString() : "",
     saleLabel: p.saleLabel ?? "",
     saleEndsAt: p.saleEndsAt ? p.saleEndsAt.slice(0, 10) : "",
+    stripLabel: p.stripLabel ?? "",
+    stripColor: p.stripColor ?? "pink",
   };
 }
 
@@ -177,6 +183,8 @@ async function save() {
       f.saleEnabled && f.saleEndsAt
         ? new Date(f.saleEndsAt).toISOString()
         : null,
+    stripLabel: f.stripLabel.trim() ? f.stripLabel.trim() : null,
+    stripColor: f.stripColor,
   };
 
   saving.value = true;
@@ -263,6 +271,22 @@ onMounted(load);
         <label class="field"
           ><span>Accent hex</span><input v-model="editing.accentHex"
         /></label>
+        <label class="field"
+          ><span>Strip label (blank = positional fallback)</span
+          ><input
+            v-model="editing.stripLabel"
+            maxlength="30"
+            placeholder="Protect"
+        /></label>
+        <label class="field">
+          <span>Strip color</span>
+          <select v-model="editing.stripColor">
+            <option value="pink">Pink</option>
+            <option value="blue">Blue</option>
+            <option value="yellow">Yellow</option>
+            <option value="lime">Lime</option>
+          </select>
+        </label>
         <label class="field"
           ><span>Display order</span
           ><input v-model.number="editing.displayOrder" type="number"
@@ -456,7 +480,8 @@ onMounted(load);
   text-transform: uppercase;
 }
 .field input,
-.field textarea {
+.field textarea,
+.field select {
   font-family: var(--font-body);
   font-size: 1rem;
   padding: 0.5rem 0.65rem;
