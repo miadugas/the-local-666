@@ -39,7 +39,7 @@ const cart = useCartStore();
   margin: 0 auto 2rem;
 }
 .eyebrow {
-  --tape-color: var(--color-acid-blue);
+  --tape-color: var(--color-acid-orange);
   --tape-rotate: var(--rotate-stencil);
   --tape-mask: url(/torn-tape-1.svg);
   margin-bottom: 1.25rem;

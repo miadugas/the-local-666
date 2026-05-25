@@ -13,8 +13,8 @@
 
     <p class="lede">
       Die-cut vinyl, built for daily abuse — not your junk drawer. Slap them on
-      laptops, lockers, gas pumps, hearses, and the back of every cop car you can
-      find.
+      laptops, lockers, gas pumps, hearses, and the back of every cop car you
+      can find.
     </p>
 
     <div class="ctas">
@@ -47,7 +47,7 @@
 }
 
 .eyebrow {
-  --tape-color: var(--color-acid-yellow);
+  --tape-color: var(--color-acid-orange);
   --tape-rotate: var(--rotate-stencil);
   --tape-mask: url(/torn-tape-2.svg);
   margin-bottom: 1.5rem;

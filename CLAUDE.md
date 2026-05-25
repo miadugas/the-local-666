@@ -67,8 +67,9 @@ grave-goods-store/
 
 - `--color-acid-pink: #ff2d8a` — primary CTA, manifesto highlight, newsletter section
 - `--color-acid-blue: #00d4ff` — nav hover, card brand strip, divider accents
-- `--color-acid-lime: #a3e635` — manifesto eyebrow, tenet 03 numeral
-- `--color-acid-yellow: #fff200` — hero eyebrow, newsletter submit button text, occasional tape
+- `--color-acid-lime: #a3e635` — tenet 03 numeral
+- `--color-acid-yellow: #fff200` — newsletter submit button text, low-stock "Only X left" banner, occasional tape
+- `--color-acid-orange: #ff5e00` — **electric/neon orange (NOT the dead boutique ember).** All taped section eyebrows (hero, shop, manifesto, content pages).
 - `--color-acid-red: #e3151f` — **reserved for warning semantics only** (sold-out, sale, removal). Not decorative.
 
 ### Type
@@ -173,7 +174,7 @@ One level is fine. More than one → `provide`/`inject`, slots, or a store.
 - ❌ **Hairline borders** on dark cards — `--border-bone` (3px solid) is the rule
 - ❌ **Soft radial-gradient body backgrounds** or grain overlays — pure `#000000` only
 - ❌ **Engraved roman serif headlines** (Cinzel, Cormorant, Garamond, Trajan) — Bowlby One only for display
-- ❌ **Ember-orange anywhere** — old ember/soot/cream tokens are removed
+- ❌ **Ember-orange** — the dead warm boutique-ember/soot hue is banned; old ember/soot/cream tokens are removed. (Electric/neon `--color-acid-orange` #ff5e00 is a sanctioned acid accent — see palette — and is NOT ember.)
 - ❌ **Mixing multiple acid accents inside one element** — one acid per element; multiple can coexist in a frame
 - ❌ **Decorative use of acid-red** — reserved for warning semantics (sold-out, sale, removal)
 - ❌ Punk-moment patterns (tape, stencil, ransom-note) scattered as ambient texture — keep them in defined slots

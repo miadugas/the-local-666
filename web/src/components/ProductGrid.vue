@@ -135,7 +135,7 @@ function handleClose() {
 }
 
 .eyebrow {
-  --tape-color: var(--color-acid-blue);
+  --tape-color: var(--color-acid-orange);
   --tape-rotate: var(--rotate-strip);
   --tape-mask: url(/torn-tape-4.svg);
 }
