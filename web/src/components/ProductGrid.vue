@@ -16,6 +16,21 @@ const selectedProduct = ref<Product | null>(null);
 const threePackDollars = PRICES.THREE_PACK_CENTS / 100;
 const fivePackDollars = PRICES.FIVE_PACK_CENTS / 100;
 
+// Banner is dismissable; the choice persists so it doesn't nag return visitors.
+const BANNER_DISMISS_KEY = "the-local-666-bundle-banner-dismissed";
+const bannerDismissed = ref(
+  typeof localStorage !== "undefined" &&
+    localStorage.getItem(BANNER_DISMISS_KEY) === "1",
+);
+function dismissBanner() {
+  bannerDismissed.value = true;
+  try {
+    localStorage.setItem(BANNER_DISMISS_KEY, "1");
+  } catch {
+    /* private mode — fine, just won't persist */
+  }
+}
+
 function handleAddToCart(product: Product) {
   cart.addItem(product);
   selectedProduct.value = null;
@@ -44,13 +59,25 @@ function handleClose() {
         </span>
       </header>
 
-      <aside class="bundle-banner" aria-label="Bundle pricing">
+      <aside
+        v-if="!bannerDismissed"
+        class="bundle-banner"
+        aria-label="Bundle pricing"
+      >
         <p class="bundle-prices">
           <span class="clause">Any 3 → ${{ threePackDollars }}</span>
           <span class="bundle-sep" aria-hidden="true">·</span>
           <span class="clause">Any 5 → ${{ fivePackDollars }}</span>
         </p>
         <p class="bundle-tag">Grab the set. Arm your friends.</p>
+        <button
+          type="button"
+          class="bundle-dismiss"
+          aria-label="Dismiss bundle offer"
+          @click="dismissBanner"
+        >
+          ×
+        </button>
       </aside>
 
       <p v-if="loading" class="state">Digging up the goods…</p>
@@ -130,6 +157,7 @@ function handleClose() {
 }
 
 .bundle-banner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,11 +169,12 @@ function handleClose() {
   border-radius: var(--radius-tight);
   box-shadow: var(--shadow-block-bone);
   padding: clamp(0.875rem, 2.5vw, 1.25rem) clamp(1.125rem, 3.5vw, 1.75rem);
+  padding-right: clamp(2.25rem, 5vw, 2.75rem);
   margin-bottom: 2.25rem;
 }
 .bundle-prices {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3.2vw, 1.9rem);
+  font-size: clamp(0.95rem, 4.2vw, 1.9rem);
   line-height: 0.95;
   letter-spacing: 0.01em;
   margin: 0;
@@ -164,18 +193,30 @@ function handleClose() {
 .bundle-prices .clause {
   white-space: nowrap;
 }
+.bundle-dismiss {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.1rem 0.35rem;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--duration-fast) var(--ease-snap);
+}
+.bundle-dismiss:hover {
+  opacity: 1;
+}
 @media (max-width: 640px) {
   .bundle-banner {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 0.65rem;
-  }
-  .bundle-prices .clause {
-    display: block;
-  }
-  .bundle-sep {
-    display: none;
   }
 }
 
