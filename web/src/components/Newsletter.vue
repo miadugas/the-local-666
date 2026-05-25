@@ -32,13 +32,13 @@ async function handleSubmit() {
 
 <template>
   <section class="newsletter" aria-label="Newsletter signup">
-    <h2 class="head">Join the procession</h2>
+    <h2 class="head">Join the local</h2>
     <p class="lede">
       Drops, restocks, the occasional ritual. No spam, no salvation, no
       algorithm.
     </p>
     <p v-if="status === 'done'" class="confirm" role="status">
-      You're on the list. Welcome to the procession.
+      You're on the list. Welcome to the local.
     </p>
     <form v-else class="form" @submit.prevent="handleSubmit">
       <input
