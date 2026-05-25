@@ -91,7 +91,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
       <template v-else>
         <span v-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
         <span v-if="lowStock" class="stock-badge"
-          >Only {{ product.stock }} left</span
+          >{{ product.stock }} left</span
         >
       </template>
       <div class="disc">

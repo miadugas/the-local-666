@@ -38,7 +38,7 @@ const lowStock = computed(
 );
 const stockBadgeText = computed(() =>
   lowStock.value
-    ? `Only ${props.product.stock} left`
+    ? `${props.product.stock} left`
     : `${props.product.stock} available`,
 );
 const onSale = computed(
