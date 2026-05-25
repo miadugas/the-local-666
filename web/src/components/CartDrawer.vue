@@ -7,6 +7,19 @@ const cart = useCartStore();
 const checkoutError = ref("");
 const closeBtn = ref<HTMLButtonElement | null>(null);
 
+// Empty-cart lines — deadpan, leftist. One is picked at random per open (this
+// component mounts fresh each time the drawer opens).
+const EMPTY_CART_LINES = [
+  "Empty as a cop's conscience. Go arm yourself.",
+  "Empty as a landlord's heart. Go grab something.",
+  "Empty as a billionaire's apology. Go arm yourself.",
+  "Empty as a CEO's promise. Go grab something.",
+  "Nothing here yet. Arm your friends — start with you.",
+] as const;
+const emptyLine = ref(
+  EMPTY_CART_LINES[Math.floor(Math.random() * EMPTY_CART_LINES.length)],
+);
+
 let previouslyFocused: HTMLElement | null = null;
 let prevBodyOverflow = "";
 
@@ -83,7 +96,7 @@ onBeforeUnmount(() => {
       </header>
 
       <p v-if="cart.items.length === 0" class="empty">
-        Your cart's clearer than a cop's conscience. Go dig something up.
+        {{ emptyLine }}
       </p>
 
       <ul v-else class="lines">

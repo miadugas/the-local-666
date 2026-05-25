@@ -16,7 +16,7 @@ import ContentPage from "../components/ContentPage.vue";
 
     <h2>If it shows up wrecked</h2>
     <p>
-      Vinyl's tough, but the mail is chaos. If your order arrives damaged or
+      Vinyl's tough, but the mail can be chaos. If your order arrives damaged or
       never lands, just tell us within <strong>30 days</strong> and we'll
       replace it free — no photo, no questions asked.
     </p>
