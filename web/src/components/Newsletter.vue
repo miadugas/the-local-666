@@ -46,7 +46,7 @@ async function handleSubmit() {
         type="email"
         required
         :disabled="status === 'loading'"
-        placeholder="your@email.com"
+        placeholder="you@email.com"
         aria-label="Email address"
         class="email-input"
       />
