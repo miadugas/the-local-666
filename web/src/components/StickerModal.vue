@@ -27,6 +27,20 @@ const soldOut = computed(
 const showStock = computed(
   () => !soldOut.value && props.product.stock !== null,
 );
+// Below this remaining count the tag escalates to the loud "Only X left"
+// urgency treatment; at or above it the count shows as a quiet line.
+const LOW_STOCK_THRESHOLD = 20;
+const lowStock = computed(
+  () =>
+    !soldOut.value &&
+    props.product.stock !== null &&
+    props.product.stock < LOW_STOCK_THRESHOLD,
+);
+const stockBadgeText = computed(() =>
+  lowStock.value
+    ? `Only ${props.product.stock} left`
+    : `${props.product.stock} available`,
+);
 const onSale = computed(
   () => props.product.salePriceCents != null && !soldOut.value,
 );
@@ -121,7 +135,13 @@ onBeforeUnmount(() => {
         <h2 id="modal-title" class="title">{{ product.title }}</h2>
         <p class="spec">{{ product.spec }}</p>
         <p v-if="onSale" class="sale-tag">{{ product.saleLabel ?? "Sale" }}</p>
-        <p v-if="showStock" class="stock-tag">Only {{ product.stock }} left</p>
+        <p
+          v-if="showStock"
+          class="stock-tag"
+          :class="{ 'stock-tag--low': lowStock }"
+        >
+          {{ stockBadgeText }}
+        </p>
         <div class="buy">
           <span class="price">
             <template v-if="onSale">
@@ -298,18 +318,24 @@ onBeforeUnmount(() => {
   margin: 0;
   transform: rotate(var(--rotate-stencil));
 }
-/* Low-stock urgency — acid-yellow (acid-red is reserved for warnings). */
+/* Remaining count. Always shown for tracked products: a quiet muted line by
+   default, escalating to the loud acid-yellow stencil when low (acid-red is
+   reserved for warnings per CLAUDE.md). */
 .stock-tag {
   align-self: flex-start;
   font-family: var(--font-zine);
-  font-size: 0.7rem;
-  letter-spacing: var(--tracking-shout);
+  font-size: 0.72rem;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-bone) 70%, transparent);
+  margin: 0;
+}
+.stock-tag.stock-tag--low {
   background: var(--color-acid-yellow);
   color: var(--color-ink);
   border: var(--border-ink);
   padding: 0.2rem 0.55rem;
-  margin: 0;
+  letter-spacing: var(--tracking-shout);
   transform: rotate(var(--rotate-tape));
 }
 

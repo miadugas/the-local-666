@@ -55,10 +55,24 @@ const soldOut = computed(
     props.product.isSoldOut ||
     (props.product.stock !== null && props.product.stock <= 0),
 );
-// Show the remaining count for any tracked, in-stock product (Mia only tracks
+// Always show the count for any tracked, in-stock product (Mia only tracks
 // stock on limited test runs, so a count is always meaningful when present).
 const showStock = computed(
   () => !soldOut.value && props.product.stock !== null,
+);
+// Below this remaining count the chip escalates to the loud "Only X left"
+// urgency treatment; at or above it the count shows as a quiet chip.
+const LOW_STOCK_THRESHOLD = 20;
+const lowStock = computed(
+  () =>
+    !soldOut.value &&
+    props.product.stock !== null &&
+    props.product.stock < LOW_STOCK_THRESHOLD,
+);
+const stockBadgeText = computed(() =>
+  lowStock.value
+    ? `Only ${props.product.stock} left`
+    : `${props.product.stock} available`,
 );
 const onSale = computed(
   () => props.product.salePriceCents != null && !soldOut.value,
@@ -78,8 +92,11 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
       <span v-if="soldOut" class="sold-out-badge">Sold Out</span>
       <template v-else>
         <span v-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
-        <span v-if="showStock" class="stock-badge"
-          >Only {{ product.stock }} left</span
+        <span
+          v-if="showStock"
+          class="stock-badge"
+          :class="{ 'stock-badge--low': lowStock }"
+          >{{ stockBadgeText }}</span
         >
       </template>
       <div class="disc">
@@ -299,24 +316,31 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   transform: rotate(var(--rotate-stencil));
   white-space: nowrap;
 }
-/* Low-stock urgency. acid-red is reserved for warnings (CLAUDE.md), so this
-   uses acid-yellow. Top-RIGHT so it never collides with a top-left sale badge
-   when a tracked product is also on sale. */
+/* Remaining-count chip. Always shown for tracked, in-stock products (top-RIGHT
+   so it never collides with a top-left sale badge). Quiet bone chip by default;
+   escalates to the loud acid-yellow stencil when low (acid-red is reserved for
+   warnings per CLAUDE.md). */
 .image-tape .stock-badge {
   position: absolute;
   z-index: 2;
   top: -0.4rem;
   right: -0.4rem;
-  background: var(--color-acid-yellow);
+  background: var(--color-bone);
   color: var(--color-ink);
   border: var(--border-ink);
   font-family: var(--font-zine);
+  font-size: 0.6rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: 0.18rem 0.45rem;
+  white-space: nowrap;
+}
+.image-tape .stock-badge.stock-badge--low {
+  background: var(--color-acid-yellow);
   font-size: 0.65rem;
   letter-spacing: var(--tracking-shout);
-  text-transform: uppercase;
   padding: 0.2rem 0.5rem;
   transform: rotate(var(--rotate-tape));
-  white-space: nowrap;
 }
 .image-tape .sold-out-badge {
   position: absolute;
