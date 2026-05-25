@@ -137,7 +137,9 @@ async function handleSubmit() {
   font-size: 0.8125rem;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  box-shadow: var(--shadow-block-ink);
+  /* Bone offset (not ink): the button is black, so an ink shadow merges into
+     it and reads as a blob. Bone gives a crisp hard-offset against the pink. */
+  box-shadow: var(--shadow-block-bone);
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease-snap);
 }
