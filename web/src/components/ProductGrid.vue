@@ -185,6 +185,7 @@ function handleClose() {
 }
 .bundle-tag {
   font-family: var(--font-zine);
+  font-weight: 700;
   font-size: clamp(0.8rem, 1.8vw, 0.95rem);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
