@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Product } from "@grave-goods/shared";
+import { PRICES } from "@grave-goods/shared";
 import { useProducts } from "../composables/useProducts";
 import { useCartStore } from "../stores/cart";
 import StickerCard from "./StickerCard.vue";
@@ -9,6 +10,11 @@ import StickerModal from "./StickerModal.vue";
 const { products, loading, error, reload } = useProducts();
 const cart = useCartStore();
 const selectedProduct = ref<Product | null>(null);
+
+// Bundle figures come straight from the pricing module so the banner can
+// never drift from what the cart actually charges.
+const threePackDollars = PRICES.THREE_PACK_CENTS / 100;
+const fivePackDollars = PRICES.FIVE_PACK_CENTS / 100;
 
 function handleAddToCart(product: Product) {
   cart.addItem(product);
@@ -37,6 +43,15 @@ function handleClose() {
           all {{ products.length }} →
         </span>
       </header>
+
+      <aside class="bundle-banner" aria-label="Bundle pricing">
+        <p class="bundle-prices">
+          Any 3 → ${{ threePackDollars }}
+          <span class="bundle-sep" aria-hidden="true">·</span>
+          Any 5 → ${{ fivePackDollars }}
+        </p>
+        <p class="bundle-tag">Grab the set. Arm your friends.</p>
+      </aside>
 
       <p v-if="loading" class="state">Digging up the goods…</p>
 
@@ -112,6 +127,39 @@ function handleClose() {
   letter-spacing: var(--tracking-wide);
   color: var(--color-acid-pink);
   text-transform: uppercase;
+}
+
+.bundle-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  background: var(--color-acid-yellow);
+  color: var(--color-ink);
+  border: var(--border-ink);
+  border-radius: var(--radius-tight);
+  box-shadow: var(--shadow-block-bone);
+  padding: clamp(0.875rem, 2.5vw, 1.25rem) clamp(1.125rem, 3.5vw, 1.75rem);
+  margin-bottom: 2.25rem;
+}
+.bundle-prices {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3.2vw, 1.9rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+.bundle-sep {
+  opacity: 0.45;
+  margin: 0 0.35rem;
+}
+.bundle-tag {
+  font-family: var(--font-zine);
+  font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .grid {
