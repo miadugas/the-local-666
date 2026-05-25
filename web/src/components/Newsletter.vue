@@ -55,7 +55,7 @@ async function handleSubmit() {
         class="subscribe-btn"
         :disabled="status === 'loading'"
       >
-        {{ status === "loading" ? "ADDING…" : "JOIN THE LIST" }}
+        {{ status === "loading" ? "ADDING…" : "I'M IN" }}
       </button>
     </form>
     <p v-if="status === 'error'" class="error" role="alert">{{ errorMsg }}</p>
