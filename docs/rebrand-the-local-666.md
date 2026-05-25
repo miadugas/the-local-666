@@ -55,7 +55,7 @@ old. Never rip-and-replace on a live store taking real money.
       `send` MX → feedback-smtp.us-east-1.amazonses.com · `send` SPF include:amazonses.com ·
       `resend._domainkey` DKIM. Same Resend account → existing RESEND_API_KEY works.
 - [x] DMARC live (Cloudflare DMARC Management): `_dmarc` = `v=DMARC1; p=none;
-  rua=…@dmarc-reports.cloudflare.net`. Monitor mode, CF parses reports.
+rua=…@dmarc-reports.cloudflare.net`. Monitor mode, CF parses reports.
 - [ ] **(P4 cutover)** flip `EMAIL_FROM` → `The Local 666 <orders@thelocal666.com>`.
 
 Email architecture (clean separation — what the old domain never had):
@@ -77,19 +77,33 @@ Email architecture (clean separation — what the old domain never had):
 
 ### P4 — The flip (one coordinated push) 🔴
 
-- [ ] Code: all brand strings → The Local 666 (wordmark, copy, `<title>`/OG, favicon).
-- [ ] Env on box: `FRONTEND_URL` → `https://thelocal666.com`; `EMAIL_FROM` → new
-      sender; Stripe success/cancel URLs → new domain; new `whsec_`.
-- [ ] Stripe: statement descriptor → new brand.
-- [ ] Push → auto-deploy.
-- [ ] **Verify money path on new domain:** checkout → `cs_live_` → new webhook fires →
-      confirmation email from new sender.
+- [x] **P4a — brand code DONE + committed (e151870), NOT pushed.** Wordmark image,
+      copy, `<title>`/OG, favicon, email + Stripe line-item names, mailto → hello@. Full
+      build (vue-tsc + vite + backend tsc) green; wordmark verified in local preview
+      (desktop + mobile). Live site UNCHANGED (`main` ahead of origin by 1).
+- [x] **P4b — cutover DONE + DEPLOYED (2026-05-24).** Box `.env`: `FRONTEND_URL` +
+      `EMAIL_FROM` → thelocal666. Stripe statement descriptor → `THE LOCAL 666`. Pushed
+      e151870 → deploy green. Verified live: `<title>`, CORS origin = thelocal666,
+      wordmark.png 200. (Webhook left on old endpoint here — moved in P5.)
 
-### P5 — Retire the old 🟢
+### P5 — Retire the old 🟢 ✅ DONE (2026-05-24)
 
-- [ ] Remove old Stripe webhook endpoint + old sender usage.
-- [ ] Take the store off `gravegoodsgoodies.com` (remove its tunnel hostname → dark /
-      holding page until coloring books are ready).
+- [x] Webhook moved: box `.env` `STRIPE_WEBHOOK_SECRET` → new `whsec_`, then
+      `docker compose --profile tunnel up -d --force-recreate app` to reload it.
+      ⚠️ GOTCHA: env-only changes do NOT reload via `git push` — deploy is
+      `up -d --build` (no `--force-recreate`), identical image → no recreate. Must
+      force-recreate on the box (or add `--force-recreate` to deploy.yml — see P6).
+- [x] Enabled `the-local-666` endpoint, disabled `creative-jubilee`.
+- [x] **Money path verified — first real $5 payment.** Stripe `200` on new endpoint,
+      statement = "THE LOCAL 666", confirmation email from `orders@thelocal666.com`.
+- [x] Removed `gravegoodsgoodies.com` + `www` tunnel routes → old domain no longer
+      resolves; store is thelocal666-only. (gravegoodsgoodies zone kept for coloring books.)
+
+> ⚠️ **DELIVERABILITY WATCH:** first order email landed in Outlook **Junk**. NOT a
+> misconfig — SPF/DKIM/DMARC all verified correct. It's a brand-new sending domain with
+> zero reputation (+ `666` domain / "summoned/crypt" wording nudging spam score). Improves
+> with sending history. If it persists for customers: warm-up, "check spam" note at
+> checkout, or a dedicated send subdomain.
 
 ### P6 — Repo + docs, last 🟢
 
@@ -97,3 +111,5 @@ Email architecture (clean separation — what the old domain never had):
       attached; update local remote URL).
 - [ ] Update `CLAUDE.md` (brand name + de-stale: backend/Pinia/prices).
 - [ ] Leave compose project / pg volume / server dir names as-is.
+- [ ] (Optional infra) Add `--force-recreate` to deploy.yml's `up -d --build` so future
+      env-only changes apply on deploy without a manual box recreate (see P5 gotcha).
