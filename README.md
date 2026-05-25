@@ -1,6 +1,6 @@
-# grave-goods-store
+# the-local-666
 
-**Grave Goods** — punk leftist sticker store. Solo-operator side project. Vue 3 + Vite + Tailwind v4.
+**The Local 666** — punk leftist sticker store. Solo-operator side project. Vue 3 + Vite + Tailwind v4.
 
 See [CLAUDE.md](./CLAUDE.md) for stack, conventions, and locked decisions.
 
