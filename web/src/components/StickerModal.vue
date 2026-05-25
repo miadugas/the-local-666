@@ -331,7 +331,7 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 .stock-tag.stock-tag--low {
-  background: var(--color-acid-yellow);
+  background: var(--color-acid-orange);
   color: var(--color-ink);
   border: var(--border-ink);
   padding: 0.2rem 0.55rem;

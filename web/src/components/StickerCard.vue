@@ -333,7 +333,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   z-index: 2;
   top: -0.4rem;
   right: -0.4rem;
-  background: var(--color-acid-yellow);
+  background: var(--color-acid-orange);
   color: var(--color-ink);
   border: var(--border-ink);
   font-family: var(--font-zine);
