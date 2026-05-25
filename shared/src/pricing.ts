@@ -4,16 +4,17 @@
 // the Express checkout import from here — never recompute totals separately.
 
 export const PRICES = {
-  SINGLE_CENTS: 500,
-  THREE_PACK_CENTS: 1300,
-  FIVE_PACK_CENTS: 2000,
+  SINGLE_CENTS: 400,
+  THREE_PACK_CENTS: 1000,
+  FIVE_PACK_CENTS: 1500,
 } as const;
 
-// Sale price thresholds — derived from cost structure
-// Fixed cost per single-item order: COGS $0.295 + packaging $0.90 + postage $1.19 + Stripe flat $0.30 = $2.69
-// Stripe also takes 2.9% of revenue. Break-even at sale price P: 0.971 * P = 2.69 → P = $2.77
-export const SALE_HARD_FLOOR_CENTS = 300; // Below this = losing money after fees. Hard block.
-export const SALE_SOFT_WARN_CENTS = 350; // Below this = thin margin (<20%). Warn admin.
+// Sale price thresholds — derived from real cost structure (verified 2026-05-24).
+// Fixed cost per single-item order: COGS $0.30 + packaging $0.40 + postage $0.73
+// (flexible first-class letter) + Stripe flat $0.30 = $1.73. Stripe also takes 2.9%
+// of revenue. Break-even at sale price P: 0.971 * P = 1.73 → P ≈ $1.78.
+export const SALE_HARD_FLOOR_CENTS = 250; // Below this = thin (<~28% margin). Hard block.
+export const SALE_SOFT_WARN_CENTS = 300; // Below this = warn admin (margin dips under ~39%).
 
 export type CartLine = {
   productId: string;
@@ -123,8 +124,8 @@ export function validateSalePrice(salePriceCents: number): SalePriceValidation {
   // Compute margin at this sale price
   // net = price - COGS - packaging - postage - stripe_fee
   // stripe_fee = 0.029 * price + 30 (cents)
-  // fixed costs per single-item order = 29.5 + 90 + 119 + 30 = 268.5 cents (use 269)
-  const FIXED_COSTS_CENTS = 269;
+  // fixed costs per single-item order = 30 (COGS) + 40 (packaging) + 73 (postage) + 30 (Stripe flat) = 173 cents
+  const FIXED_COSTS_CENTS = 173;
   const netCents = Math.round(
     salePriceCents - FIXED_COSTS_CENTS - 0.029 * salePriceCents,
   );
