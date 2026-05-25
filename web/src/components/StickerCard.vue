@@ -326,8 +326,9 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   white-space: nowrap;
 }
 /* "Only X left" urgency banner — RESERVED for the low-stock callout (< 20).
-   acid-red is reserved for warnings (CLAUDE.md), so this uses acid-yellow.
-   Top-RIGHT so it never collides with a top-left sale badge. */
+   Electric acid-orange fill + bone (white) border + Permanent Marker text so
+   it jumps off the dark card. Top-RIGHT so it never collides with a top-left
+   sale badge. */
 .image-tape .stock-badge {
   position: absolute;
   z-index: 2;
@@ -335,12 +336,13 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   right: -0.4rem;
   background: var(--color-acid-orange);
   color: var(--color-ink);
-  border: var(--border-ink);
-  font-family: var(--font-zine);
-  font-size: 0.65rem;
-  letter-spacing: var(--tracking-shout);
+  border: var(--border-bone);
+  font-family: var(--font-brand);
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
+  padding: 0.25rem 0.6rem;
   transform: rotate(var(--rotate-tape));
   white-space: nowrap;
 }

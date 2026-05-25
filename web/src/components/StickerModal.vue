@@ -333,9 +333,12 @@ onBeforeUnmount(() => {
 .stock-tag.stock-tag--low {
   background: var(--color-acid-orange);
   color: var(--color-ink);
-  border: var(--border-ink);
-  padding: 0.2rem 0.55rem;
-  letter-spacing: var(--tracking-shout);
+  border: var(--border-bone);
+  font-family: var(--font-brand);
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 0.25rem 0.65rem;
+  letter-spacing: 0.02em;
   transform: rotate(var(--rotate-tape));
 }
 
