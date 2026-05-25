@@ -362,7 +362,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
 }
 /* electric-orange torn fill, inset so the bone shows through as a torn edge */
 .image-tape .stock-badge::after {
-  inset: 2px;
+  inset: 1px;
   z-index: -1;
   background: var(--color-acid-orange);
 }

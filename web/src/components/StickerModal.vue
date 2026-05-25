@@ -356,7 +356,7 @@ onBeforeUnmount(() => {
   background: var(--color-bone);
 }
 .stock-tag.stock-tag--low::after {
-  inset: 2px;
+  inset: 1px;
   z-index: -1;
   background: var(--color-acid-orange);
 }
