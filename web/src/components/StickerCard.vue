@@ -55,13 +55,10 @@ const soldOut = computed(
     props.product.isSoldOut ||
     (props.product.stock !== null && props.product.stock <= 0),
 );
-// Always show the count for any tracked, in-stock product (Mia only tracks
-// stock on limited test runs, so a count is always meaningful when present).
-const showStock = computed(
-  () => !soldOut.value && props.product.stock !== null,
-);
-// Below this remaining count the chip escalates to the loud "Only X left"
-// urgency treatment; at or above it the count shows as a quiet chip.
+// Remaining count for tracked, in-stock products. The neutral count sits at
+// the BOTTOM of the card by the price; once it drops below the threshold it
+// promotes to the loud "Only X left" CORNER banner (reserved for that callout),
+// so the same number never shows in two places at once.
 const LOW_STOCK_THRESHOLD = 20;
 const lowStock = computed(
   () =>
@@ -69,10 +66,11 @@ const lowStock = computed(
     props.product.stock !== null &&
     props.product.stock < LOW_STOCK_THRESHOLD,
 );
-const stockBadgeText = computed(() =>
-  lowStock.value
-    ? `Only ${props.product.stock} left`
-    : `${props.product.stock} available`,
+const showCount = computed(
+  () =>
+    !soldOut.value &&
+    props.product.stock !== null &&
+    props.product.stock >= LOW_STOCK_THRESHOLD,
 );
 const onSale = computed(
   () => props.product.salePriceCents != null && !soldOut.value,
@@ -92,11 +90,8 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
       <span v-if="soldOut" class="sold-out-badge">Sold Out</span>
       <template v-else>
         <span v-if="onSale" class="sale-badge">{{ saleBadgeLabel }}</span>
-        <span
-          v-if="showStock"
-          class="stock-badge"
-          :class="{ 'stock-badge--low': lowStock }"
-          >{{ stockBadgeText }}</span
+        <span v-if="lowStock" class="stock-badge"
+          >Only {{ product.stock }} left</span
         >
       </template>
       <div class="disc">
@@ -140,6 +135,7 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
           Add ↗
         </button>
       </div>
+      <p v-if="showCount" class="stock-count">{{ product.stock }} available</p>
     </div>
   </article>
 </template>
@@ -262,6 +258,19 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   align-items: center;
 }
 
+/* Neutral remaining count, bottom of the card under the price. Quiet by design
+   — the loud "Only X left" corner banner takes over once stock is low. */
+.stock-count {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-zine);
+  font-size: 0.7rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-bone) 60%, transparent);
+}
+
 .price {
   font-family: var(--font-display);
   font-size: 1.375rem;
@@ -316,31 +325,24 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   transform: rotate(var(--rotate-stencil));
   white-space: nowrap;
 }
-/* Remaining-count chip. Always shown for tracked, in-stock products (top-RIGHT
-   so it never collides with a top-left sale badge). Quiet bone chip by default;
-   escalates to the loud acid-yellow stencil when low (acid-red is reserved for
-   warnings per CLAUDE.md). */
+/* "Only X left" urgency banner — RESERVED for the low-stock callout (< 20).
+   acid-red is reserved for warnings (CLAUDE.md), so this uses acid-yellow.
+   Top-RIGHT so it never collides with a top-left sale badge. */
 .image-tape .stock-badge {
   position: absolute;
   z-index: 2;
   top: -0.4rem;
   right: -0.4rem;
-  background: var(--color-bone);
+  background: var(--color-acid-yellow);
   color: var(--color-ink);
   border: var(--border-ink);
   font-family: var(--font-zine);
-  font-size: 0.6rem;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  padding: 0.18rem 0.45rem;
-  white-space: nowrap;
-}
-.image-tape .stock-badge.stock-badge--low {
-  background: var(--color-acid-yellow);
   font-size: 0.65rem;
   letter-spacing: var(--tracking-shout);
+  text-transform: uppercase;
   padding: 0.2rem 0.5rem;
   transform: rotate(var(--rotate-tape));
+  white-space: nowrap;
 }
 .image-tape .sold-out-badge {
   position: absolute;
