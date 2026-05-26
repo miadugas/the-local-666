@@ -160,6 +160,9 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   flex-direction: column;
   position: relative;
   transition: transform var(--duration-fast) var(--ease-snap);
+  /* Query container so the strip label can size to the CARD width (cqi),
+     not the viewport — bigger on wide cards, safe on narrow ones. */
+  container-type: inline-size;
 }
 .card:hover {
   transform: translate(-1px, -1px);
@@ -179,8 +182,13 @@ const saleBadgeLabel = computed(() => props.product.saleLabel ?? "Sale");
   color: var(--color-ink);
   font-family: var(--font-brand);
   padding: 0.875rem 0.75rem;
-  font-size: 1.125rem;
-  line-height: 1;
+  /* Card-relative: ~floor on narrow 4-up cards, grows to the cap on wide cards.
+     Floor never drops below the old 1.125rem. */
+  font-size: clamp(1.125rem, 7cqi, 1.5rem);
+  line-height: 1.05;
+  /* Backup only — long labels stay one line at every breakpoint, but balance
+     the wrap if one ever doesn't. */
+  text-wrap: balance;
   text-align: center;
   border-bottom: var(--border-bone);
 }
