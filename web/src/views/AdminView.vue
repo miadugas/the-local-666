@@ -80,6 +80,23 @@ const salePreview = computed(() => {
   };
 });
 
+// Display order must be a non-negative integer AND exclusive — no two products
+// share a position. Live-checked against the loaded catalog so a collision
+// blocks Save before it ever hits the server.
+const orderError = computed(() => {
+  const f = editing.value;
+  if (!f) return null;
+  if (!Number.isInteger(f.displayOrder) || f.displayOrder < 0) {
+    return "Display order must be a whole number ≥ 0.";
+  }
+  const clash = products.value.find(
+    (p) => p.id !== f.id && p.displayOrder === f.displayOrder,
+  );
+  return clash
+    ? `Position ${f.displayOrder} is taken by "${clash.title}".`
+    : null;
+});
+
 function blankForm(): FormModel {
   return {
     id: null,
@@ -171,6 +188,10 @@ async function save() {
   }
   if (f.saleEnabled && salePreview.value?.state === "error") {
     formError.value = salePreview.value.message;
+    return;
+  }
+  if (orderError.value) {
+    formError.value = orderError.value;
     return;
   }
 
@@ -331,8 +352,9 @@ onMounted(load);
         </label>
         <label class="field"
           ><span>Display order</span
-          ><input v-model.number="editing.displayOrder" type="number"
+          ><input v-model.number="editing.displayOrder" type="number" min="0"
         /></label>
+        <p v-if="orderError" class="sale-preview error">{{ orderError }}</p>
         <div class="field">
           <span>
             Description
@@ -406,7 +428,9 @@ onMounted(load);
           <button
             class="btn"
             :disabled="
-              saving || (editing.saleEnabled && salePreview?.state === 'error')
+              saving ||
+              !!orderError ||
+              (editing.saleEnabled && salePreview?.state === 'error')
             "
             @click="save"
           >

@@ -197,3 +197,21 @@ export async function deleteProduct(id: number): Promise<boolean> {
   const result = await pool.query("DELETE FROM products WHERE id = $1", [id]);
   return (result.rowCount ?? 0) > 0;
 }
+
+/**
+ * Returns the title of a product already occupying `order` (excluding `exceptId`
+ * on update), or null if the position is free. Display order is exclusive — no
+ * two products share a position.
+ */
+export async function displayOrderTakenBy(
+  order: number,
+  exceptId: number | null,
+): Promise<string | null> {
+  const result = await pool.query<{ title: string }>(
+    `SELECT title FROM products
+       WHERE display_order = $1 AND ($2::int IS NULL OR id <> $2)
+       LIMIT 1`,
+    [order, exceptId],
+  );
+  return result.rows[0]?.title ?? null;
+}

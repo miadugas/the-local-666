@@ -12,6 +12,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  displayOrderTakenBy,
   type CreateProductInput,
   type UpdateProductInput,
 } from "../products/admin-queries.js";
@@ -127,6 +128,17 @@ function parseAccentHex(value: unknown, res: Response): string | undefined {
   return hex;
 }
 
+function parseDisplayOrder(value: unknown, res: Response): number | undefined {
+  const order = Number(value);
+  if (!Number.isInteger(order) || order < 0) {
+    res
+      .status(400)
+      .json({ message: "displayOrder must be a whole number ≥ 0" });
+    return undefined;
+  }
+  return order;
+}
+
 function parseStock(value: unknown, res: Response): number | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
@@ -210,6 +222,15 @@ adminProductsRouter.post(
     if (b.stock !== undefined && stock === undefined) return;
     const accentHex = parseAccentHex(b.accentHex, res);
     if (accentHex === undefined) return;
+    const displayOrder = parseDisplayOrder(b.displayOrder, res);
+    if (displayOrder === undefined) return;
+    const orderTaken = await displayOrderTakenBy(displayOrder, null);
+    if (orderTaken) {
+      res.status(409).json({
+        message: `Display order ${displayOrder} is taken by "${orderTaken}"`,
+      });
+      return;
+    }
 
     const finalSalePriceCents = salePriceCents ?? null;
     if (!validateFinalSale(finalSalePriceCents, priceCents, res)) return;
@@ -228,9 +249,7 @@ adminProductsRouter.post(
       accentHex,
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
-      displayOrder: Number.isInteger(Number(b.displayOrder))
-        ? Number(b.displayOrder)
-        : 0,
+      displayOrder,
       imageUrl,
       imagePublicId: b.imagePublicId ? String(b.imagePublicId) : null,
     };
@@ -281,8 +300,18 @@ adminProductsRouter.patch(
     if (b.description !== undefined)
       input.description = b.description === null ? null : String(b.description);
     if (b.isSoldOut !== undefined) input.isSoldOut = Boolean(b.isSoldOut);
-    if (b.displayOrder !== undefined)
-      input.displayOrder = Number(b.displayOrder);
+    if (b.displayOrder !== undefined) {
+      const displayOrder = parseDisplayOrder(b.displayOrder, res);
+      if (displayOrder === undefined) return;
+      const orderTaken = await displayOrderTakenBy(displayOrder, id);
+      if (orderTaken) {
+        res.status(409).json({
+          message: `Display order ${displayOrder} is taken by "${orderTaken}"`,
+        });
+        return;
+      }
+      input.displayOrder = displayOrder;
+    }
     if (b.imageUrl !== undefined) input.imageUrl = String(b.imageUrl);
     if (b.imagePublicId !== undefined)
       input.imagePublicId =
