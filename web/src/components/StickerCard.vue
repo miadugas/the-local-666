@@ -17,6 +17,9 @@ const emit = defineEmits<{
   "view-detail": [product: Product];
 }>();
 
+// Legacy positional fallback — used ONLY when a product has no stripColor /
+// stripLabel (live rows were backfilled in migration 006, so this is rarely
+// hit). Stays 4 entries (index % 4); not meant to mirror the full palette.
 // MUST stay a closed token list — `color` values flow into inline style as
 // raw CSS. Never derive from product data or user input.
 const STRIPS = [
@@ -32,8 +35,16 @@ const STRIPS = [
 const STRIP_COLOR_VARS: Record<StripColor, string> = {
   pink: "var(--color-acid-pink)",
   blue: "var(--color-acid-blue)",
-  yellow: "var(--color-acid-yellow)",
   lime: "var(--color-acid-lime)",
+  yellow: "var(--color-acid-yellow)",
+  orange: "var(--color-acid-orange)",
+  mint: "var(--color-acid-mint)",
+  sky: "var(--color-acid-sky)",
+  violet: "var(--color-acid-violet)",
+  peri: "var(--color-pastel-peri)",
+  blush: "var(--color-pastel-blush)",
+  bone: "var(--color-bone)",
+  plum: "var(--color-plum)",
 };
 
 // Per-field fallback: a product can set just the label, just the color, or

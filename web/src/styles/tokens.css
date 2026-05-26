@@ -11,8 +11,11 @@
   --color-pitch: #000000;
   --color-ink: #050505;
   --color-bone: #f4ecd8;
+  --color-plum: #150b1c; /* dark plum — sticker-art disc backing */
 
-  /* COLOR — Acid accents (rotating; one per card/section) ----------------- */
+  /* COLOR — Acid accents (rotating; one per card/section).
+     ⚠️ Hexes mirror shared/src/types.ts BRAND_COLORS — keep in sync (Tailwind
+     v4 @theme can't import TS). ----------------------------------------- */
   --color-acid-pink: #ff2d8a;
   --color-acid-blue: #00d4ff;
   --color-acid-lime: #a3e635;
@@ -23,7 +26,9 @@
   --color-acid-violet: #b026ff; /* electric purple — rounds out the neon set */
   --color-acid-red: #e3151f; /* reserved for warning semantics */
 
-  /* COLOR — Pastels (soft sticker-art backings; NOT neon, never an accent) - */
+  /* COLOR — Pastels. Soft sticker-art disc backings. Selectable in the
+     strip/accent pickers, but NOT neon — never a CTA / eyebrow / warning
+     accent. -------------------------------------------------------------- */
   --color-pastel-peri: #a8c8f0; /* periwinkle */
   --color-pastel-blush: #f0bcc7; /* blush pink */
 

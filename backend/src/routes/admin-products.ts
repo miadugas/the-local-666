@@ -2,6 +2,7 @@ import { Router, type Response } from "express";
 import {
   validateSalePrice,
   isStripColor,
+  isBrandColorHex,
   type StripColor,
 } from "@grave-goods/shared";
 import { requireAuth } from "../auth/middleware.js";
@@ -113,6 +114,19 @@ function parseStripColor(
   return value;
 }
 
+function parseAccentHex(value: unknown, res: Response): string | undefined {
+  const hex = String(value ?? "")
+    .trim()
+    .toLowerCase();
+  if (!isBrandColorHex(hex)) {
+    res
+      .status(400)
+      .json({ message: "accentHex must be one of the palette colors" });
+    return undefined;
+  }
+  return hex;
+}
+
 function parseStock(value: unknown, res: Response): number | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
@@ -194,6 +208,8 @@ adminProductsRouter.post(
     if (b.stripColor !== undefined && stripColor === undefined) return;
     const stock = parseStock(b.stock, res);
     if (b.stock !== undefined && stock === undefined) return;
+    const accentHex = parseAccentHex(b.accentHex, res);
+    if (accentHex === undefined) return;
 
     const finalSalePriceCents = salePriceCents ?? null;
     if (!validateFinalSale(finalSalePriceCents, priceCents, res)) return;
@@ -209,7 +225,7 @@ adminProductsRouter.post(
       stripLabel,
       stripColor,
       stock,
-      accentHex: String(b.accentHex ?? "").trim(),
+      accentHex,
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
       displayOrder: Number.isInteger(Number(b.displayOrder))
@@ -257,7 +273,11 @@ adminProductsRouter.patch(
       }
       input.priceCents = pc;
     }
-    if (b.accentHex !== undefined) input.accentHex = String(b.accentHex);
+    if (b.accentHex !== undefined) {
+      const accentHex = parseAccentHex(b.accentHex, res);
+      if (accentHex === undefined) return;
+      input.accentHex = accentHex;
+    }
     if (b.description !== undefined)
       input.description = b.description === null ? null : String(b.description);
     if (b.isSoldOut !== undefined) input.isSoldOut = Boolean(b.isSoldOut);

@@ -30,7 +30,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
       '"Protect Trans Kids" A Multi-Headed Dragon On The Right Side Of History Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
-    accentHex: "#5BCEFA",
+    accentHex: "#5bcefa",
     description:
       "You came for the children and woke up the dragon. Several of them, actually. All of them angry. None of them tired.\nThis isn't a debate. It's not a both-sides situation. It's not a political position up for reconsideration every election cycle. These are kids — real ones, with families who love them and futures worth protecting — and the dragon doesn't negotiate.\n\nFor the parents, the allies, the educators, the strangers on the internet who show up anyway. For everyone who decided that \"not my problem\" was never actually an option. For the trans kids themselves, who deserve to see something fierce flying their colors.\nThe opposition has legislation. We have a hydra. Cut one head off and see what happens.\nSlap it somewhere loud. Let it start the conversation, because trans kids don't need your thoughts and prayers — they need a guardian beast with five mouths. This one's not asking nicely and is absolutely not here to debate.\n\nTrans kids exist, trans kids deserve protection, trans kids are not a debate. Slap this on a laptop, a locker, or every door at your kid's school district HQ.\n\nThey are loved. They are protected. The dragon said so.",
     displayOrder: 0,
@@ -43,7 +43,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     title: '"Cops Aren\'t Your Friends" A Cheerful Reminder Sticker',
     spec: '3" die-cut vinyl',
     priceCents: 400,
-    accentHex: "#2ad6a0",
+    accentHex: "#34d399",
     description:
       "She's not angry about it. She's not even surprised. She's just laughing because you already knew this and kept forgetting.\nThe bubbly font, the bright colors, the delighted anime girl — because the most unsettling way to say a true thing is to say it like it's obvious. Like you're telling someone the sky is blue. Like you can't believe this is still the conversation we're having.\nThis isn't a threat. It's not even really an argument. It's the friend who's done the reading, watched the footage, talked to the people, and arrived at a conclusion so solid she can deliver it with a smile and a little shrug.\nFor the ones who know. Who've always known. Who are so tired of explaining it that at some point the only reasonable response is to laugh.\nPink and green. Cute as hell. Not kidding even a little.\nSlap this bad boy on your laptop, water bottle, or the back of a cop car if you're feeling bold.\n\nThey're not. They never have been. Stick it somewhere a friendly officer might see it — your bumper, your laptop, the door of the cafe with the 'free coffee for cops' sign.\n\nNot a hot take. Just a warm reminder. 🩷",
     displayOrder: 1,

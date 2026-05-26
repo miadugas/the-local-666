@@ -62,8 +62,11 @@ grave-goods-store/
 - **Pitch** (`--color-pitch: #000000`) — page background. Pure black, no gradient.
 - **Bone** (`--color-bone: #f4ecd8`) — body text, ink-line outlines on dark surfaces. The warm-cream replacement; old `cream-*` tokens are gone.
 - **Ink** (`--color-ink: #050505`) — text color on acid-bg surfaces (newsletter pink, taped eyebrows, brand strips on cards).
+- **Plum** (`--color-plum: #150b1c`) — dark near-black plum; sticker-art disc backing only (not an accent).
 
 **Acid accents** — rotating, one per card / section. Multiple acids can coexist in a frame but never blended in one element.
+
+> **Brand palette is a shared source of truth.** `BRAND_COLORS` in `shared/src/types.ts` mirrors these hexes (Tailwind v4 `@theme` can't import TS — keep them in sync). The admin **strip-color** and **accent** pickers both offer the full palette (12: the acids minus reserved red, the pastels, bone, plum). `acid-red` is excluded from both pickers; `accent_hex` is server-validated + DB-`CHECK`ed to the palette.
 
 - `--color-acid-pink: #ff2d8a` — primary CTA, manifesto highlight, newsletter section
 - `--color-acid-blue: #00d4ff` — nav hover, card brand strip, divider accents

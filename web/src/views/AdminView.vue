@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { validateSalePrice } from "@grave-goods/shared";
+import { validateSalePrice, BRAND_COLORS } from "@grave-goods/shared";
 import type { AdminProduct, StripColor } from "@grave-goods/shared";
 import { useAdminStore } from "../stores/admin";
 import { formatPrice } from "../lib/format";
@@ -13,6 +13,14 @@ const router = useRouter();
 
 const products = ref<AdminProduct[]>([]);
 const loadError = ref(false);
+
+// Brand palette for both color pickers. Strip stores the NAME; accent stores
+// the HEX. Labels are the capitalized name.
+const colorOptions = Object.entries(BRAND_COLORS).map(([name, hex]) => ({
+  name,
+  hex,
+  label: name.charAt(0).toUpperCase() + name.slice(1),
+}));
 
 type FormModel = {
   id: number | null;
@@ -298,9 +306,14 @@ onMounted(load);
           ><span>Price (USD)</span
           ><input v-model="editing.priceDollars" inputmode="decimal"
         /></label>
-        <label class="field"
-          ><span>Accent hex</span><input v-model="editing.accentHex"
-        /></label>
+        <label class="field">
+          <span>Accent (disc backing)</span>
+          <select v-model="editing.accentHex">
+            <option v-for="c in colorOptions" :key="c.hex" :value="c.hex">
+              {{ c.label }}
+            </option>
+          </select>
+        </label>
         <label class="field"
           ><span>Strip label (blank = positional fallback)</span
           ><input
@@ -311,10 +324,9 @@ onMounted(load);
         <label class="field">
           <span>Strip color</span>
           <select v-model="editing.stripColor">
-            <option value="pink">Pink</option>
-            <option value="blue">Blue</option>
-            <option value="yellow">Yellow</option>
-            <option value="lime">Lime</option>
+            <option v-for="c in colorOptions" :key="c.name" :value="c.name">
+              {{ c.label }}
+            </option>
           </select>
         </label>
         <label class="field"
