@@ -48,7 +48,7 @@ const TENETS = [
 .tenet {
   padding: 2.25rem 2rem;
   border-right: var(--border-bone);
-  text-align: left;
+  text-align: center;
 }
 .tenet:last-child {
   border-right: none;
