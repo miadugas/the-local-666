@@ -19,6 +19,7 @@ type AdminProductRow = {
   accent_hex: string;
   description: string | null;
   is_sold_out: boolean;
+  is_hidden: boolean;
   stock: number | null;
   display_order: number;
   image_url: string;
@@ -28,7 +29,7 @@ type AdminProductRow = {
 };
 
 const COLS =
-  "id, slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, strip_label, strip_color, accent_hex, description, is_sold_out, stock, display_order, image_url, image_public_id, created_at, updated_at";
+  "id, slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, strip_label, strip_color, accent_hex, description, is_sold_out, is_hidden, stock, display_order, image_url, image_public_id, created_at, updated_at";
 
 function mapRow(r: AdminProductRow): AdminProduct {
   return {
@@ -45,6 +46,7 @@ function mapRow(r: AdminProductRow): AdminProduct {
     accentHex: r.accent_hex,
     description: r.description,
     isSoldOut: r.is_sold_out,
+    isHidden: r.is_hidden,
     stock: r.stock,
     displayOrder: r.display_order,
     imageUrl: r.image_url,
@@ -67,6 +69,7 @@ export type CreateProductInput = {
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
+  isHidden: boolean;
   stock?: number | null;
   displayOrder: number;
   imageUrl: string;
@@ -104,8 +107,8 @@ export async function createProduct(
   const stock = input.stock ?? null;
   const result = await pool.query<AdminProductRow>(
     `INSERT INTO products
-       (slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, display_order, image_url, image_public_id, strip_label, strip_color, stock)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+       (slug, title, spec, price_cents, sale_price_cents, sale_label, sale_ends_at, accent_hex, description, is_sold_out, is_hidden, display_order, image_url, image_public_id, strip_label, strip_color, stock)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
      RETURNING ${COLS}`,
     [
       input.slug,
@@ -118,6 +121,7 @@ export async function createProduct(
       input.accentHex,
       input.description,
       input.isSoldOut,
+      input.isHidden,
       input.displayOrder,
       input.imageUrl,
       input.imagePublicId,
@@ -169,6 +173,7 @@ export async function updateProduct(
   if (input.accentHex !== undefined) set("accent_hex", input.accentHex);
   if (input.description !== undefined) set("description", input.description);
   if (input.isSoldOut !== undefined) set("is_sold_out", input.isSoldOut);
+  if (input.isHidden !== undefined) set("is_hidden", input.isHidden);
   // null is a real "clear" here (back to unlimited), gated on !== undefined.
   if (input.stock !== undefined) set("stock", input.stock);
   if (input.displayOrder !== undefined)

@@ -100,6 +100,8 @@ export type AdminProduct = {
   accentHex: string;
   description: string | null;
   isSoldOut: boolean;
+  /** Hidden listings are excluded from all public reads (storefront + checkout). */
+  isHidden: boolean;
   /** null = unlimited/untracked; a number = limited (test run). */
   stock: number | null;
   displayOrder: number;

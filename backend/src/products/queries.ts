@@ -59,14 +59,14 @@ function mapRow(row: ProductRow): Product {
 
 export async function listProducts(): Promise<Product[]> {
   const result = await pool.query<ProductRow>(
-    `SELECT ${SELECT_COLUMNS} FROM products ORDER BY display_order, id`,
+    `SELECT ${SELECT_COLUMNS} FROM products WHERE NOT is_hidden ORDER BY display_order, id`,
   );
   return result.rows.map(mapRow);
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const result = await pool.query<ProductRow>(
-    `SELECT ${SELECT_COLUMNS} FROM products WHERE slug = $1 LIMIT 1`,
+    `SELECT ${SELECT_COLUMNS} FROM products WHERE slug = $1 AND NOT is_hidden LIMIT 1`,
     [slug],
   );
   const row = result.rows[0];

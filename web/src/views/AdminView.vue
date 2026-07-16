@@ -31,6 +31,7 @@ type FormModel = {
   accentHex: string;
   description: string;
   isSoldOut: boolean;
+  isHidden: boolean;
   displayOrder: number;
   imageUrl: string;
   imagePublicId: string | null;
@@ -107,6 +108,7 @@ function blankForm(): FormModel {
     accentHex: "#ff2d8a",
     description: "",
     isSoldOut: false,
+    isHidden: false,
     displayOrder: products.value.length,
     imageUrl: "",
     imagePublicId: null,
@@ -146,6 +148,7 @@ function startEdit(p: AdminProduct) {
     accentHex: p.accentHex,
     description: p.description ?? "",
     isSoldOut: p.isSoldOut,
+    isHidden: p.isHidden,
     displayOrder: p.displayOrder,
     imageUrl: p.imageUrl,
     imagePublicId: p.imagePublicId,
@@ -218,6 +221,7 @@ async function save() {
     accentHex: f.accentHex,
     description: f.description ? f.description : null,
     isSoldOut: f.isSoldOut,
+    isHidden: f.isHidden,
     displayOrder: f.displayOrder,
     imageUrl: f.imageUrl,
     imagePublicId: f.imagePublicId,
@@ -258,6 +262,15 @@ async function remove(p: AdminProduct) {
   if (res.ok) await load();
 }
 
+async function toggleHidden(p: AdminProduct) {
+  const res = await fetch(`/api/admin/products/${p.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ isHidden: !p.isHidden }),
+  });
+  if (res.ok) await load();
+}
+
 async function signOut() {
   await admin.signOut();
   router.push({ name: "admin-login" });
@@ -267,14 +280,15 @@ async function signOut() {
 // count at zero) plus the remaining count, and disambiguates a manual sold-out
 // that still has positive stock so the row never reads as a contradiction.
 function rowStatus(p: AdminProduct): string {
+  const prefix = p.isHidden ? "HIDDEN · " : "";
   const tracked = p.stock !== null;
   if (p.isSoldOut) {
     return tracked && p.stock! > 0
-      ? `SOLD OUT (manual) · ${p.stock} left`
-      : "SOLD OUT";
+      ? `${prefix}SOLD OUT (manual) · ${p.stock} left`
+      : `${prefix}SOLD OUT`;
   }
-  if (tracked && p.stock! <= 0) return "SOLD OUT (out of stock)";
-  return tracked ? `${p.stock} left` : "∞";
+  if (tracked && p.stock! <= 0) return `${prefix}SOLD OUT (out of stock)`;
+  return tracked ? `${prefix}${p.stock} left` : `${prefix}∞`;
 }
 
 onMounted(load);
@@ -294,7 +308,12 @@ onMounted(load);
 
     <div class="workspace" :class="{ split: editing }">
       <ul class="list">
-        <li v-for="p in products" :key="p.id" class="row">
+        <li
+          v-for="p in products"
+          :key="p.id"
+          class="row"
+          :class="{ hidden: p.isHidden }"
+        >
           <img :src="p.imageUrl" alt="" class="thumb" />
           <div class="row-meta">
             <strong>{{ p.title }}</strong>
@@ -304,6 +323,9 @@ onMounted(load);
             </span>
           </div>
           <div class="row-actions">
+            <button class="ghost" @click="toggleHidden(p)">
+              {{ p.isHidden ? "Show" : "Hide" }}
+            </button>
             <button class="ghost" @click="startEdit(p)">Edit</button>
             <button class="ghost danger" @click="remove(p)">Delete</button>
           </div>
@@ -375,6 +397,10 @@ onMounted(load);
         </div>
         <label class="check"
           ><input v-model="editing.isSoldOut" type="checkbox" /> Sold out</label
+        >
+        <label class="check"
+          ><input v-model="editing.isHidden" type="checkbox" /> Hidden from
+          store</label
         >
         <label class="field"
           ><span>Stock (blank = unlimited)</span
@@ -493,6 +519,9 @@ onMounted(load);
   border: var(--border-bone);
   border-radius: var(--radius-tight);
   padding: 0.5rem 0.75rem;
+}
+.row.hidden {
+  opacity: 0.45;
 }
 .thumb {
   width: 48px;

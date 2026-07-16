@@ -249,6 +249,7 @@ adminProductsRouter.post(
       accentHex,
       description: b.description ? String(b.description) : null,
       isSoldOut: Boolean(b.isSoldOut),
+      isHidden: Boolean(b.isHidden),
       displayOrder,
       imageUrl,
       imagePublicId: b.imagePublicId ? String(b.imagePublicId) : null,
@@ -300,6 +301,7 @@ adminProductsRouter.patch(
     if (b.description !== undefined)
       input.description = b.description === null ? null : String(b.description);
     if (b.isSoldOut !== undefined) input.isSoldOut = Boolean(b.isSoldOut);
+    if (b.isHidden !== undefined) input.isHidden = Boolean(b.isHidden);
     if (b.displayOrder !== undefined) {
       const displayOrder = parseDisplayOrder(b.displayOrder, res);
       if (displayOrder === undefined) return;
