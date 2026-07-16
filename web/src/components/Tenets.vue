@@ -1,19 +1,22 @@
 <script setup lang="ts">
 const TENETS = [
   {
-    num: "01",
-    text: "No gods. No masters.\nNo minimum orders.",
+    setup: "No gods. No masters.",
+    payoff: "No minimum orders.",
     color: "var(--color-acid-pink)",
+    tilt: "-0.6deg",
   },
   {
-    num: "02",
-    text: "A quarter of profits\nfund the fight.",
+    setup: "A quarter of profits",
+    payoff: "fund the fight.",
     color: "var(--color-acid-blue)",
+    tilt: "0.45deg",
   },
   {
-    num: "03",
-    text: "Not merch.\nVisible dissent.",
+    setup: "Not merch.",
+    payoff: "Visible dissent.",
     color: "var(--color-acid-lime)",
+    tilt: "-0.35deg",
   },
 ] as const;
 </script>
@@ -22,12 +25,14 @@ const TENETS = [
   <section class="tenets">
     <article
       v-for="tenet in TENETS"
-      :key="tenet.num"
+      :key="tenet.setup"
       class="tenet"
-      :style="{ '--tcolor': tenet.color }"
+      :style="{ '--tcolor': tenet.color, '--tilt': tenet.tilt }"
     >
-      <span class="num">{{ tenet.num }}</span>
-      <p class="text">{{ tenet.text }}</p>
+      <p class="text">
+        <span class="line">{{ tenet.setup }}</span>
+        <span class="line payoff">{{ tenet.payoff }}</span>
+      </p>
     </article>
   </section>
 </template>
@@ -43,30 +48,31 @@ const TENETS = [
 .tenet {
   padding: 2.25rem 2rem;
   border-right: var(--border-bone);
-  text-align: center;
+  text-align: left;
 }
 .tenet:last-child {
   border-right: none;
 }
 
-.num {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 3rem;
-  line-height: 1;
-  color: var(--tcolor);
-  margin-bottom: 0.5rem;
-}
-
+/* Two-ink zine print: setup line in bone, payoff line spot-colored in the
+   tenet's acid. The twist is the accent — no numerals, no markers. */
 .text {
   font-family: var(--font-zine);
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  letter-spacing: 0.06em;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
   color: var(--fg);
   text-transform: uppercase;
-  white-space: pre-line; /* honor \n in the data */
   margin: 0;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.line {
+  display: block;
+}
+
+.payoff {
+  color: var(--tcolor);
 }
 
 @media (max-width: 640px) {
